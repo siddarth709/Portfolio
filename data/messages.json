@@ -1,9 +1,1 @@
-[
-    {
-        "id": 1,
-        "name": "TestUser",
-        "email": "test@example.com",
-        "message": "Hello, this is a test message.",
-        "date": "Now"
-    }
-]
+[]
