@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "category": "AI/ML",
+        "skill_list": "Neural Networks, NLP, Computer Vision"
+    },
+    {
+        "id": 2,
+        "category": "Languages",
+        "skill_list": "Python, C++, SQL"
+    },
+    {
+        "id": 3,
+        "category": "Web",
+        "skill_list": "Flask, HTML/CSS, JavaScript"
+    },
+    {
+        "id": 4,
+        "category": "Tools",
+        "skill_list": "Git, TensorFlow, PyTorch"
+    }
+]

@@ -1,0 +1,115 @@
+/* About Page Styles */
+
+.about-header {
+    width: 100%;
+    height: 400px;
+    /* Increased height for better banner visibility */
+    position: relative;
+    margin-bottom: 6rem;
+    /* overflow: hidden; Removed to allow profile pic to overlapping */
+}
+
+.about-banner {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    /* Center the banner */
+    /* Removed the mask-image to clarify the banner quality */
+    opacity: 0.9;
+}
+
+.about-header::after {
+    /* Subtle overlay for text readability if needed, but keeping it light */
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 60%, var(--color-bg-main));
+}
+
+.header-content {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    padding: 0 var(--spacing-md);
+    z-index: 20;
+    display: flex;
+    align-items: flex-end;
+}
+
+.profile-wrapper {
+    display: flex;
+    align-items: flex-end;
+    gap: 2rem;
+    transform: translateY(30%);
+    /* Push slightly down to overlap section */
+}
+
+.profile-container {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 5px solid var(--color-bg-main);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--color-bg-secondary);
+}
+
+.profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info {
+    margin-bottom: 40px;
+    /* Align with profile pic center/bottom */
+}
+
+.profile-name {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    /* Improve readability over banner */
+}
+
+.profile-email {
+    color: var(--color-text-secondary);
+    /* Or distinct color if over banner */
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    background: rgba(0, 0, 0, 0.6);
+    /* Backdrop for check readability */
+    padding: 0.2rem 0.8rem;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+
+/* Adjust content spacing since header overlaps */
+.about-intro {
+    padding-top: 6rem;
+}
+
+@media (max-width: 768px) {
+    .profile-wrapper {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        transform: translateY(20%);
+    }
+
+    .profile-info {
+        margin-bottom: 0;
+        margin-top: 1rem;
+    }
+
+    .about-intro {
+        padding-top: 10rem;
+    }
+}

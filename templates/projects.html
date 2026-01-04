@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio | Projects{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h1 class="section-title display-text">All Projects<span class="text-accent">.</span></h1>
+        <div class="projects-grid">
+
+            {% for project in projects %}
+            <!-- Project Card -->
+            <div class="project-card">
+                <div class="card-image"
+                    style="{% if project.image %}background-image: url('{{ url_for('static', filename='uploads/projects/' + project.image) }}');{% endif %}">
+                </div>
+                <div class="card-content">
+                    <h3>{{ project.title }}</h3>
+                    <p>{{ project.description }}</p>
+                    {% if project.link and project.link != '#' %}
+                    <a href="{{ project.link }}" target="_blank" class="btn btn-primary">View Details &rarr;</a>
+                    {% else %}
+                    <span class="link-arrow" style="cursor: default; opacity: 0.5;">Details Coming Soon &rarr;</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Coming Soon Card -->
+            <div class="coming-soon-card">
+                <div class="coming-soon-icon">&plus;</div>
+                <h3 class="coming-soon-title">More Coming Soon</h3>
+                <p class="coming-soon-text">I'm constantly building and experimenting. Stay tuned for new projects.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
