@@ -1,24 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-
-    // Reveal elements on scroll
+    // Reveal Animations on Scroll
     const observerOptions = {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px"
+        threshold: 0.1
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -30,22 +13,39 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, observerOptions);
 
-    document.querySelectorAll('.project-card, .section-title, .about-content').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-        observer.observe(el);
+    const fadeElements = document.querySelectorAll('.fade-in, .slide-up');
+    fadeElements.forEach(el => observer.observe(el));
+
+    // Navbar Scroll Effect
+    const navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.style.background = 'rgba(10, 10, 10, 0.95)';
+            navbar.style.padding = '0.5rem 0';
+        } else {
+            navbar.style.background = 'rgba(10, 10, 10, 0.8)';
+            navbar.style.padding = '0';
+        }
     });
 
-    // Add visible class styles dynamically or rely on inline styles transitioning to class
-    // Here we'll simple add a class that resets the inline styles
-    const styleSheet = document.createElement("style");
-    styleSheet.innerText = `
-        .visible {
-            opacity: 1 !important;
-            transform: translateY(0) !important;
-        }
-    `;
-    document.head.appendChild(styleSheet);
+    // Mobile Navigation Toggle
+    const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
 
+    if (mobileNavToggle) {
+        mobileNavToggle.addEventListener('click', () => {
+            mobileNavToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+            document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+        });
+
+        // Close menu when clicking a link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileNavToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+    }
 });
