@@ -4,3 +4,4 @@ flask-login
 pyotp
 qrcode
 pillow
+PyGithub==2.1.1

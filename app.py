@@ -7,6 +7,7 @@ import io
 import base64
 import json
 import os
+from github import Github, GithubException
 
 app = Flask(__name__)
 # Change this in production via Environment Variable
@@ -17,6 +18,10 @@ app.secret_key = os.environ.get('SECRET_KEY', 'dev_secret_key_change_me')
 ADMIN_PASSWORD_HASH = os.environ.get('ADMIN_PASSWORD', 'admin') 
 # TOTP Secret (default provided for demo, change in prod)
 FIXED_TOTP_SECRET = os.environ.get('TOTP_SECRET', "JBSWY3DPEHPK3PXP") 
+
+# GitHub Persistence Config
+GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
+GITHUB_REPO_NAME = os.environ.get('GITHUB_REPO')
 
 # Upload Config
 UPLOAD_FOLDER_CERTS = os.path.join(app.root_path, 'static', 'uploads', 'certificates')
@@ -51,6 +56,49 @@ DATA_FILE_HOME = os.path.join(app.root_path, 'data', 'home.json')
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# --- Helper Functions ---
+
+def sync_to_github(file_path, content_bytes=None, is_binary=False, message="Update data"):
+    """
+    Syncs a local file update to GitHub repository to ensure persistence.
+    If content_bytes is provided, writes that. Otherwise reads from file_path.
+    """
+    if not GITHUB_TOKEN or not GITHUB_REPO_NAME:
+        print("GitHub Sync Skipped: Missing GITHUB_TOKEN or GITHUB_REPO")
+        return
+
+    try:
+        g = Github(GITHUB_TOKEN)
+        # Handle cases where repo name might include URL parts or just user/repo
+        repo_name_clean = GITHUB_REPO_NAME.split('/')[-1] if '/' in GITHUB_REPO_NAME else GITHUB_REPO_NAME
+        # If user provides user/repo, PyGithub get_repo handles it usually if authenticated user has access
+        # Better: get_user().get_repo(name) gets it from user's repos.
+        # SAFE WAY: g.get_repo(GITHUB_REPO_NAME) which works for 'user/repo' string
+        repo = g.get_repo(GITHUB_REPO_NAME)
+        
+        # Calculate relative path from app root
+        rel_path = os.path.relpath(file_path, app.root_path)
+
+        if content_bytes is None:
+            mode = 'rb' if is_binary else 'r'
+            with open(file_path, mode) as f:
+                content_bytes = f.read()
+
+        try:
+            # Try to get existing file
+            contents = repo.get_contents(rel_path)
+            repo.update_file(contents.path, f"{message} [skip ci]", content_bytes, contents.sha)
+            print(f"Successfully synced {rel_path} to GitHub.")
+        except GithubException as e:
+            if e.status == 404:
+                # File doesn't exist, create it
+                repo.create_file(rel_path, f"{message} [skip ci]", content_bytes)
+                print(f"Created {rel_path} on GitHub.")
+            else:
+                print(f"Error syncing to GitHub: {e}")
+    except Exception as e:
+         print(f"GitHub Sync Error: {e}")
+
 def load_json(filepath):
     if os.path.exists(filepath):
         with open(filepath, 'r') as f:
@@ -60,6 +108,9 @@ def load_json(filepath):
 def save_json(filepath, data):
     with open(filepath, 'w') as f:
         json.dump(data, f, indent=4)
+    # Sync to GitHub
+    sync_to_github(filepath, message=f"Update {os.path.basename(filepath)}")
+
 
 def save_certificate(data):
     certs = load_json(DATA_FILE_CERTS)
@@ -295,6 +346,7 @@ def admin():
                 if file and file.filename != '' and allowed_file(file.filename):
                     filename = secure_filename(file.filename)
                     file.save(os.path.join(app.config['UPLOAD_FOLDER_CERTS'], filename))
+                    sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_CERTS'], filename), is_binary=True, message=f"Upload Cert {filename}")
                     image_filename = filename
 
             new_cert = {
@@ -317,6 +369,7 @@ def admin():
                     # Allow secure filename for docs
                     filename = secure_filename(file.filename)
                     file.save(os.path.join(app.config['UPLOAD_FOLDER_DOCS'], filename))
+                    sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_DOCS'], filename), is_binary=True, message=f"Upload Doc {filename}")
                     
                     new_doc = {
                         "id": len(load_json(DATA_FILE_DOCS)) + 1,
@@ -357,6 +410,7 @@ def admin():
                 if file and file.filename != '' and allowed_file(file.filename):
                     filename = secure_filename(file.filename)
                     file.save(os.path.join(app.config['UPLOAD_FOLDER_PROJECTS'], filename))
+                    sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_PROJECTS'], filename), is_binary=True, message=f"Upload Project {filename}")
                     image_filename = filename
                     
             new_project = {
@@ -381,6 +435,7 @@ def admin():
                 if file and file.filename != '' and allowed_file(file.filename):
                     filename = secure_filename(file.filename)
                     file.save(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename))
+                    sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename), is_binary=True, message=f"Upload Profile Image {filename}")
                     profile['profile_image'] = filename
             
             if 'banner_image' in request.files:
@@ -388,6 +443,7 @@ def admin():
                 if file and file.filename != '' and allowed_file(file.filename):
                     filename = secure_filename(file.filename)
                     file.save(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename))
+                    sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename), is_binary=True, message=f"Upload Banner Image {filename}")
                     profile['banner_image'] = filename
             
             save_profile(profile)
