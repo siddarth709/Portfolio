@@ -286,7 +286,29 @@ def certifications():
 @app.route('/research')
 def research():
     research_items = load_json(DATA_FILE_RESEARCH)
+    research_items = load_json(DATA_FILE_RESEARCH)
     return render_template('research.html', research=research_items)
+
+RESEARCH_PASSWORD = "siddarth1722@5424"
+
+@app.route('/research/protected/<int:id>', methods=['GET', 'POST'])
+def protected_research(id):
+    research_items = load_json(DATA_FILE_RESEARCH)
+    item = next((item for item in research_items if item['id'] == id), None)
+    
+    if not item or not item.get('document'):
+        flash('Document not found or access denied.', 'error')
+        return redirect(url_for('research'))
+
+    if request.method == 'POST':
+        password = request.form.get('password')
+        if password == RESEARCH_PASSWORD:
+            # Serve file
+            return send_from_directory(app.config['UPLOAD_FOLDER_DOCS'], item['document'])
+        else:
+            flash('Incorrect Password', 'error')
+            
+    return render_template('research_login.html')
 
 # --- Admin / Auth Routes ---
 
@@ -388,13 +410,24 @@ def admin():
             desc = request.form.get('description')
             link = request.form.get('link') or '#'
             
+            doc_filename = None
+            if 'document' in request.files:
+                file = request.files['document']
+                if file and file.filename != '':
+                    filename = secure_filename(file.filename)
+                    # Saving to private docs folder
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER_DOCS'], filename))
+                    sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_DOCS'], filename), is_binary=True, message=f"Upload Research Doc {filename}")
+                    doc_filename = filename
+
             new_research = {
                 "id": len(load_json(DATA_FILE_RESEARCH)) + 1,
                 "type": type,
                 "title": title,
                 "description": desc,
                 "link": link,
-                "link_text": "Read Paper" if type == 'published' else "View Project"
+                "link_text": "Read Paper" if type == 'published' else "View Project",
+                "document": doc_filename
             }
             save_research(new_research)
             flash('Research Item Added!', 'success')

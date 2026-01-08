@@ -15,7 +15,7 @@
                 {% if cert.image %}
                 <div class="tile-image-container" style="height: 180px;">
                     <img src="{{ url_for('static', filename='uploads/certificates/' + cert.image) }}"
-                        alt="{{ cert.title }}" class="tile-image"
+                        alt="{{ cert.title }}" class="tile-image enlarge-image"
                         style="object-fit: contain; padding: 1rem; background: #fff;">
                 </div>
                 {% endif %}
@@ -45,6 +45,14 @@
             </div>
 
         </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div id="caption"></div>
+    </div>
     </div>
 </section>
 {% endblock %}

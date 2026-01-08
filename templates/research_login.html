@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio | Research Access{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container" style="max-width: 500px; text-align: center;">
+        <h1 class="section-title display-text">Restricted Access<span class="text-accent">.</span></h1>
+        <p style="color: var(--color-text-secondary); margin-bottom: 2rem;">
+            This research document is protected. Please enter the access password.
+        </p>
+
+        <div class="fade-in" style="background: var(--color-bg-secondary); padding: 2rem; border-radius: 8px;">
+            <form method="POST">
+                <input type="password" name="password" required placeholder="Enter Password" autofocus
+                    style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px; font-size: 1rem;">
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Access Document</button>
+            </form>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div style="color: #ff6b6b; margin-top: 1rem; font-size: 0.9rem;">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
+
+        <div style="margin-top: 2rem;">
+            <a href="{{ url_for('research') }}" class="btn btn-outline" style="border: none;">&larr; Back to
+                Research</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

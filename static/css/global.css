@@ -140,6 +140,7 @@ img {
     filter: brightness(1.1);
     transform: translateY(-2px);
 }
+
 /* Shared Grid System */
 .grid-layout {
     display: grid;
@@ -223,7 +224,8 @@ img {
     font-size: 0.95rem;
     margin-bottom: 1.5rem;
     line-height: 1.6;
-    flex-grow: 1; /* Pushes footer down */
+    flex-grow: 1;
+    /* Pushes footer down */
 }
 
 .tile-footer {
@@ -270,4 +272,78 @@ img {
 .tile-empty:hover {
     opacity: 1;
     border-color: var(--color-accent);
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    padding-top: 50px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.show {
+    opacity: 1;
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 900px;
+    max-height: 80vh;
+    object-fit: contain;
+    animation-name: zoom;
+    animation-duration: 0.6s;
+}
+
+@keyframes zoom {
+    from {
+        transform: scale(0)
+    }
+
+    to {
+        transform: scale(1)
+    }
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+    z-index: 2001;
+    /* Above image */
+}
+
+.close:hover,
+.close:focus {
+    color: var(--color-accent);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Enlarge Image Cursor */
+.enlarge-image {
+    cursor: zoom-in;
+}
+
+/* Mobile Responsive Modal */
+@media only screen and (max-width: 700px) {
+    .modal-content {
+        width: 100%;
+    }
 }

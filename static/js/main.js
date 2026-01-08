@@ -48,4 +48,52 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // Image Modal Functionality
+    const modal = document.getElementById('imageModal');
+    if (modal) {
+        const modalImg = document.getElementById("modalImage");
+        const captionText = document.getElementById("caption");
+        const span = document.getElementsByClassName("close")[0];
+
+        // Open Modal
+        document.querySelectorAll('.enlarge-image').forEach(img => {
+            img.addEventListener('click', function (e) {
+                e.stopPropagation(); // Prevent tile click if nested
+                modal.style.display = "block";
+                // Force reflow for transition
+                void modal.offsetWidth;
+                modal.classList.add('show');
+                modalImg.src = this.src;
+                captionText.innerHTML = this.alt;
+            });
+        });
+
+        // Close Modal Helper
+        const closeModal = () => {
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = "none";
+            }, 300); // Match transition duration
+        };
+
+        // Close on X
+        if (span) {
+            span.onclick = closeModal;
+        }
+
+        // Close on click outside
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Close on Escape
+        document.addEventListener('keydown', function (event) {
+            if (event.key === "Escape" && modal.style.display === "block") {
+                closeModal();
+            }
+        });
+    }
 });
