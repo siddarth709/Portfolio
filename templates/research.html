@@ -32,6 +32,13 @@
                             <span style="font-size: 1.2em; margin-right: 5px;">🔒</span> Access Doc
                         </a>
                         {% endif %}
+
+                        {% if item.public_document %}
+                        <a href="{{ url_for('static', filename='uploads/research_public/' + item.public_document) }}"
+                            target="_blank" class="tile-link" style="margin-left: 1rem; color: var(--color-accent);">
+                            <span style="font-size: 1.2em; margin-right: 5px;">👁️</span> Preview
+                        </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

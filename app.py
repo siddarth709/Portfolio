@@ -26,16 +26,19 @@ GITHUB_REPO_NAME = os.environ.get('GITHUB_REPO')
 # Upload Config
 UPLOAD_FOLDER_CERTS = os.path.join(app.root_path, 'static', 'uploads', 'certificates')
 UPLOAD_FOLDER_DOCS = os.path.join(app.root_path, 'uploads', 'private')
+UPLOAD_FOLDER_RESEARCH_PUBLIC = os.path.join(app.root_path, 'static', 'uploads', 'research_public')
 UPLOAD_FOLDER_PROJECTS = os.path.join(app.root_path, 'static', 'uploads', 'projects')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf', 'docx', 'txt'}
 
 app.config['UPLOAD_FOLDER_CERTS'] = UPLOAD_FOLDER_CERTS
 app.config['UPLOAD_FOLDER_DOCS'] = UPLOAD_FOLDER_DOCS
+app.config['UPLOAD_FOLDER_RESEARCH_PUBLIC'] = UPLOAD_FOLDER_RESEARCH_PUBLIC
 app.config['UPLOAD_FOLDER_PROJECTS'] = UPLOAD_FOLDER_PROJECTS
 
 # Ensure directories exist
 os.makedirs(UPLOAD_FOLDER_CERTS, exist_ok=True)
 os.makedirs(UPLOAD_FOLDER_DOCS, exist_ok=True)
+os.makedirs(UPLOAD_FOLDER_RESEARCH_PUBLIC, exist_ok=True)
 os.makedirs(UPLOAD_FOLDER_PROJECTS, exist_ok=True)
 UPLOAD_FOLDER_IMAGES = os.path.join(app.root_path, 'static', 'images')
 app.config['UPLOAD_FOLDER_IMAGES'] = UPLOAD_FOLDER_IMAGES
@@ -167,7 +170,7 @@ def delete_item(item_id, item_type):
         upload_folder = app.config['UPLOAD_FOLDER_DOCS']
     elif item_type == 'research':
         filepath = DATA_FILE_RESEARCH
-        upload_folder = None
+        upload_folder = None # Logic handled specifically below because of mixed folders
     elif item_type == 'project':
         filepath = DATA_FILE_PROJECTS
         upload_folder = app.config['UPLOAD_FOLDER_PROJECTS']
@@ -203,7 +206,17 @@ def delete_item(item_id, item_type):
              file_path = os.path.join(upload_folder, item_to_delete['image'])
              if os.path.exists(file_path):
                  os.remove(file_path)
-                 
+        
+        elif item_type == 'research':
+             if item_to_delete.get('document'):
+                 file_path = os.path.join(app.config['UPLOAD_FOLDER_DOCS'], item_to_delete['document'])
+                 if os.path.exists(file_path):
+                     os.remove(file_path)
+             if item_to_delete.get('public_document'):
+                 file_path = os.path.join(app.config['UPLOAD_FOLDER_RESEARCH_PUBLIC'], item_to_delete['public_document'])
+                 if os.path.exists(file_path):
+                     os.remove(file_path)
+
         items = [item for item in items if str(item['id']) != str(item_id)]
         save_json(filepath, items)
         return True
@@ -429,6 +442,16 @@ def admin():
                 "link_text": "Read Paper" if type == 'published' else "View Project",
                 "document": doc_filename
             }
+
+            if 'public_document' in request.files:
+                file = request.files['public_document']
+                if file and file.filename != '':
+                    filename = secure_filename(file.filename)
+                    # Saving to PUBLIC research folder
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER_RESEARCH_PUBLIC'], filename))
+                    sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_RESEARCH_PUBLIC'], filename), is_binary=True, message=f"Upload Public Research Doc {filename}")
+                    new_research['public_document'] = filename
+
             save_research(new_research)
             flash('Research Item Added!', 'success')
             
