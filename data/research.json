@@ -1,1 +1,11 @@
-[]
+[
+    {
+        "id": 1,
+        "type": "ongoing",
+        "title": "AI in Radar Systems",
+        "description": "Defense",
+        "link": "#",
+        "link_text": "View Project",
+        "document": "AI_Applications_in_Defense_Radars.pdf"
+    }
+]
