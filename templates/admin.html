@@ -16,16 +16,7 @@
             <a href="{{ url_for('logout') }}" class="btn btn-outline" style="font-size: 0.9rem;">Logout</a>
         </div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        {% for category, message in messages %}
-        <div
-            style="background: rgba(0,255,0,0.1); border: 1px solid green; color: #51cf66; padding: 1rem; border-radius: 4px; margin-bottom: 2rem;">
-            {{ message }}
-        </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
+
 
         <!-- Forms Grid -->
         <div
@@ -285,8 +276,7 @@
                 <div style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">{{ msg.email
                     }}</div>
                 <p style="font-size: 0.95rem;">{{ msg.message }}</p>
-                <a href="{{ url_for('delete', item_type='message', id=msg.id) }}"
-                    onclick="return confirm('Delete this message?')"
+                <a href="#" class="btn-delete" data-href="{{ url_for('delete', item_type='message', id=msg.id) }}"
                     style="display: block; text-align: right; color: #ff6b6b; font-size: 0.8rem; margin-top: 1rem;">Delete
                     Message</a>
             </div>
@@ -310,8 +300,8 @@
                         <div style="flex-grow: 1; margin-right: 1rem;">
                             <strong>{{ item.title }}</strong>
                         </div>
-                        <a href="{{ url_for('delete', item_type='project', id=item.id) }}"
-                            onclick="return confirm('Are you sure?')"
+                        <a href="#" class="btn-delete"
+                            data-href="{{ url_for('delete', item_type='project', id=item.id) }}"
                             style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
                     </li>
                     {% endfor %}
@@ -334,8 +324,8 @@
                                 style="font-size: 0.8rem; color: var(--color-text-secondary); text-transform: uppercase;">[{{
                                 item.type }}]</span>
                         </div>
-                        <a href="{{ url_for('delete', item_type='research', id=item.id) }}"
-                            onclick="return confirm('Are you sure?')"
+                        <a href="#" class="btn-delete"
+                            data-href="{{ url_for('delete', item_type='research', id=item.id) }}"
                             style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
                     </li>
                     {% endfor %}
@@ -357,8 +347,8 @@
                             <strong>{{ item.title }}</strong> <br><span
                                 style="font-size: 0.8rem; color: var(--color-text-secondary);">{{ item.issuer }}</span>
                         </div>
-                        <a href="{{ url_for('delete', item_type='certificate', id=item.id) }}"
-                            onclick="return confirm('Are you sure?')"
+                        <a href="#" class="btn-delete"
+                            data-href="{{ url_for('delete', item_type='certificate', id=item.id) }}"
                             style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
                     </li>
                     {% endfor %}
@@ -383,8 +373,8 @@
                         <div style="display: flex; gap: 1rem;">
                             <a href="{{ url_for('download_file', filename=doc.filename) }}"
                                 style="color: var(--color-accent); font-size: 0.9rem;">Download</a>
-                            <a href="{{ url_for('delete', item_type='document', id=doc.id) }}"
-                                onclick="return confirm('Are you sure?')"
+                            <a href="#" class="btn-delete"
+                                data-href="{{ url_for('delete', item_type='document', id=doc.id) }}"
                                 style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
                         </div>
                     </li>
@@ -407,8 +397,8 @@
                             <strong>{{ item.school }}</strong> <br><span
                                 style="font-size: 0.8rem; color: var(--color-text-secondary);">{{ item.degree }}</span>
                         </div>
-                        <a href="{{ url_for('delete', item_type='education', id=item.id) }}"
-                            onclick="return confirm('Are you sure?')"
+                        <a href="#" class="btn-delete"
+                            data-href="{{ url_for('delete', item_type='education', id=item.id) }}"
                             style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
                     </li>
                     {% endfor %}
@@ -430,8 +420,8 @@
                             <strong>{{ item.company }}</strong> <br><span
                                 style="font-size: 0.8rem; color: var(--color-text-secondary);">{{ item.role }}</span>
                         </div>
-                        <a href="{{ url_for('delete', item_type='experience', id=item.id) }}"
-                            onclick="return confirm('Are you sure?')"
+                        <a href="#" class="btn-delete"
+                            data-href="{{ url_for('delete', item_type='experience', id=item.id) }}"
                             style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
                     </li>
                     {% endfor %}
@@ -454,8 +444,8 @@
                                 style="font-size: 0.8rem; color: var(--color-text-secondary);">{{ item.skill_list
                                 }}</span>
                         </div>
-                        <a href="{{ url_for('delete', item_type='skill', id=item.id) }}"
-                            onclick="return confirm('Are you sure?')"
+                        <a href="#" class="btn-delete"
+                            data-href="{{ url_for('delete', item_type='skill', id=item.id) }}"
                             style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
                     </li>
                     {% endfor %}
@@ -494,4 +484,32 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/profile-editor.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Intercept delete clicks
+        const deleteLinks = document.querySelectorAll('.btn-delete');
+        deleteLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const href = link.getAttribute('data-href');
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ff6b6b',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!',
+                    background: '#1a1a1a',
+                    color: '#fff'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = href;
+                    }
+                });
+            });
+        });
+    });
+</script>
 {% endblock %}

@@ -47,6 +47,34 @@
     </footer>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Check for Flask Flash Messages and trigger SweetAlert2 Toasts
+        {% with messages = get_flashed_messages(with_categories = true) %}
+        {% if messages %}
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
+        {% for category, message in messages %}
+        Toast.fire({
+            icon: "{{ 'success' if category == 'success' else 'error' }}",
+            title: "{{ message }}"
+        });
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 
