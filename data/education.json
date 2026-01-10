@@ -1,9 +1,9 @@
 [
     {
-        "id": 2,
+        "id": 1,
         "school": "Jyothy Institute of Technology",
         "degree": "B.E. in Artificial Intelligence and Machine Learning",
         "date": "2024 - present",
-        "logo": "cropped_image.png"
+        "logo": null
     }
 ]
