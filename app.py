@@ -28,6 +28,9 @@ UPLOAD_FOLDER_CERTS = os.path.join(app.root_path, 'static', 'uploads', 'certific
 UPLOAD_FOLDER_DOCS = os.path.join(app.root_path, 'uploads', 'private')
 UPLOAD_FOLDER_RESEARCH_PUBLIC = os.path.join(app.root_path, 'static', 'uploads', 'research_public')
 UPLOAD_FOLDER_PROJECTS = os.path.join(app.root_path, 'static', 'uploads', 'projects')
+UPLOAD_FOLDER_IMAGES = os.path.join(app.root_path, 'static', 'images')
+UPLOAD_FOLDER_TESTIMONIALS = os.path.join(app.root_path, 'static', 'uploads', 'testimonials')
+UPLOAD_FOLDER_LOGOS = os.path.join(app.root_path, 'static', 'uploads', 'logos')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf', 'docx', 'txt'}
 
 app.config['UPLOAD_FOLDER_CERTS'] = UPLOAD_FOLDER_CERTS
@@ -578,22 +581,51 @@ def admin():
             flash('Profile Updated!', 'success')
 
         elif action == 'add_education':
+            school = request.form.get('school')
+            degree = request.form.get('degree')
+            date = request.form.get('date')
+            
+            logo_filename = None
+            if 'logo' in request.files:
+                file = request.files['logo']
+                if file and file.filename != '' and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join(UPLOAD_FOLDER_LOGOS, filename))
+                    sync_to_github(os.path.join(UPLOAD_FOLDER_LOGOS, filename), is_binary=True, message=f"Upload Education Logo {filename}")
+                    logo_filename = filename
+
             new_edu = {
                 "id": len(load_json(DATA_FILE_EDUCATION)) + 1,
-                "school": request.form.get('school'),
-                "degree": request.form.get('degree'),
-                "date": request.form.get('date')
+                "school": school,
+                "degree": degree,
+                "date": date,
+                "logo": logo_filename
             }
             save_education(new_edu)
             flash('Education Added!', 'success')
 
         elif action == 'add_experience':
+            role = request.form.get('role')
+            company = request.form.get('company')
+            date = request.form.get('date')
+            desc = request.form.get('description')
+            
+            logo_filename = None
+            if 'logo' in request.files:
+                file = request.files['logo']
+                if file and file.filename != '' and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join(UPLOAD_FOLDER_LOGOS, filename))
+                    sync_to_github(os.path.join(UPLOAD_FOLDER_LOGOS, filename), is_binary=True, message=f"Upload Experience Logo {filename}")
+                    logo_filename = filename
+
             new_exp = {
                 "id": len(load_json(DATA_FILE_EXPERIENCE)) + 1,
-                "role": request.form.get('role'),
-                "company": request.form.get('company'),
-                "date": request.form.get('date'),
-                "description": request.form.get('description')
+                "role": role,
+                "company": company,
+                "date": date,
+                "description": desc,
+                "logo": logo_filename
             }
             save_experience(new_exp)
             flash('Experience Added!', 'success')

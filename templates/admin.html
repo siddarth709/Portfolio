@@ -133,7 +133,7 @@
             <!-- Add Education -->
             <div class="fade-in" style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: 8px;">
                 <h3 style="margin-bottom: 1rem;">Add Education</h3>
-                <form method="POST" action="{{ url_for('admin') }}">
+                <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
                     <input type="hidden" name="action" value="add_education">
                     <input type="text" name="school" required placeholder="School/University"
                         style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
@@ -141,6 +141,10 @@
                         style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
                     <input type="text" name="date" required placeholder="Date (e.g. 2020-2024)"
                         style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Logo
+                        (Optional)</label>
+                    <input type="file" name="logo" accept="image/*"
+                        style="width: 100%; margin-bottom: 0.8rem; color: var(--color-text-secondary);">
                     <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
                         &plus;</button>
                 </form>
@@ -149,14 +153,18 @@
             <!-- Add Experience -->
             <div class="fade-in" style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: 8px;">
                 <h3 style="margin-bottom: 1rem;">Add Experience</h3>
-                <form method="POST" action="{{ url_for('admin') }}">
+                <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
                     <input type="hidden" name="action" value="add_experience">
                     <input type="text" name="company" required placeholder="Company"
                         style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
                     <input type="text" name="role" required placeholder="Role"
                         style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                    <input type="text" name="date" required placeholder="Date Range"
+                    <input type="text" name="date" required placeholder="Date"
                         style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Logo
+                        (Optional)</label>
+                    <input type="file" name="logo" accept="image/*"
+                        style="width: 100%; margin-bottom: 0.8rem; color: var(--color-text-secondary);">
                     <textarea name="description" rows="2" placeholder="Description"
                         style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;"></textarea>
                     <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add

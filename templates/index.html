@@ -65,10 +65,19 @@
                     <h3 style="margin-bottom: 1rem; color: var(--color-accent);">Education & Experience</h3>
 
                     {% for edu in education %}
-                    <div style="margin-bottom: 1.5rem;">
-                        <h4 style="margin-bottom: 0.2rem;">{{ edu.school }}</h4>
-                        <p style="font-size: 0.9rem; color: var(--color-text-secondary);">{{ edu.degree }} &bull; {{
-                            edu.date }}</p>
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <span class="date">{{ edu.date }}</span>
+                            <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.3rem;">
+                                {% if edu.logo %}
+                                <img src="{{ url_for('static', filename='uploads/logos/' + edu.logo) }}" alt="Logo"
+                                    style="width: 24px; height: 24px; border-radius: 4px; object-fit: contain;">
+                                {% endif %}
+                                <h3 class="h3">{{ edu.school }}</h3>
+                            </div>
+                            <p class="text-accent">{{ edu.degree }}</p>
+                        </div>
                     </div>
                     {% endfor %}
 
