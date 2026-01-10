@@ -307,7 +307,7 @@ def contact():
         else:
             flash('Please fill all fields', 'error')
 
-    return render_template('contact.html')
+    return render_template('contact.html', profile=load_json(DATA_FILE_PROFILE))
 
 @app.route('/certifications')
 def certifications():
