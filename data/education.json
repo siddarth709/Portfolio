@@ -1,9 +1,23 @@
 [
     {
-        "id": 1,
+        "id": 3,
         "school": "Jyothy Institute of Technology",
         "degree": "B.E. in Artificial Intelligence and Machine Learning",
         "date": "2024 - present",
+        "logo": "cropped_image.png"
+    },
+    {
+        "id": 2,
+        "school": "Jyothy Institute of Technology",
+        "degree": "B.E. in Artificial Intelligence and Machine Learning",
+        "date": "2024 - present",
+        "logo": "cropped_image.png"
+    },
+    {
+        "id": 1,
+        "school": "Vidyaniketan Public School",
+        "degree": "Senior Secondary - CBSE",
+        "date": "2023",
         "logo": "cropped_image.png"
     }
 ]
