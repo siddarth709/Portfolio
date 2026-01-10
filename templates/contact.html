@@ -18,9 +18,18 @@
                     style="font-size: 1.5rem; display: block; margin-bottom: 1rem;">siddarth1729@outlook.com</a>
 
                 <div style="margin-top: 2rem;">
-                    <a href="#" class="btn btn-outline" style="margin-left: 0; margin-right: 1rem;">Twitter</a>
-                    <a href="#" class="btn btn-outline" style="margin-left: 0; margin-right: 1rem;">LinkedIn</a>
-                    <a href="#" class="btn btn-outline" style="margin-left: 0;">GitHub</a>
+                    {% if profile.twitter %}
+                    <a href="{{ profile.twitter }}" target="_blank" class="btn btn-outline"
+                        style="margin-left: 0; margin-right: 1rem;">Twitter</a>
+                    {% endif %}
+                    {% if profile.linkedin %}
+                    <a href="{{ profile.linkedin }}" target="_blank" class="btn btn-outline"
+                        style="margin-left: 0; margin-right: 1rem;">LinkedIn</a>
+                    {% endif %}
+                    {% if profile.github %}
+                    <a href="{{ profile.github }}" target="_blank" class="btn btn-outline"
+                        style="margin-left: 0;">GitHub</a>
+                    {% endif %}
                 </div>
             </div>
 

@@ -52,6 +52,16 @@
                         style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
 
                     <label
+                        style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">GitHub</label>
+                    <input type="text" name="github" value="{{ profile.github }}"
+                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Twitter /
+                        X</label>
+                    <input type="text" name="twitter" value="{{ profile.twitter }}"
+                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+
+                    <label
                         style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Bio</label>
                     <textarea name="bio" rows="4"
                         style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">{{ profile.bio }}</textarea>

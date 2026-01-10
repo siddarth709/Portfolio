@@ -539,29 +539,42 @@ def admin():
             flash('Project Added Successfully!', 'success')
 
         elif action == 'update_profile':
-            profile = load_json(DATA_FILE_PROFILE)
-            profile['bio'] = request.form.get('bio')
-            profile['name'] = request.form.get('name') or profile.get('name')
-            profile['email'] = request.form.get('email') or profile.get('email')
-            profile['linkedin'] = request.form.get('linkedin') or profile.get('linkedin')
+            name = request.form.get('name')
+            email = request.form.get('email')
+            linkedin = request.form.get('linkedin')
+            github = request.form.get('github')
+            twitter = request.form.get('twitter')
+            bio = request.form.get('bio')
             
+            profile = load_json(DATA_FILE_PROFILE)
+            profile['name'] = name
+            profile['email'] = email
+            profile['linkedin'] = linkedin
+            profile['github'] = github
+            profile['twitter'] = twitter
+            profile['bio'] = bio
+
             if 'profile_image' in request.files:
                 file = request.files['profile_image']
-                if file and file.filename != '' and allowed_file(file.filename):
-                    filename = secure_filename(file.filename)
+                if file and file.filename != '':
+                    filename = "profile_pic.png" # Keep it simple for now or use secure_filename
                     file.save(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename))
-                    sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename), is_binary=True, message=f"Upload Profile Image {filename}")
-                    profile['profile_image'] = filename
-            
+                    # Sync? Profile pic is static/images/profile_pic.png usually.
+                    # It's better to use text input for filename or keep fixed.
+                    # For this user, let's just overwrite.
+                    profile['image'] = filename
+                    sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename), is_binary=True, message="Update Profile Pic")
+
             if 'banner_image' in request.files:
-                file = request.files['banner_image']
-                if file and file.filename != '' and allowed_file(file.filename):
-                    filename = secure_filename(file.filename)
-                    file.save(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename))
-                    sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename), is_binary=True, message=f"Upload Banner Image {filename}")
-                    profile['banner_image'] = filename
-            
-            save_profile(profile)
+                 file = request.files['banner_image']
+                 if file and file.filename != '':
+                     filename = "banner.jpg"
+                     file.save(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename))
+                     sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename), is_binary=True, message="Update Banner")
+
+            save_json(DATA_FILE_PROFILE, profile)
+            # Sync profile data
+            sync_to_github(DATA_FILE_PROFILE, message="Update Profile Data")
             flash('Profile Updated!', 'success')
 
         elif action == 'add_education':
