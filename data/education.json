@@ -1,1 +1,9 @@
-[]
+[
+    {
+        "id": 1,
+        "school": "Vidyaniketan Public School",
+        "degree": "Senior Secondary - CBSE",
+        "date": "2023",
+        "logo": "cropped_image.png"
+    }
+]
