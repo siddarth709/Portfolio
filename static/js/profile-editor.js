@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Elements
-    const fileInput = document.getElementById('hidden-profile-input');
-    const editBtn = document.getElementById('edit-profile-btn');
     const modal = document.getElementById('editor-modal');
     const closeBtn = document.getElementById('close-modal');
     const cancelBtn = document.getElementById('cancel-edit');
@@ -9,17 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const cropContainer = document.getElementById('crop-container');
     const cropImage = document.getElementById('crop-image');
     const zoomSlider = document.getElementById('zoom-slider');
-    const form = document.getElementById('profile-form');
-    // We need a way to inject the blob into the form. 
-    // Since we can't set file input value programmatically for security,
-    // we will use a hidden input or append to FormData if we were using AJAX.
-    // BUT, standard form submit relies on the file input.
-    // TRICK: We will keep the original file input for the initial selection.
-    // If the user crops, we need to swap that file content or use a DataTransfer.
-    // Easier approach: Use AJAX to submit the form, or simpler:
-    // Update a hidden text input with base64 data? No, valid file upload is better.
-    // Let's use DataTransfer to update the file input files.
 
+    // State
+    let currentInput = null; // The file input currently being worked on
     let state = {
         scale: 1,
         panning: false,
@@ -31,24 +21,38 @@ document.addEventListener('DOMContentLoaded', () => {
         imgHeight: 0
     };
 
-    // 1. Trigger File Input
-    editBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        fileInput.click();
-    });
+    // Generic function to attach cropper logic to a pair of elements
+    function initCropper(triggerBtnId, inputId) {
+        const triggerBtn = document.getElementById(triggerBtnId);
+        const fileInput = document.getElementById(inputId);
 
-    // 2. Handle File Selection
-    fileInput.addEventListener('change', (e) => {
-        if (e.target.files && e.target.files[0]) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                cropImage.src = event.target.result;
-                openModal();
+        if (!triggerBtn || !fileInput) return;
+
+        triggerBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            currentInput = fileInput; // Track active input
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    cropImage.src = event.target.result;
+                    currentInput = fileInput; // Ensure correct input is tracked
+                    openModal();
+                }
+                reader.readAsDataURL(e.target.files[0]);
             }
-            reader.readAsDataURL(e.target.files[0]);
-        }
-    });
+        });
+    }
 
+    // Initialize for known inputs
+    initCropper('edit-profile-btn', 'hidden-profile-input');
+    initCropper('add-edu-logo-btn', 'add-edu-logo-input');
+    initCropper('add-exp-logo-btn', 'add-exp-logo-input');
+
+    // --- Modal Logic ---
     cropImage.onload = () => {
         // Reset state
         state.scale = 1;
@@ -71,13 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTransform();
     };
 
-    // 3. Zoom Logic
     zoomSlider.addEventListener('input', (e) => {
         state.scale = parseFloat(e.target.value);
         updateTransform();
     });
 
-    // 4. Pan Logic
+    // Pan Logic
     cropContainer.addEventListener('mousedown', (e) => {
         e.preventDefault();
         state.panning = true;
@@ -103,65 +106,48 @@ document.addEventListener('DOMContentLoaded', () => {
         cropImage.style.transform = `translate(-50%, -50%) translate(${state.pointX}px, ${state.pointY}px) scale(${state.scale})`;
     }
 
-    // 5. Open/Close Modal
     function openModal() {
         modal.classList.add('active');
     }
 
     function closeModal() {
         modal.classList.remove('active');
-        fileInput.value = ''; // Reset if cancelled
+        // Do NOT clear input here; allow cancelling to keep the selection? 
+        // Usually better to clear if user cancels crop?
+        // But if they just wanted to inspect it? Let's leave it.
+        // If they want to remove, they can't right now, but they can select another.
     }
 
     closeBtn.addEventListener('click', closeModal);
     cancelBtn.addEventListener('click', closeModal);
 
-    // 6. Save (Crop) Logic
+    // Save Logic
     saveBtn.addEventListener('click', () => {
+        if (!currentInput) return;
+
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
-        const size = 300; // Output size
+        const size = 300;
         canvas.width = size;
         canvas.height = size;
 
-        // Calculate source rectangle
-        // The display is 300x300. The image is at (pointX, pointY) from center, scaled by 'scale'.
-        // We want to map the 300x300 visible area to the canvas.
-
-        // Image center in container text: 150 + pointX, 150 + pointY
-
-        // Easier: draw image transformed.
-
-        ctx.fillStyle = '#000';
+        ctx.fillStyle = '#0a0a0a'; // Background matching dark theme if image has transparency
         ctx.fillRect(0, 0, size, size);
 
-        // Move to center of canvas
         ctx.translate(size / 2, size / 2);
-        // Apply same transforms
         ctx.translate(state.pointX, state.pointY);
         ctx.scale(state.scale, state.scale);
-        // Draw image centered at 0,0
         ctx.drawImage(cropImage, -state.imgWidth / 2, -state.imgHeight / 2);
 
         canvas.toBlob((blob) => {
-            // Create a new File from blob
-            const file = new File([blob], "profile_pic.png", { type: "image/png" });
+            const file = new File([blob], "cropped_image.png", { type: "image/png" });
             const container = new DataTransfer();
             container.items.add(file);
+            currentInput.files = container.files;
 
-            // Assign to input
-            fileInput.files = container.files;
-
-            // Close modal
+            // Visual feedback (optional) - e.g. change button text?
+            // Let's just close for now.
             modal.classList.remove('active');
-
-            // Optional: Submit immediately or show preview
-            // For now, allow user to click "Update Profile" on the main form? 
-            // The prompt implied "Apply" -> triggers cropping. User still needs to submit form.
-            // Let's update the preview on the page if any.
-            // But wait, the admin page input was inside the main form.
-            // If we updated fileInput.files, normal form submit will work!
-
         }, 'image/png');
     });
 
