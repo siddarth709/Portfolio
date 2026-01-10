@@ -1,12 +1,5 @@
 [
     {
-        "id": 3,
-        "name": "Hi",
-        "message": "Test 4",
-        "date": "Now",
-        "image": null
-    },
-    {
         "id": 2,
         "name": "Siddarth",
         "message": "User 2",
