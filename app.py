@@ -73,20 +73,16 @@ def allowed_file(filename):
 
 def sync_to_github(file_path, content_bytes=None, is_binary=False, message="Update data"):
     """
-    Syncs a local file update to GitHub repository to ensure persistence.
-    If content_bytes is provided, writes that. Otherwise reads from file_path.
+    Syncs a file to GitHub.
+    Returns: (success, status_message)
     """
     if not GITHUB_TOKEN or not GITHUB_REPO_NAME:
-        print("GitHub Sync Skipped: Missing GITHUB_TOKEN or GITHUB_REPO")
-        return
+        msg = "GitHub Sync Skipped: Missing GITHUB_TOKEN or GITHUB_REPO"
+        print(msg)
+        return False, msg
 
     try:
         g = Github(GITHUB_TOKEN)
-        # Handle cases where repo name might include URL parts or just user/repo
-        repo_name_clean = GITHUB_REPO_NAME.split('/')[-1] if '/' in GITHUB_REPO_NAME else GITHUB_REPO_NAME
-        # If user provides user/repo, PyGithub get_repo handles it usually if authenticated user has access
-        # Better: get_user().get_repo(name) gets it from user's repos.
-        # SAFE WAY: g.get_repo(GITHUB_REPO_NAME) which works for 'user/repo' string
         repo = g.get_repo(GITHUB_REPO_NAME)
         
         # Calculate relative path from app root
@@ -101,16 +97,24 @@ def sync_to_github(file_path, content_bytes=None, is_binary=False, message="Upda
             # Try to get existing file
             contents = repo.get_contents(rel_path)
             repo.update_file(contents.path, f"{message} [skip ci]", content_bytes, contents.sha)
-            print(f"Successfully synced {rel_path} to GitHub.")
+            msg = f"Successfully synced {rel_path} to GitHub."
+            print(msg)
+            return True, msg
         except GithubException as e:
             if e.status == 404:
                 # File doesn't exist, create it
                 repo.create_file(rel_path, f"{message} [skip ci]", content_bytes)
-                print(f"Created {rel_path} on GitHub.")
+                msg = f"Created {rel_path} on GitHub."
+                print(msg)
+                return True, msg
             else:
-                print(f"Error syncing to GitHub: {e}")
+                msg = f"Error syncing to GitHub: {e}"
+                print(msg)
+                return False, msg
     except Exception as e:
-         print(f"GitHub Sync Error: {e}")
+         msg = f"GitHub Sync Error: {e}"
+         print(msg)
+         return False, msg
 
 def load_json(filepath):
     if os.path.exists(filepath):
@@ -122,7 +126,15 @@ def save_json(filepath, data):
     with open(filepath, 'w') as f:
         json.dump(data, f, indent=4)
     # Sync to GitHub
-    sync_to_github(filepath, message=f"Update {os.path.basename(filepath)}")
+    # Sync to GitHub
+    success, msg = sync_to_github(filepath, message=f"Update {os.path.basename(filepath)}")
+    if not success:
+        try:
+            # Flash warning only if in request context (simple check)
+            if request:
+                flash(f"Saved locally, but Sync failed: {msg}", 'warning')
+        except:
+            pass # Not in request context
 
 
 def save_certificate(data):
@@ -567,18 +579,22 @@ def admin():
                     # It's better to use text input for filename or keep fixed.
                     # For this user, let's just overwrite.
                     profile['image'] = filename
-                    sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename), is_binary=True, message="Update Profile Pic")
+                    success, msg = sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename), is_binary=True, message="Update Profile Pic")
+                    if not success:
+                        flash(f"Profile Pic saved locally, but Sync failed: {msg}", 'warning')
 
             if 'banner_image' in request.files:
                  file = request.files['banner_image']
                  if file and file.filename != '':
                      filename = "banner.jpg"
                      file.save(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename))
-                     sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename), is_binary=True, message="Update Banner")
+                     success, msg = sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename), is_binary=True, message="Update Banner")
+                     if not success:
+                         flash(f"Banner saved locally, but Sync failed: {msg}", 'warning')
 
             save_json(DATA_FILE_PROFILE, profile)
-            # Sync profile data
-            sync_to_github(DATA_FILE_PROFILE, message="Update Profile Data")
+            save_json(DATA_FILE_PROFILE, profile)
+            # Sync profile data logic is now inside save_json with flash
             flash('Profile Updated!', 'success')
 
         elif action == 'add_education':
@@ -591,8 +607,11 @@ def admin():
                 file = request.files['logo']
                 if file and file.filename != '' and allowed_file(file.filename):
                     filename = secure_filename(file.filename)
+                    filename = secure_filename(file.filename)
                     file.save(os.path.join(UPLOAD_FOLDER_LOGOS, filename))
-                    sync_to_github(os.path.join(UPLOAD_FOLDER_LOGOS, filename), is_binary=True, message=f"Upload Education Logo {filename}")
+                    success, msg = sync_to_github(os.path.join(UPLOAD_FOLDER_LOGOS, filename), is_binary=True, message=f"Upload Education Logo {filename}")
+                    if not success:
+                        flash(f"Logo saved locally, but Sync failed: {msg}", 'warning')
                     logo_filename = filename
 
             new_edu = {
@@ -616,8 +635,11 @@ def admin():
                 file = request.files['logo']
                 if file and file.filename != '' and allowed_file(file.filename):
                     filename = secure_filename(file.filename)
+                    filename = secure_filename(file.filename)
                     file.save(os.path.join(UPLOAD_FOLDER_LOGOS, filename))
-                    sync_to_github(os.path.join(UPLOAD_FOLDER_LOGOS, filename), is_binary=True, message=f"Upload Experience Logo {filename}")
+                    success, msg = sync_to_github(os.path.join(UPLOAD_FOLDER_LOGOS, filename), is_binary=True, message=f"Upload Experience Logo {filename}")
+                    if not success:
+                        flash(f"Logo saved locally, but Sync failed: {msg}", 'warning')
                     logo_filename = filename
 
             new_exp = {
