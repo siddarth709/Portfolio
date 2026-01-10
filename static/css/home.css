@@ -241,3 +241,120 @@
     box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
     text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
 }
+
+/* About Section Styles (Migrated) */
+
+.about-header {
+    width: 100%;
+    height: 400px;
+    position: relative;
+    margin-bottom: 6rem;
+}
+
+.about-banner {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.9;
+}
+
+.about-header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 60%, var(--color-bg-main));
+}
+
+.header-content {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    padding: 0 var(--spacing-md);
+    z-index: 20;
+    display: flex;
+    align-items: flex-end;
+}
+
+.profile-wrapper {
+    display: flex;
+    align-items: flex-end;
+    gap: 2rem;
+    transform: translateY(30%);
+}
+
+.profile-container {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 5px solid var(--color-bg-main);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    background: var(--color-bg-secondary);
+    transition: all 0.3s ease;
+}
+
+.profile-container:hover {
+    box-shadow: 0 0 30px var(--color-accent), 0 0 60px rgba(0, 240, 255, 0.5);
+    transform: scale(1.05);
+    border-color: var(--color-accent);
+}
+
+.profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info {
+    margin-bottom: 40px;
+}
+
+.profile-name {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    transition: text-shadow 0.3s ease;
+    cursor: default;
+}
+
+.profile-name:hover {
+    text-shadow: 0 0 20px var(--color-accent), 0 0 40px rgba(0, 240, 255, 0.6);
+}
+
+.profile-email {
+    font-family: 'Inter', sans-serif;
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 0.2rem 0.8rem;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.about-intro {
+    padding-top: 6rem;
+}
+
+@media (max-width: 768px) {
+    .profile-wrapper {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        transform: translateY(20%);
+    }
+
+    .profile-info {
+        margin-bottom: 0;
+        margin-top: 1rem;
+    }
+
+    .about-intro {
+        padding-top: 10rem;
+    }
+}

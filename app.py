@@ -33,7 +33,12 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf', 'docx', 'txt'}
 app.config['UPLOAD_FOLDER_CERTS'] = UPLOAD_FOLDER_CERTS
 app.config['UPLOAD_FOLDER_DOCS'] = UPLOAD_FOLDER_DOCS
 app.config['UPLOAD_FOLDER_RESEARCH_PUBLIC'] = UPLOAD_FOLDER_RESEARCH_PUBLIC
+app.config['UPLOAD_FOLDER_RESEARCH_PUBLIC'] = UPLOAD_FOLDER_RESEARCH_PUBLIC
 app.config['UPLOAD_FOLDER_PROJECTS'] = UPLOAD_FOLDER_PROJECTS
+
+UPLOAD_FOLDER_TESTIMONIALS = os.path.join(app.root_path, 'static', 'uploads', 'testimonials')
+app.config['UPLOAD_FOLDER_TESTIMONIALS'] = UPLOAD_FOLDER_TESTIMONIALS
+os.makedirs(UPLOAD_FOLDER_TESTIMONIALS, exist_ok=True)
 
 # Ensure directories exist
 os.makedirs(UPLOAD_FOLDER_CERTS, exist_ok=True)
@@ -55,6 +60,7 @@ DATA_FILE_EXPERIENCE = os.path.join(app.root_path, 'data', 'experience.json')
 DATA_FILE_SKILLS = os.path.join(app.root_path, 'data', 'skills.json')
 DATA_FILE_MESSAGES = os.path.join(app.root_path, 'data', 'messages.json')
 DATA_FILE_HOME = os.path.join(app.root_path, 'data', 'home.json')
+DATA_FILE_TESTIMONIALS = os.path.join(app.root_path, 'data', 'testimonials.json')
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -161,6 +167,11 @@ def save_message(data):
 def save_home(data):
     save_json(DATA_FILE_HOME, data)
 
+def save_testimonial(data):
+    items = load_json(DATA_FILE_TESTIMONIALS)
+    items.insert(0, data)
+    save_json(DATA_FILE_TESTIMONIALS, items)
+
 def delete_item(item_id, item_type):
     if item_type == 'certificate':
         filepath = DATA_FILE_CERTS
@@ -249,7 +260,20 @@ def index():
             "hero_text_2": "That Matter.",
             "subtitle": "Full Stack Developer & UI/UX Enthusiast."
         }
-    return render_template('index.html', home=home_data)
+    
+    profile = load_json(DATA_FILE_PROFILE)
+    education = load_json(DATA_FILE_EDUCATION)
+    experience = load_json(DATA_FILE_EXPERIENCE)
+    skills = load_json(DATA_FILE_SKILLS)
+    testimonials = load_json(DATA_FILE_TESTIMONIALS)
+    
+    return render_template('index.html', 
+                           home=home_data,
+                           profile=profile,
+                           education=education,
+                           experience=experience,
+                           skills=skills)
+
 
 @app.route('/projects')
 def projects():
@@ -260,13 +284,7 @@ def projects():
 def project_detail(id):
     return render_template('project_detail.html', id=id)
 
-@app.route('/about')
-def about():
-    profile = load_json(DATA_FILE_PROFILE)
-    education = load_json(DATA_FILE_EDUCATION)
-    experience = load_json(DATA_FILE_EXPERIENCE)
-    skills = load_json(DATA_FILE_SKILLS)
-    return render_template('about.html', profile=profile, education=education, experience=experience, skills=skills)
+
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
@@ -296,6 +314,12 @@ def certifications():
     certs = load_json(DATA_FILE_CERTS)
     return render_template('certifications.html', certificates=certs)
 
+@app.route('/testimonials')
+def testimonials_page():
+    testimonials_data = load_json(DATA_FILE_TESTIMONIALS)
+    return render_template('testimonials.html', testimonials=testimonials_data)
+
+
 @app.route('/research')
 def research():
     research_items = load_json(DATA_FILE_RESEARCH)
@@ -322,6 +346,41 @@ def protected_research(id):
             flash('Incorrect Password', 'error')
             
     return render_template('research_login.html')
+
+@app.route('/add_testimonial', methods=['POST'])
+def add_testimonial():
+    password = request.form.get('password')
+    if password == "siddarthjt024":
+        name = request.form.get('name')
+        message = request.form.get('message')
+        if name and message:
+            image_filename = None
+            if 'image' in request.files:
+                file = request.files['image']
+                if file and file.filename != '' and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    # Unique filename to prevent overwrites
+                    import time
+                    filename = f"{int(time.time())}_{filename}"
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER_TESTIMONIALS'], filename))
+                    image_filename = filename
+
+            new_testimonial = {
+                "id": len(load_json(DATA_FILE_TESTIMONIALS)) + 1,
+                "name": name,
+                "message": message,
+                "date": "Now",
+                "image": image_filename
+            }
+            save_testimonial(new_testimonial)
+            
+            # Sync image to GitHub if exists
+            if image_filename:
+                 local_path = os.path.join(app.config['UPLOAD_FOLDER_TESTIMONIALS'], image_filename)
+                 sync_to_github(local_path, is_binary=True, message=f"Add testimonial image: {image_filename}")
+
+            return {'success': True}
+    return {'success': False, 'message': 'Invalid Password'}
 
 # --- Admin / Auth Routes ---
 
@@ -535,15 +594,7 @@ def admin():
             save_skill(new_skill)
             flash('Skill Added!', 'success')
 
-        elif action == 'update_home_text':
-            home_data = {
-                "hero_text_1": request.form.get('hero_text_1'),
-                "hero_text_accent": request.form.get('hero_text_accent'),
-                "hero_text_2": request.form.get('hero_text_2'),
-                "subtitle": request.form.get('subtitle')
-            }
-            save_home(home_data)
-            flash('Homepage Text Updated!', 'success')
+
 
         return redirect(url_for('admin'))
         

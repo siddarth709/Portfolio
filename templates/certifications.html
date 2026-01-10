@@ -11,11 +11,15 @@
 
             {% for cert in certificates %}
             <!-- Certificate Block Start -->
-            <div class="tile-card fade-in">
+            <div class="tile-card fade-in enlarge-card" data-title="{{ cert.title }}" data-issuer="{{ cert.issuer }}"
+                data-date="{{ cert.date }}" data-description="{{ cert.description }}"
+                data-link="{{ cert.link if cert.link else '#' }}"
+                data-image="{{ url_for('static', filename='uploads/certificates/' + cert.image) if cert.image else '' }}">
+
                 {% if cert.image %}
                 <div class="tile-image-container" style="height: 180px;">
                     <img src="{{ url_for('static', filename='uploads/certificates/' + cert.image) }}"
-                        alt="{{ cert.title }}" class="tile-image enlarge-image"
+                        alt="{{ cert.title }}" class="tile-image"
                         style="object-fit: contain; padding: 1rem; background: #fff;">
                 </div>
                 {% endif %}
@@ -47,12 +51,28 @@
         </div>
     </div>
 
-    <!-- Image Modal -->
+    <!-- Enhanced Certificate Modal -->
     <div id="imageModal" class="modal">
-        <span class="close">&times;</span>
-        <img class="modal-content" id="modalImage">
-        <div id="caption"></div>
-    </div>
+        <div class="modal-content card-modal">
+            <span class="close">&times;</span>
+            <div class="modal-header">
+                <h2 id="modalTitle" class="modal-title"></h2>
+                <span id="modalIssuer" class="modal-badge"></span>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-image-wrapper">
+                    <img id="modalImage" class="modal-img-display" src="" alt="">
+                </div>
+                <div class="modal-info">
+                    <p id="modalDescription" class="modal-desc"></p>
+                    <div class="modal-meta">
+                        <span id="modalDate" class="modal-date"></span>
+                        <a id="modalLink" href="#" target="_blank" class="btn btn-primary modal-btn">View Credential</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 {% endblock %}

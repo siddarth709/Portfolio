@@ -4,20 +4,21 @@
   --color-bg-secondary: #111111;
   --color-text-main: #ffffff;
   --color-text-secondary: #888888;
-  --color-accent: #00f0ff; /* Cyan Neon */
+  --color-accent: #00f0ff;
+  /* Cyan Neon */
   --color-accent-glow: rgba(0, 240, 255, 0.4);
   --color-border: #333333;
-  
+
   /* Typography */
-  --font-main: 'Inter', sans-serif;
-  --font-display: 'Outfit', sans-serif;
-  
+  --font-main: 'Outfit', sans-serif;
+  --font-display: 'Rajdhani', sans-serif;
+
   /* Spacing */
   --spacing-sm: 0.5rem;
   --spacing-md: 1rem;
   --spacing-lg: 2rem;
   --spacing-xl: 4rem;
-  
+
   /* Layout */
   --container-width: 1200px;
   --header-height: 80px;

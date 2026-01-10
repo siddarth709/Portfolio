@@ -7,26 +7,87 @@
 {% endblock %}
 
 {% block content %}
-<section class="hero">
-    <div class="container">
-        <div class="hero-content">
-            <h1 class="display-text slide-up">
-                {{ home.hero_text_1 }} <br>
-                <span class="text-accent">{{ home.hero_text_accent }}</span> <br>
-                {{ home.hero_text_2 }}
-            </h1>
-            <p class="hero-subtitle fade-in">
-                {{ home.subtitle }}
-            </p>
-            <div class="hero-actions fade-in">
-                <a href="{{ url_for('projects') }}" class="btn btn-primary">View Projects</a>
-                <a href="{{ url_for('contact') }}" class="btn btn-outline">Contact Me</a>
+
+
+<!-- About Section -->
+<div class="about-header" style="height: auto; margin-bottom: 0; background: transparent;">
+    <!-- Keeping Banner Hidden or Optional for Home layout, or repurpose? 
+         User said "Add about in homepage", let's include the whole structure but maybe tweak spacing.
+         For now, sticking to the exact structure from about.html but appended.
+    -->
+    <!-- Actually, let's use the exact structure but maybe simplify the banner part if it looks weird below Hero.
+         The About Page had a big banner. Index page has Hero. 
+         Let's add it as a new section below Hero.
+    -->
+</div>
+
+<section id="about" class="section about-intro" style="padding-top: 5rem;">
+    <div class="about-header" style="height: 300px; margin-bottom: 6rem;">
+        <img src="{{ url_for('static', filename='images/' + profile.banner_image) if profile.banner_image else url_for('static', filename='images/banner.png') }}"
+            alt="Banner" class="about-banner">
+        <div class="header-content container">
+            <div class="profile-wrapper">
+                <div class="profile-container fade-in">
+                    <img src="{{ url_for('static', filename='images/' + profile.profile_image) if profile.profile_image else url_for('static', filename='images/profile.jpg') }}"
+                        alt="Profile Picture" class="profile-img">
+                </div>
+                <div class="profile-info fade-in">
+                    <h1 class="profile-name">{{ profile.name }}</h1>
+                    <p class="profile-email">{{ profile.email }}</p>
+                </div>
             </div>
         </div>
     </div>
-    <div class="hero-bg-image"></div>
-    <div class="hero-background"></div>
+
+    <div class="container">
+        <div class="about-content" style="max-width: 900px; margin: 0 auto;">
+            <p class="display-text fade-in" style="font-size: 1.5rem; margin-bottom: 2rem; white-space: pre-line;">
+                {{ profile.bio }}
+            </p>
+            <div style="text-align: center; margin-bottom: 3rem;" class="fade-in">
+                <a href="{{ profile.linkedin }}" target="_blank" class="btn btn-outline">
+                    Connect on LinkedIn &rarr;
+                </a>
+            </div>
+
+            <div class="fade-in"
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 4rem; margin-top: 4rem;">
+                <div>
+                    <h3 style="margin-bottom: 1rem; color: var(--color-accent);">Skills</h3>
+                    <ul style="list-style: none; color: var(--color-text-secondary);">
+                        {% for skill in skills %}
+                        <li style="margin-bottom: 0.5rem;"><strong>{{ skill.category }}:</strong> {{ skill.skill_list }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="margin-bottom: 1rem; color: var(--color-accent);">Education & Experience</h3>
+
+                    {% for edu in education %}
+                    <div style="margin-bottom: 1.5rem;">
+                        <h4 style="margin-bottom: 0.2rem;">{{ edu.school }}</h4>
+                        <p style="font-size: 0.9rem; color: var(--color-text-secondary);">{{ edu.degree }} &bull; {{
+                            edu.date }}</p>
+                    </div>
+                    {% endfor %}
+
+                    {% for exp in experience %}
+                    <div style="margin-bottom: 1.5rem;">
+                        <h4 style="margin-bottom: 0.2rem;">{{ exp.company }}</h4>
+                        <p style="font-size: 0.9rem; color: var(--color-text-secondary);">{{ exp.role }} &bull; {{
+                            exp.date }}</p>
+                        <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-top: 0.2rem;">{{
+                            exp.description }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+
+
 
 
 {% endblock %}

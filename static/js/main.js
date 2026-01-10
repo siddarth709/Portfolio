@@ -57,15 +57,48 @@ document.addEventListener('DOMContentLoaded', () => {
         const span = document.getElementsByClassName("close")[0];
 
         // Open Modal
-        document.querySelectorAll('.enlarge-image').forEach(img => {
-            img.addEventListener('click', function (e) {
-                e.stopPropagation(); // Prevent tile click if nested
-                modal.style.display = "block";
-                // Force reflow for transition
-                void modal.offsetWidth;
-                modal.classList.add('show');
-                modalImg.src = this.src;
-                captionText.innerHTML = this.alt;
+        // Open Modal
+        document.querySelectorAll('.enlarge-image, .enlarge-card').forEach(el => {
+            el.addEventListener('click', function (e) {
+                // If clicking a link or button inside the card, do not open modal
+                if (e.target.closest('a') || e.target.closest('button')) {
+                    return;
+                }
+
+                e.stopPropagation();
+                e.stopPropagation();
+
+                // Get data from attributes
+                const title = this.getAttribute('data-title');
+                const issuer = this.getAttribute('data-issuer');
+                const date = this.getAttribute('data-date');
+                const desc = this.getAttribute('data-description');
+                const link = this.getAttribute('data-link');
+                const imgSrc = this.getAttribute('data-image');
+
+                if (imgSrc) {
+                    modalImg.src = imgSrc;
+                    modalImg.alt = title;
+
+                    // Populate other fields
+                    document.getElementById('modalTitle').textContent = title;
+                    document.getElementById('modalIssuer').textContent = issuer;
+                    document.getElementById('modalDescription').textContent = desc;
+                    document.getElementById('modalDate').textContent = date;
+
+                    const btn = document.getElementById('modalLink');
+                    if (link && link !== '#') {
+                        btn.href = link;
+                        btn.style.display = 'inline-flex';
+                    } else {
+                        btn.style.display = 'none';
+                    }
+
+                    modal.style.display = "block";
+                    // Force reflow
+                    void modal.offsetWidth;
+                    modal.classList.add('show');
+                }
             });
         });
 

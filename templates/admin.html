@@ -22,50 +22,7 @@
         <div
             style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
 
-            <!-- Homepage Settings -->
-            <div class="fade-in"
-                style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: 8px; grid-column: span 2;">
-                <h3 style="margin-bottom: 1rem;">Homepage Text</h3>
-                <form method="POST" action="{{ url_for('admin') }}">
-                    <input type="hidden" name="action" value="update_home_text">
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div>
-                            <label
-                                style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Hero
-                                Text 1 (Top)</label>
-                            <input type="text" name="hero_text_1" value="{{ home.hero_text_1 }}" required
-                                style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                        </div>
-                        <div>
-                            <label
-                                style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Hero
-                                Text Accent (Middle)</label>
-                            <input type="text" name="hero_text_accent" value="{{ home.hero_text_accent }}" required
-                                style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                        </div>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div>
-                            <label
-                                style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Hero
-                                Text 2 (Bottom)</label>
-                            <input type="text" name="hero_text_2" value="{{ home.hero_text_2 }}" required
-                                style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                        </div>
-                        <div>
-                            <label
-                                style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Subtitle</label>
-                            <input type="text" name="subtitle" value="{{ home.subtitle }}" required
-                                style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Update
-                        Home Text</button>
-                </form>
-            </div>
 
             <!-- Profile Settings -->
             <div class="fade-in"
