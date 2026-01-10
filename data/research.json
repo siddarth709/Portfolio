@@ -1,15 +1,5 @@
 [
     {
-        "id": 2,
-        "type": "ongoing",
-        "title": "dskyuf",
-        "description": "JNVDSC",
-        "link": "dsjsbvlsd",
-        "link_text": "View Project",
-        "document": "DDCO_Assignment_.pdf",
-        "public_document": "DSA_LAB_Part_2.pdf"
-    },
-    {
         "id": 1,
         "type": "ongoing",
         "title": "Ai radar System",
