@@ -51,6 +51,7 @@ os.makedirs(UPLOAD_FOLDER_PROJECTS, exist_ok=True)
 UPLOAD_FOLDER_IMAGES = os.path.join(app.root_path, 'static', 'images')
 app.config['UPLOAD_FOLDER_IMAGES'] = UPLOAD_FOLDER_IMAGES
 os.makedirs(UPLOAD_FOLDER_IMAGES, exist_ok=True)
+os.makedirs(UPLOAD_FOLDER_LOGOS, exist_ok=True)
 
 # --- Data Handling ---
 DATA_FILE_CERTS = os.path.join(app.root_path, 'data', 'certificates.json')
