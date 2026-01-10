@@ -48,9 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Initialize for known inputs
+    // Initialize for known inputs
     initCropper('edit-profile-btn', 'hidden-profile-input');
-    initCropper('add-edu-logo-btn', 'add-edu-logo-input');
-    initCropper('add-exp-logo-btn', 'add-exp-logo-input');
+    // Logo inputs removed
+
 
     // --- Modal Logic ---
     cropImage.onload = () => {

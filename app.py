@@ -213,6 +213,9 @@ def delete_item(item_id, item_type):
     elif item_type == 'message':
         filepath = DATA_FILE_MESSAGES
         upload_folder = None
+    elif item_type == 'testimonial':
+        filepath = DATA_FILE_TESTIMONIALS
+        upload_folder = app.config['UPLOAD_FOLDER_TESTIMONIALS']
     else:
         return False
 
@@ -243,7 +246,17 @@ def delete_item(item_id, item_type):
                  file_path = os.path.join(app.config['UPLOAD_FOLDER_RESEARCH_PUBLIC'], item_to_delete['public_document'])
                  if os.path.exists(file_path):
                      os.remove(file_path)
+             if item_to_delete.get('public_document'):
+                  file_path = os.path.join(app.config['UPLOAD_FOLDER_RESEARCH_PUBLIC'], item_to_delete['public_document'])
+                  if os.path.exists(file_path):
+                      os.remove(file_path)
 
+        elif item_type == 'testimonial':
+             if item_to_delete.get('image'):
+                 file_path = os.path.join(upload_folder, item_to_delete['image'])
+                 # Generic delete doesn't know about robust file check, but this is fine.
+                 if os.path.exists(file_path):
+                     os.remove(file_path)
         items = [item for item in items if str(item['id']) != str(item_id)]
         save_json(filepath, items)
         return True
@@ -602,24 +615,11 @@ def admin():
             degree = request.form.get('degree')
             date = request.form.get('date')
             
-            logo_filename = None
-            if 'logo' in request.files:
-                file = request.files['logo']
-                if file and file.filename != '' and allowed_file(file.filename):
-                    filename = secure_filename(file.filename)
-                    filename = secure_filename(file.filename)
-                    file.save(os.path.join(UPLOAD_FOLDER_LOGOS, filename))
-                    success, msg = sync_to_github(os.path.join(UPLOAD_FOLDER_LOGOS, filename), is_binary=True, message=f"Upload Education Logo {filename}")
-                    if not success:
-                        flash(f"Logo saved locally, but Sync failed: {msg}", 'warning')
-                    logo_filename = filename
-
             new_edu = {
                 "id": len(load_json(DATA_FILE_EDUCATION)) + 1,
                 "school": school,
                 "degree": degree,
-                "date": date,
-                "logo": logo_filename
+                "date": date
             }
             save_education(new_edu)
             flash('Education Added!', 'success')
@@ -630,25 +630,12 @@ def admin():
             date = request.form.get('date')
             desc = request.form.get('description')
             
-            logo_filename = None
-            if 'logo' in request.files:
-                file = request.files['logo']
-                if file and file.filename != '' and allowed_file(file.filename):
-                    filename = secure_filename(file.filename)
-                    filename = secure_filename(file.filename)
-                    file.save(os.path.join(UPLOAD_FOLDER_LOGOS, filename))
-                    success, msg = sync_to_github(os.path.join(UPLOAD_FOLDER_LOGOS, filename), is_binary=True, message=f"Upload Experience Logo {filename}")
-                    if not success:
-                        flash(f"Logo saved locally, but Sync failed: {msg}", 'warning')
-                    logo_filename = filename
-
             new_exp = {
                 "id": len(load_json(DATA_FILE_EXPERIENCE)) + 1,
                 "role": role,
                 "company": company,
                 "date": date,
-                "description": desc,
-                "logo": logo_filename
+                "description": desc
             }
             save_experience(new_exp)
             flash('Experience Added!', 'success')
@@ -675,6 +662,7 @@ def admin():
     experience = load_json(DATA_FILE_EXPERIENCE)
     skills = load_json(DATA_FILE_SKILLS)
     messages = load_json(DATA_FILE_MESSAGES)
+    testimonials = load_json(DATA_FILE_TESTIMONIALS)
     home_data = load_json(DATA_FILE_HOME)
     return render_template('admin.html', 
                            documents=documents, 
@@ -686,6 +674,7 @@ def admin():
                            experience=experience,
                            skills=skills,
                            messages=messages,
+                           testimonials=testimonials,
                            home=home_data)
 
 @app.route('/admin/delete/<item_type>/<int:id>')

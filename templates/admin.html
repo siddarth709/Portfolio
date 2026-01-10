@@ -141,13 +141,6 @@
                         style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
                     <input type="text" name="date" required placeholder="Date (e.g. 2020-2024)"
                         style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                    <label style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Logo
-                        (Optional)</label>
-                    <input type="file" id="add-edu-logo-input" name="logo" style="display: none;" accept="image/*">
-                    <button type="button" id="add-edu-logo-btn" class="btn btn-outline"
-                        style="width: 100%; margin-bottom: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                        <span style="font-size: 1.2rem;">📷</span> Upload Logo
-                    </button>
                     <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
                         &plus;</button>
                 </form>
@@ -164,13 +157,6 @@
                         style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
                     <input type="text" name="date" required placeholder="Date"
                         style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                    <label style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Logo
-                        (Optional)</label>
-                    <input type="file" id="add-exp-logo-input" name="logo" style="display: none;" accept="image/*">
-                    <button type="button" id="add-exp-logo-btn" class="btn btn-outline"
-                        style="width: 100%; margin-bottom: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                        <span style="font-size: 1.2rem;">📷</span> Upload Logo
-                    </button>
                     <textarea name="description" rows="2" placeholder="Description"
                         style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;"></textarea>
                     <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
@@ -269,6 +255,28 @@
 
         <!-- Data Lists -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+
+            <!-- Testimonials List -->
+            <div>
+                <h4 style="margin-bottom: 1rem; color: var(--color-accent);">Testimonials</h4>
+                {% if testimonials %}
+                <ul style="border: 1px solid var(--color-border); border-radius: 4px;">
+                    {% for item in testimonials %}
+                    <li
+                        style="padding: 1rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; background: var(--color-bg-secondary);">
+                        <div style="flex-grow: 1; margin-right: 1rem;">
+                            <strong>{{ item.name }}</strong>
+                        </div>
+                        <a href="#" class="btn-delete"
+                            data-href="{{ url_for('delete', item_type='testimonial', id=item.id) }}"
+                            style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p style="color: var(--color-text-secondary);">No testimonials added.</p>
+                {% endif %}
+            </div>
 
             <!-- Projects List -->
             <div>

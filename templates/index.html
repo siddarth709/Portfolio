@@ -70,11 +70,8 @@
                         <div class="timeline-content">
                             <span class="date">{{ edu.date }}</span>
                             <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.3rem;">
-                                {% if edu.logo %}
-                                <img src="{{ url_for('static', filename='uploads/logos/' + edu.logo) }}" alt="Logo"
-                                    style="width: 24px; height: 24px; border-radius: 4px; object-fit: contain;">
-                                {% endif %}
-                                <h3 class="h3">{{ edu.school }}</h3>
+                                <!-- Logo removed -->
+                                <h3 class="h3" style="margin: 0;">{{ edu.school }}</h3>
                             </div>
                             <p class="text-accent">{{ edu.degree }}</p>
                         </div>
