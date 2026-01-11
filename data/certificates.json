@@ -1,1 +1,11 @@
-[]
+[
+    {
+        "id": 1,
+        "title": "IBM Data Science",
+        "issuer": "IBM + Coursera",
+        "date": "Oct 22",
+        "link": "#",
+        "description": "End-to-end data science pipeline, encompassing Python programming, SQL data extraction, exploratory analysis, and the deployment of machine learning models to drive data-driven decision-making.",
+        "image": "Coursera_ZTPV1QJ47MYL_page-0001.jpg"
+    }
+]
