@@ -1,1 +1,20 @@
-[]
+[
+    {
+        "id": 2,
+        "title": "IBM Data Science Certification",
+        "issuer": "IBM + Coursera",
+        "date": "Oct 22",
+        "link": "#",
+        "description": "Data Science Foundations: Gained a deep understanding of what data science is, the methodology behind it, and the professional tools used in the field (Jupyter Notebooks, RStudio, and IBM Cloud Pak for Data).\r\n\r\nProgramming Mastery: Developed proficiency in Python for data manipulation, including libraries like Pandas, NumPy, and Matplotlib.\r\n\r\nData Management: Learned to work with relational databases using SQL to extract and analyze data.\r\n\r\nAnalytical Techniques: Mastered data analysis (Wrangling, Exploratory Data Analysis) and high-level Data Visualization using Seaborn and Folium.\r\n\r\nMachine Learning: Built, evaluated, and deployed Machine Learning models using Scikit-learn, covering regression, classification, and clustering.\r\n\r\nGenerative AI Integration: Gained insights into leveraging Generative AI to accelerate a data science career.",
+        "image": null
+    },
+    {
+        "id": 1,
+        "title": "IBM - Data Science Certificate ",
+        "issuer": "IBM on Coursera",
+        "date": "Oct 22",
+        "link": "#",
+        "description": "1.What is Data Science?\r\n2.Tools for Data Science\r\n3.Data Science Methodology\r\n4.Python for Data Science, AI &\r\nDevelopment\r\n5.Python Project for Data Science\r\n6.Databases and SQL for Data Science\r\nwith Python\r\n7.Data Analysis with Python\r\n8.Data Visualization with Python\r\n9.Machine Learning with Python\r\n10.Applied Data Science Capstone\r\n11.Generative AI: Elevate Your Data\r\nScience Career\r\n12. Data Scientist Career Guide and\r\nInterview Preparation",
+        "image": "Coursera_ZTPV1QJ47MYL_page-0001.jpg"
+    }
+]
