@@ -2,11 +2,13 @@
   /* Colors */
   --color-bg-main: #0a0a0a;
   --color-bg-secondary: #111111;
+  --color-bg-main-rgb: 0, 0, 0;
+  /* Updated to pure black for deep glass */
+  --color-bg-secondary-rgb: 17, 17, 17;
   --color-text-main: #ffffff;
   --color-text-secondary: #888888;
   --color-accent: #00f0ff;
-  /* Cyan Neon */
-  --color-accent-glow: rgba(0, 240, 255, 0.4);
+  --color-accent-rgb: 0, 240, 255;
   --color-border: #333333;
 
   /* Typography */

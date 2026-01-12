@@ -580,32 +580,44 @@ def admin():
             profile['email'] = email
             profile['linkedin'] = linkedin
             profile['github'] = github
+            profile['github'] = github
             profile['twitter'] = twitter
+            profile['phone'] = request.form.get('phone') # Add phone number
             profile['bio'] = bio
 
             if 'profile_image' in request.files:
                 file = request.files['profile_image']
                 if file and file.filename != '':
-                    filename = "profile_pic.png" # Keep it simple for now or use secure_filename
+                    filename = "profile_pic.png" # Keep it simple for now
                     file.save(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename))
-                    # Sync? Profile pic is static/images/profile_pic.png usually.
-                    # It's better to use text input for filename or keep fixed.
-                    # For this user, let's just overwrite.
                     profile['image'] = filename
-                    success, msg = sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename), is_binary=True, message="Update Profile Pic")
-                    if not success:
-                        flash(f"Profile Pic saved locally, but Sync failed: {msg}", 'warning')
+                    sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename), is_binary=True, message="Update Profile Pic")
 
             if 'banner_image' in request.files:
                  file = request.files['banner_image']
                  if file and file.filename != '':
-                     filename = "banner.jpg"
-                     file.save(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename))
-                     success, msg = sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename), is_binary=True, message="Update Banner")
-                     if not success:
-                         flash(f"Banner saved locally, but Sync failed: {msg}", 'warning')
+                    filename = "banner.png"
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename))
+                    profile['banner_image'] = filename
+                    sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename), is_binary=True, message="Update Banner")
 
-            save_json(DATA_FILE_PROFILE, profile)
+            # New Section Images
+            for img_field in ['skills_image', 'education_image', 'experience_image']:
+                if img_field in request.files:
+                    file = request.files[img_field]
+                    if file and file.filename != '':
+                        # Use fixed names or secure filenames. Let's strictly map them to keep it clean?
+                        # Or just use the uploaded filename? The user might upload "screenshot.png" for all.
+                        # Better to have designated filenames like "skills_pic.png", "edu_pic.png" etc?
+                        # The prompt implies "modify or change image".
+                        # Let's use the uploaded filename but maybe prefix? Or just overwrite specific files?
+                        # Users might want to try different images. Let's use unique timestamped names or secure filenames.
+                        # Actually for simplistic CMS logic in this project, replacing a specific file (e.g. 'skills.jpg') is cleaner but caching issues.
+                        # Let's use secure_filename.
+                        filename = secure_filename(file.filename)
+                        file.save(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename))
+                        profile[img_field] = filename
+                        sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename), is_binary=True, message=f"Update {img_field}")
             save_json(DATA_FILE_PROFILE, profile)
             # Sync profile data logic is now inside save_json with flash
             flash('Profile Updated!', 'success')

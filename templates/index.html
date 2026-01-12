@@ -33,7 +33,15 @@
                 </div>
                 <div class="profile-info fade-in">
                     <h1 class="profile-name">{{ profile.name }}</h1>
-                    <p class="profile-email">{{ profile.email }}</p>
+                    <p class="profile-email">
+                        <span style="color: var(--color-accent);">✉️</span> {{ profile.email }}
+                    </p>
+                    {% if profile.phone %}
+                    <p class="profile-phone"
+                        style="font-family: 'Inter', sans-serif; color: var(--color-text-secondary); font-size: 1rem; margin-top: 0.5rem;">
+                        <span style="color: var(--color-accent);">📞</span> {{ profile.phone }}
+                    </p>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -52,44 +60,96 @@
 
             <div class="fade-in"
                 style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 4rem; margin-top: 4rem;">
-                <div>
-                    <h3 style="margin-bottom: 1rem; color: var(--color-accent);">Skills</h3>
-                    <ul style="list-style: none; color: var(--color-text-secondary);">
-                        {% for skill in skills %}
-                        <li style="margin-bottom: 0.5rem;"><strong>{{ skill.category }}:</strong> {{ skill.skill_list }}
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <div>
-                    <h3 style="margin-bottom: 1rem; color: var(--color-accent);">Education & Experience</h3>
+                <!-- Skills Removed from here to move effectively below -->
+                <div style="display: none;"></div>
+                <!-- Education & Experience List Removed -->
+                <div style="display: none;"></div>
+            </div>
 
-                    {% for edu in education %}
-                    <div class="timeline-item fade-in">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-content">
-                            <span class="date">{{ edu.date }}</span>
-                            <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.3rem;">
-                                <!-- Logo removed -->
-                                <h3 class="h3" style="margin: 0;">{{ edu.school }}</h3>
-                            </div>
-                            <p class="text-accent">{{ edu.degree }}</p>
-                        </div>
-                    </div>
-                    {% endfor %}
+        </div>
 
-                    {% for exp in experience %}
-                    <div style="margin-bottom: 1.5rem;">
-                        <h4 style="margin-bottom: 0.2rem;">{{ exp.company }}</h4>
-                        <p style="font-size: 0.9rem; color: var(--color-text-secondary);">{{ exp.role }} &bull; {{
-                            exp.date }}</p>
-                        <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-top: 0.2rem;">{{
-                            exp.description }}</p>
+        <!-- New Big Skills Showcase Section -->
+        <div class="skills-showcase section">
+            <div class="skills-text">
+                <h2 class="display-text section-title">Skills & <span class="text-accent">Expertise</span>.</h2>
+                <div class="skills-list-big">
+                    {% for skill in skills %}
+                    <div class="skill-category-big">
+                        <h3 class="skill-cat-title">{{ skill.category }}</h3>
+                        <p class="skill-items-big">{{ skill.skill_list }}</p>
                     </div>
                     {% endfor %}
                 </div>
             </div>
+            <div class="skills-image">
+                <div class="circular-image-container">
+                    <img src="{{ url_for('static', filename='images/' + profile.skills_image) }}"
+                        alt="Skills Visualization">
+                </div>
+            </div>
         </div>
+        <!-- Education & Experience Grid -->
+        <div class="edu-exp-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 6rem;">
+
+            <!-- Education Box -->
+            <div class="edu-exp-box glass-panel"
+                style="padding: 2rem; border-radius: 12px; position: relative; overflow: hidden;">
+                <div class="box-header"
+                    style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 2rem;">
+                    <h2 class="display-text section-title" style="font-size: 2rem; margin: 0;">Education<span
+                            class="text-accent">.</span></h2>
+                    <div class="mini-circular-image"
+                        style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255,255,255,0.2); flex-shrink: 0;">
+                        <img src="{{ url_for('static', filename='images/' + profile.education_image) }}" alt="Education"
+                            style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                </div>
+
+                <div class="box-list">
+                    {% for edu in education %}
+                    <div class="timeline-item fade-in" style="margin-bottom: 1.5rem;">
+                        <h3 class="h3" style="margin: 0; font-size: 1.2rem; color: var(--color-text-main);">{{
+                            edu.school }}</h3>
+                        <p class="text-accent" style="margin: 0.2rem 0;">{{ edu.degree }}</p>
+                        <span class="date" style="font-size: 0.85rem; color: var(--color-text-secondary);">{{
+                            edu.date }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Experience Box -->
+            <div class="edu-exp-box glass-panel"
+                style="padding: 2rem; border-radius: 12px; position: relative; overflow: hidden;">
+                <div class="box-header"
+                    style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 2rem;">
+                    <h2 class="display-text section-title" style="font-size: 2rem; margin: 0;">Experience<span
+                            class="text-accent">.</span></h2>
+                    <div class="mini-circular-image"
+                        style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255,255,255,0.2); flex-shrink: 0;">
+                        <img src="{{ url_for('static', filename='images/' + profile.experience_image) }}"
+                            alt="Experience" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                </div>
+
+                <div class="box-list">
+                    {% for exp in experience %}
+                    <div class="timeline-item fade-in" style="margin-bottom: 1.5rem;">
+                        <h4 style="margin: 0; font-size: 1.2rem; color: var(--color-text-main);">{{ exp.company
+                            }}</h4>
+                        <p style="font-size: 1rem; color: var(--color-text-secondary); margin: 0.2rem 0;">{{
+                            exp.role }}</p>
+                        <p style="font-size: 0.85rem; color: var(--color-text-secondary);">{{ exp.date }}</p>
+                        <p
+                            style="font-size: 0.9rem; color: var(--color-text-secondary); margin-top: 0.5rem; line-height: 1.4;">
+                            {{ exp.description }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
     </div>
 </section>
 

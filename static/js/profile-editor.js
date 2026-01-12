@@ -50,6 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize for known inputs
     // Initialize for known inputs
     initCropper('edit-profile-btn', 'hidden-profile-input');
+    initCropper('skills-img-btn', 'skills-img-input');
+    initCropper('edu-img-btn', 'edu-img-input');
+    initCropper('exp-img-btn', 'exp-img-input');
     // Logo inputs removed
 
 

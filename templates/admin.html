@@ -45,406 +45,435 @@
                                 style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
                         </div>
                     </div>
-
-                    <label
-                        style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">LinkedIn</label>
-                    <input type="text" name="linkedin" value="{{ profile.linkedin }}"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-
-                    <label
-                        style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">GitHub</label>
-                    <input type="text" name="github" value="{{ profile.github }}"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-
-                    <label style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Twitter /
-                        X</label>
-                    <input type="text" name="twitter" value="{{ profile.twitter }}"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-
-                    <label
-                        style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Bio</label>
-                    <textarea name="bio" rows="4"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">{{ profile.bio }}</textarea>
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div>
-                            <label
-                                style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Profile
-                                Image</label>
-                            <!-- Hidden File Input -->
-                            <input type="file" id="hidden-profile-input" name="profile_image" accept="image/*"
-                                style="display: none;">
-                            <!-- Custom Button -->
-                            <button id="edit-profile-btn" type="button" class="btn btn-outline"
-                                style="width: 100%; text-align: center; margin-bottom: 0.8rem;">
-                                <span style="font-size: 1.2rem; margin-right: 0.5rem;">📷</span> Change Photo
-                            </button>
-                        </div>
-                        <div>
-                            <label
-                                style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Banner
-                                Image</label>
-                            <input type="file" name="banner_image" accept="image/*"
-                                style="width: 100%; margin-bottom: 0.8rem;">
-                        </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Phone
+                            Number</label>
+                        <input type="text" name="phone" value="{{ profile.phone }}" placeholder="+91 98765 43210"
+                            style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
                     </div>
-
-                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Update
-                        Profile</button>
-                </form>
             </div>
 
-            <!-- Project Form -->
-            <div class="fade-in" style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: 8px;">
-                <h3 style="margin-bottom: 1rem;">Add Project</h3>
-                <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
-                    <input type="hidden" name="action" value="add_project">
-                    <input type="text" name="title" required placeholder="Title"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                    <input type="text" name="link" required placeholder="Link URL"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                    <input type="file" name="image" accept="image/*" style="width: 100%; margin-bottom: 0.8rem;">
-                    <textarea name="description" rows="2" required placeholder="Description"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;"></textarea>
-                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
-                        &plus;</button>
-                </form>
-            </div>
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">LinkedIn</label>
+            <input type="text" name="linkedin" value="{{ profile.linkedin }}"
+                style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
 
-            <!-- Certificate Form -->
-            <div class="fade-in" style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: 8px;">
-                <h3 style="margin-bottom: 1rem;">Add Certificate</h3>
-                <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
-                    <input type="hidden" name="action" value="add_cert">
-                    <input type="text" name="title" required placeholder="Title"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                    <input type="text" name="issuer" required placeholder="Issuer"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                    <input type="text" name="date" required placeholder="Date"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                    <input type="file" name="image" accept="image/*" style="width: 100%; margin-bottom: 0.8rem;">
-                    <textarea name="description" rows="2" required placeholder="Description"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;"></textarea>
-                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
-                        &plus;</button>
-                </form>
-            </div>
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">GitHub</label>
+            <input type="text" name="github" value="{{ profile.github }}"
+                style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
 
-            <!-- Add Education -->
-            <div class="fade-in" style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: 8px;">
-                <h3 style="margin-bottom: 1rem;">Add Education</h3>
-                <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
-                    <input type="hidden" name="action" value="add_education">
-                    <input type="text" name="school" required placeholder="School/University"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                    <input type="text" name="degree" required placeholder="Degree"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                    <input type="text" name="date" required placeholder="Date (e.g. 2020-2024)"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
-                        &plus;</button>
-                </form>
-            </div>
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Twitter /
+                X</label>
+            <input type="text" name="twitter" value="{{ profile.twitter }}"
+                style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
 
-            <!-- Add Experience -->
-            <div class="fade-in" style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: 8px;">
-                <h3 style="margin-bottom: 1rem;">Add Experience</h3>
-                <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
-                    <input type="hidden" name="action" value="add_experience">
-                    <input type="text" name="company" required placeholder="Company"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                    <input type="text" name="role" required placeholder="Role"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                    <input type="text" name="date" required placeholder="Date"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                    <textarea name="description" rows="2" placeholder="Description"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;"></textarea>
-                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
-                        &plus;</button>
-                </form>
-            </div>
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Bio</label>
+            <textarea name="bio" rows="4"
+                style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">{{ profile.bio }}</textarea>
 
-            <!-- Add Skill -->
-            <div class="fade-in" style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: 8px;">
-                <h3 style="margin-bottom: 1rem;">Add Skill</h3>
-                <form method="POST" action="{{ url_for('admin') }}">
-                    <input type="hidden" name="action" value="add_skill">
-                    <input type="text" name="category" required placeholder="Category (e.g. AI/ML)"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                    <input type="text" name="items" required placeholder="Items (comma separated)"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
-                        &plus;</button>
-                </form>
-            </div>
-
-            <!-- Research Form -->
-            <div class="fade-in" style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: 8px;">
-                <h3 style="margin-bottom: 1rem;">Add Research</h3>
-                <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
-                    <input type="hidden" name="action" value="add_research">
-                    <select name="type" required
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                        <option value="published">Published Paper</option>
-                        <option value="ongoing">Ongoing Project</option>
-                    </select>
-                    <input type="text" name="title" required placeholder="Title"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                    <input type="text" name="link" placeholder="Link URL (Optional)"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-
-                    <label
-                        style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary); font-size: 0.9rem;">Protected
-                        Document (Optional)</label>
-                    <input type="file" name="document" style="width: 100%; margin-bottom: 0.8rem;">
-
-                    <label
-                        style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary); font-size: 0.9rem;">Public
-                        File (Superficial/Abstract) (Optional)</label>
-                    <input type="file" name="public_document" style="width: 100%; margin-bottom: 0.8rem;">
-
-                    <textarea name="description" rows="3" required placeholder="Description"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;"></textarea>
-                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
-                        &plus;</button>
-                </form>
-            </div>
-
-            <!-- Documents Form -->
-            <div class="fade-in" style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: 8px;">
-                <h3 style="margin-bottom: 1rem;">Upload Document</h3>
-                <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
-                    <input type="hidden" name="action" value="add_doc">
-                    <input type="text" name="title" required placeholder="Document Title"
-                        style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
-                    <input type="file" name="document" required style="width: 100%; margin-bottom: 1rem;">
-                    <button type="submit" class="btn btn-outline" style="width: 100%; justify-content: center;">Upload
-                        &uarr;</button>
-                </form>
-            </div>
-
-        </div>
-
-        <h2 style="margin-bottom: 2rem; border-top: 1px solid var(--color-border); padding-top: 2rem;">Manage Content
-        </h2>
-
-        <!-- Messages Section -->
-        <h3 style="margin-bottom: 1rem; color: var(--color-accent);">Messages</h3>
-        {% if messages %}
-        <div
-            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 3rem;">
-            {% for msg in messages %}
-            <div
-                style="background: var(--color-bg-secondary); padding: 1rem; border-radius: 4px; border: 1px solid var(--color-border);">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                    <strong>{{ msg.name }}</strong>
-                    <span style="font-size: 0.8rem; color: var(--color-text-secondary);">{{ msg.date }}</span>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Profile
+                        Image</label>
+                    <!-- Hidden File Input -->
+                    <input type="file" id="hidden-profile-input" name="profile_image" accept="image/*"
+                        style="display: none;">
+                    <!-- Custom Button -->
+                    <button id="edit-profile-btn" type="button" class="btn btn-outline"
+                        style="width: 100%; text-align: center; margin-bottom: 0.8rem;">
+                        <span style="font-size: 1.2rem; margin-right: 0.5rem;">📷</span> Change Photo
+                    </button>
                 </div>
-                <div style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">{{ msg.email
-                    }}</div>
-                <p style="font-size: 0.95rem;">{{ msg.message }}</p>
-                <a href="#" class="btn-delete" data-href="{{ url_for('delete', item_type='message', id=msg.id) }}"
-                    style="display: block; text-align: right; color: #ff6b6b; font-size: 0.8rem; margin-top: 1rem;">Delete
-                    Message</a>
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Banner
+                        Image</label>
+                    <input type="file" name="banner_image" accept="image/*" style="width: 100%; margin-bottom: 0.8rem;">
+                </div>
             </div>
-            {% endfor %}
+
+            <!-- Skills Image -->
+            <div style="margin-bottom: 1rem; border-top: 1px solid var(--color-border); padding-top: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Skills
+                    Image</label>
+                <input type="file" id="skills-img-input" name="skills_image" accept="image/*" style="display: none;">
+                <button id="skills-img-btn" type="button" class="btn btn-outline"
+                    style="width: 100%; text-align: center;">
+                    <span style="font-size: 1.2rem; margin-right: 0.5rem;">📷</span> Change Skills Image
+                </button>
+            </div>
+
+            <!-- Education Image -->
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Education
+                    Image</label>
+                <input type="file" id="edu-img-input" name="education_image" accept="image/*" style="display: none;">
+                <button id="edu-img-btn" type="button" class="btn btn-outline" style="width: 100%; text-align: center;">
+                    <span style="font-size: 1.2rem; margin-right: 0.5rem;">📷</span> Change Education Image
+                </button>
+            </div>
+
+            <!-- Experience Image -->
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Experience
+                    Image</label>
+                <input type="file" id="exp-img-input" name="experience_image" accept="image/*" style="display: none;">
+                <button id="exp-img-btn" type="button" class="btn btn-outline" style="width: 100%; text-align: center;">
+                    <span style="font-size: 1.2rem; margin-right: 0.5rem;">📷</span> Change Experience Image
+                </button>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Update
+                Profile</button>
+            </form>
         </div>
-        {% else %}
-        <p style="color: var(--color-text-secondary); margin-bottom: 3rem;">No messages received.</p>
-        {% endif %}
 
-        <!-- Data Lists -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
-
-            <!-- Testimonials List -->
-            <div>
-                <h4 style="margin-bottom: 1rem; color: var(--color-accent);">Testimonials</h4>
-                {% if testimonials %}
-                <ul style="border: 1px solid var(--color-border); border-radius: 4px;">
-                    {% for item in testimonials %}
-                    <li
-                        style="padding: 1rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; background: var(--color-bg-secondary);">
-                        <div style="flex-grow: 1; margin-right: 1rem;">
-                            <strong>{{ item.name }}</strong>
-                        </div>
-                        <a href="#" class="btn-delete"
-                            data-href="{{ url_for('delete', item_type='testimonial', id=item.id) }}"
-                            style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p style="color: var(--color-text-secondary);">No testimonials added.</p>
-                {% endif %}
-            </div>
-
-            <!-- Projects List -->
-            <div>
-                <h4 style="margin-bottom: 1rem; color: var(--color-accent);">Projects</h4>
-                {% if projects %}
-                <ul style="border: 1px solid var(--color-border); border-radius: 4px;">
-                    {% for item in projects %}
-                    <li
-                        style="padding: 1rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; background: var(--color-bg-secondary);">
-                        <div style="flex-grow: 1; margin-right: 1rem;">
-                            <strong>{{ item.title }}</strong>
-                        </div>
-                        <a href="#" class="btn-delete"
-                            data-href="{{ url_for('delete', item_type='project', id=item.id) }}"
-                            style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p style="color: var(--color-text-secondary);">No projects added.</p>
-                {% endif %}
-            </div>
-
-            <!-- Research List -->
-            <div>
-                <h4 style="margin-bottom: 1rem; color: var(--color-accent);">Research Items</h4>
-                {% if research %}
-                <ul style="border: 1px solid var(--color-border); border-radius: 4px;">
-                    {% for item in research %}
-                    <li
-                        style="padding: 1rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; background: var(--color-bg-secondary);">
-                        <div style="flex-grow: 1; margin-right: 1rem;">
-                            <strong>{{ item.title }}</strong> <span
-                                style="font-size: 0.8rem; color: var(--color-text-secondary); text-transform: uppercase;">[{{
-                                item.type }}]</span>
-                        </div>
-                        <a href="#" class="btn-delete"
-                            data-href="{{ url_for('delete', item_type='research', id=item.id) }}"
-                            style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p style="color: var(--color-text-secondary);">No research added.</p>
-                {% endif %}
-            </div>
-
-            <!-- Certificates List -->
-            <div>
-                <h4 style="margin-bottom: 1rem; color: var(--color-accent);">Certificates</h4>
-                {% if certificates %}
-                <ul style="border: 1px solid var(--color-border); border-radius: 4px;">
-                    {% for item in certificates %}
-                    <li
-                        style="padding: 1rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; background: var(--color-bg-secondary);">
-                        <div style="flex-grow: 1; margin-right: 1rem;">
-                            <strong>{{ item.title }}</strong> <br><span
-                                style="font-size: 0.8rem; color: var(--color-text-secondary);">{{ item.issuer }}</span>
-                        </div>
-                        <a href="#" class="btn-delete"
-                            data-href="{{ url_for('delete', item_type='certificate', id=item.id) }}"
-                            style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p style="color: var(--color-text-secondary);">No certificates added.</p>
-                {% endif %}
-            </div>
-
-            <!-- Documents List -->
-            <div>
-                <h4 style="margin-bottom: 1rem; color: var(--color-accent);">Private Documents</h4>
-                {% if documents %}
-                <ul style="border: 1px solid var(--color-border); border-radius: 4px;">
-                    {% for doc in documents %}
-                    <li
-                        style="padding: 1rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; background: var(--color-bg-secondary);">
-                        <div style="flex-grow: 1; margin-right: 1rem;">
-                            <strong>{{ doc.title }}</strong> <br><span
-                                style="font-size: 0.8rem; color: var(--color-text-secondary);">{{ doc.filename }}</span>
-                        </div>
-                        <div style="display: flex; gap: 1rem;">
-                            <a href="{{ url_for('download_file', filename=doc.filename) }}"
-                                style="color: var(--color-accent); font-size: 0.9rem;">Download</a>
-                            <a href="#" class="btn-delete"
-                                data-href="{{ url_for('delete', item_type='document', id=doc.id) }}"
-                                style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
-                        </div>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p style="color: var(--color-text-secondary);">No documents uploaded.</p>
-                {% endif %}
-            </div>
-
-            <!-- Education List -->
-            <div>
-                <h4 style="margin-bottom: 1rem; color: var(--color-accent);">Education</h4>
-                {% if education %}
-                <ul style="border: 1px solid var(--color-border); border-radius: 4px;">
-                    {% for item in education %}
-                    <li
-                        style="padding: 1rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; background: var(--color-bg-secondary);">
-                        <div style="flex-grow: 1; margin-right: 1rem;">
-                            <strong>{{ item.school }}</strong> <br><span
-                                style="font-size: 0.8rem; color: var(--color-text-secondary);">{{ item.degree }}</span>
-                        </div>
-                        <a href="#" class="btn-delete"
-                            data-href="{{ url_for('delete', item_type='education', id=item.id) }}"
-                            style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p style="color: var(--color-text-secondary);">No education added.</p>
-                {% endif %}
-            </div>
-
-            <!-- Experience List -->
-            <div>
-                <h4 style="margin-bottom: 1rem; color: var(--color-accent);">Experience</h4>
-                {% if experience %}
-                <ul style="border: 1px solid var(--color-border); border-radius: 4px;">
-                    {% for item in experience %}
-                    <li
-                        style="padding: 1rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; background: var(--color-bg-secondary);">
-                        <div style="flex-grow: 1; margin-right: 1rem;">
-                            <strong>{{ item.company }}</strong> <br><span
-                                style="font-size: 0.8rem; color: var(--color-text-secondary);">{{ item.role }}</span>
-                        </div>
-                        <a href="#" class="btn-delete"
-                            data-href="{{ url_for('delete', item_type='experience', id=item.id) }}"
-                            style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p style="color: var(--color-text-secondary);">No experience added.</p>
-                {% endif %}
-            </div>
-
-            <!-- Skills List -->
-            <div>
-                <h4 style="margin-bottom: 1rem; color: var(--color-accent);">Skills</h4>
-                {% if skills %}
-                <ul style="border: 1px solid var(--color-border); border-radius: 4px;">
-                    {% for item in skills %}
-                    <li
-                        style="padding: 1rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; background: var(--color-bg-secondary);">
-                        <div style="flex-grow: 1; margin-right: 1rem;">
-                            <strong>{{ item.category }}</strong> <br><span
-                                style="font-size: 0.8rem; color: var(--color-text-secondary);">{{ item.skill_list
-                                }}</span>
-                        </div>
-                        <a href="#" class="btn-delete"
-                            data-href="{{ url_for('delete', item_type='skill', id=item.id) }}"
-                            style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p style="color: var(--color-text-secondary);">No skills added.</p>
-                {% endif %}
-            </div>
-
+        <!-- Project Form -->
+        <div class="fade-in" style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: 8px;">
+            <h3 style="margin-bottom: 1rem;">Add Project</h3>
+            <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="add_project">
+                <input type="text" name="title" required placeholder="Title"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                <input type="text" name="link" required placeholder="Link URL"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                <input type="file" name="image" accept="image/*" style="width: 100%; margin-bottom: 0.8rem;">
+                <textarea name="description" rows="2" required placeholder="Description"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;"></textarea>
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
+                    &plus;</button>
+            </form>
         </div>
+
+        <!-- Certificate Form -->
+        <div class="fade-in" style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: 8px;">
+            <h3 style="margin-bottom: 1rem;">Add Certificate</h3>
+            <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="add_cert">
+                <input type="text" name="title" required placeholder="Title"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                <input type="text" name="issuer" required placeholder="Issuer"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                <input type="text" name="date" required placeholder="Date"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                <input type="file" name="image" accept="image/*" style="width: 100%; margin-bottom: 0.8rem;">
+                <textarea name="description" rows="2" required placeholder="Description"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;"></textarea>
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
+                    &plus;</button>
+            </form>
+        </div>
+
+        <!-- Add Education -->
+        <div class="fade-in" style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: 8px;">
+            <h3 style="margin-bottom: 1rem;">Add Education</h3>
+            <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="add_education">
+                <input type="text" name="school" required placeholder="School/University"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                <input type="text" name="degree" required placeholder="Degree"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                <input type="text" name="date" required placeholder="Date (e.g. 2020-2024)"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
+                    &plus;</button>
+            </form>
+        </div>
+
+        <!-- Add Experience -->
+        <div class="fade-in" style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: 8px;">
+            <h3 style="margin-bottom: 1rem;">Add Experience</h3>
+            <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="add_experience">
+                <input type="text" name="company" required placeholder="Company"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                <input type="text" name="role" required placeholder="Role"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                <input type="text" name="date" required placeholder="Date"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                <textarea name="description" rows="2" placeholder="Description"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;"></textarea>
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
+                    &plus;</button>
+            </form>
+        </div>
+
+        <!-- Add Skill -->
+        <div class="fade-in" style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: 8px;">
+            <h3 style="margin-bottom: 1rem;">Add Skill</h3>
+            <form method="POST" action="{{ url_for('admin') }}">
+                <input type="hidden" name="action" value="add_skill">
+                <input type="text" name="category" required placeholder="Category (e.g. AI/ML)"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                <input type="text" name="items" required placeholder="Items (comma separated)"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
+                    &plus;</button>
+            </form>
+        </div>
+
+        <!-- Research Form -->
+        <div class="fade-in" style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: 8px;">
+            <h3 style="margin-bottom: 1rem;">Add Research</h3>
+            <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="add_research">
+                <select name="type" required
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                    <option value="published">Published Paper</option>
+                    <option value="ongoing">Ongoing Project</option>
+                </select>
+                <input type="text" name="title" required placeholder="Title"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                <input type="text" name="link" placeholder="Link URL (Optional)"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+
+                <label
+                    style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary); font-size: 0.9rem;">Protected
+                    Document (Optional)</label>
+                <input type="file" name="document" style="width: 100%; margin-bottom: 0.8rem;">
+
+                <label
+                    style="display: block; margin-bottom: 0.5rem; color: var(--color-text-secondary); font-size: 0.9rem;">Public
+                    File (Superficial/Abstract) (Optional)</label>
+                <input type="file" name="public_document" style="width: 100%; margin-bottom: 0.8rem;">
+
+                <textarea name="description" rows="3" required placeholder="Description"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;"></textarea>
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
+                    &plus;</button>
+            </form>
+        </div>
+
+        <!-- Documents Form -->
+        <div class="fade-in" style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: 8px;">
+            <h3 style="margin-bottom: 1rem;">Upload Document</h3>
+            <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="add_doc">
+                <input type="text" name="title" required placeholder="Document Title"
+                    style="width: 100%; padding: 0.6rem; margin-bottom: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                <input type="file" name="document" required style="width: 100%; margin-bottom: 1rem;">
+                <button type="submit" class="btn btn-outline" style="width: 100%; justify-content: center;">Upload
+                    &uarr;</button>
+            </form>
+        </div>
+
+    </div>
+
+    <h2 style="margin-bottom: 2rem; border-top: 1px solid var(--color-border); padding-top: 2rem;">Manage Content
+    </h2>
+
+    <!-- Messages Section -->
+    <h3 style="margin-bottom: 1rem; color: var(--color-accent);">Messages</h3>
+    {% if messages %}
+    <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 3rem;">
+        {% for msg in messages %}
+        <div
+            style="background: var(--color-bg-secondary); padding: 1rem; border-radius: 4px; border: 1px solid var(--color-border);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                <strong>{{ msg.name }}</strong>
+                <span style="font-size: 0.8rem; color: var(--color-text-secondary);">{{ msg.date }}</span>
+            </div>
+            <div style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">{{ msg.email
+                }}</div>
+            <p style="font-size: 0.95rem;">{{ msg.message }}</p>
+            <a href="#" class="btn-delete" data-href="{{ url_for('delete', item_type='message', id=msg.id) }}"
+                style="display: block; text-align: right; color: #ff6b6b; font-size: 0.8rem; margin-top: 1rem;">Delete
+                Message</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p style="color: var(--color-text-secondary); margin-bottom: 3rem;">No messages received.</p>
+    {% endif %}
+
+    <!-- Data Lists -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+
+        <!-- Testimonials List -->
+        <div>
+            <h4 style="margin-bottom: 1rem; color: var(--color-accent);">Testimonials</h4>
+            {% if testimonials %}
+            <ul style="border: 1px solid var(--color-border); border-radius: 4px;">
+                {% for item in testimonials %}
+                <li
+                    style="padding: 1rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; background: var(--color-bg-secondary);">
+                    <div style="flex-grow: 1; margin-right: 1rem;">
+                        <strong>{{ item.name }}</strong>
+                    </div>
+                    <a href="#" class="btn-delete"
+                        data-href="{{ url_for('delete', item_type='testimonial', id=item.id) }}"
+                        style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p style="color: var(--color-text-secondary);">No testimonials added.</p>
+            {% endif %}
+        </div>
+
+        <!-- Projects List -->
+        <div>
+            <h4 style="margin-bottom: 1rem; color: var(--color-accent);">Projects</h4>
+            {% if projects %}
+            <ul style="border: 1px solid var(--color-border); border-radius: 4px;">
+                {% for item in projects %}
+                <li
+                    style="padding: 1rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; background: var(--color-bg-secondary);">
+                    <div style="flex-grow: 1; margin-right: 1rem;">
+                        <strong>{{ item.title }}</strong>
+                    </div>
+                    <a href="#" class="btn-delete" data-href="{{ url_for('delete', item_type='project', id=item.id) }}"
+                        style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p style="color: var(--color-text-secondary);">No projects added.</p>
+            {% endif %}
+        </div>
+
+        <!-- Research List -->
+        <div>
+            <h4 style="margin-bottom: 1rem; color: var(--color-accent);">Research Items</h4>
+            {% if research %}
+            <ul style="border: 1px solid var(--color-border); border-radius: 4px;">
+                {% for item in research %}
+                <li
+                    style="padding: 1rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; background: var(--color-bg-secondary);">
+                    <div style="flex-grow: 1; margin-right: 1rem;">
+                        <strong>{{ item.title }}</strong> <span
+                            style="font-size: 0.8rem; color: var(--color-text-secondary); text-transform: uppercase;">[{{
+                            item.type }}]</span>
+                    </div>
+                    <a href="#" class="btn-delete" data-href="{{ url_for('delete', item_type='research', id=item.id) }}"
+                        style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p style="color: var(--color-text-secondary);">No research added.</p>
+            {% endif %}
+        </div>
+
+        <!-- Certificates List -->
+        <div>
+            <h4 style="margin-bottom: 1rem; color: var(--color-accent);">Certificates</h4>
+            {% if certificates %}
+            <ul style="border: 1px solid var(--color-border); border-radius: 4px;">
+                {% for item in certificates %}
+                <li
+                    style="padding: 1rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; background: var(--color-bg-secondary);">
+                    <div style="flex-grow: 1; margin-right: 1rem;">
+                        <strong>{{ item.title }}</strong> <br><span
+                            style="font-size: 0.8rem; color: var(--color-text-secondary);">{{ item.issuer }}</span>
+                    </div>
+                    <a href="#" class="btn-delete"
+                        data-href="{{ url_for('delete', item_type='certificate', id=item.id) }}"
+                        style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p style="color: var(--color-text-secondary);">No certificates added.</p>
+            {% endif %}
+        </div>
+
+        <!-- Documents List -->
+        <div>
+            <h4 style="margin-bottom: 1rem; color: var(--color-accent);">Private Documents</h4>
+            {% if documents %}
+            <ul style="border: 1px solid var(--color-border); border-radius: 4px;">
+                {% for doc in documents %}
+                <li
+                    style="padding: 1rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; background: var(--color-bg-secondary);">
+                    <div style="flex-grow: 1; margin-right: 1rem;">
+                        <strong>{{ doc.title }}</strong> <br><span
+                            style="font-size: 0.8rem; color: var(--color-text-secondary);">{{ doc.filename }}</span>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="{{ url_for('download_file', filename=doc.filename) }}"
+                            style="color: var(--color-accent); font-size: 0.9rem;">Download</a>
+                        <a href="#" class="btn-delete"
+                            data-href="{{ url_for('delete', item_type='document', id=doc.id) }}"
+                            style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p style="color: var(--color-text-secondary);">No documents uploaded.</p>
+            {% endif %}
+        </div>
+
+        <!-- Education List -->
+        <div>
+            <h4 style="margin-bottom: 1rem; color: var(--color-accent);">Education</h4>
+            {% if education %}
+            <ul style="border: 1px solid var(--color-border); border-radius: 4px;">
+                {% for item in education %}
+                <li
+                    style="padding: 1rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; background: var(--color-bg-secondary);">
+                    <div style="flex-grow: 1; margin-right: 1rem;">
+                        <strong>{{ item.school }}</strong> <br><span
+                            style="font-size: 0.8rem; color: var(--color-text-secondary);">{{ item.degree }}</span>
+                    </div>
+                    <a href="#" class="btn-delete"
+                        data-href="{{ url_for('delete', item_type='education', id=item.id) }}"
+                        style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p style="color: var(--color-text-secondary);">No education added.</p>
+            {% endif %}
+        </div>
+
+        <!-- Experience List -->
+        <div>
+            <h4 style="margin-bottom: 1rem; color: var(--color-accent);">Experience</h4>
+            {% if experience %}
+            <ul style="border: 1px solid var(--color-border); border-radius: 4px;">
+                {% for item in experience %}
+                <li
+                    style="padding: 1rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; background: var(--color-bg-secondary);">
+                    <div style="flex-grow: 1; margin-right: 1rem;">
+                        <strong>{{ item.company }}</strong> <br><span
+                            style="font-size: 0.8rem; color: var(--color-text-secondary);">{{ item.role }}</span>
+                    </div>
+                    <a href="#" class="btn-delete"
+                        data-href="{{ url_for('delete', item_type='experience', id=item.id) }}"
+                        style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p style="color: var(--color-text-secondary);">No experience added.</p>
+            {% endif %}
+        </div>
+
+        <!-- Skills List -->
+        <div>
+            <h4 style="margin-bottom: 1rem; color: var(--color-accent);">Skills</h4>
+            {% if skills %}
+            <ul style="border: 1px solid var(--color-border); border-radius: 4px;">
+                {% for item in skills %}
+                <li
+                    style="padding: 1rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; background: var(--color-bg-secondary);">
+                    <div style="flex-grow: 1; margin-right: 1rem;">
+                        <strong>{{ item.category }}</strong> <br><span
+                            style="font-size: 0.8rem; color: var(--color-text-secondary);">{{ item.skill_list
+                            }}</span>
+                    </div>
+                    <a href="#" class="btn-delete" data-href="{{ url_for('delete', item_type='skill', id=item.id) }}"
+                        style="color: #ff6b6b; font-size: 0.9rem;">Delete</a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p style="color: var(--color-text-secondary);">No skills added.</p>
+            {% endif %}
+        </div>
+
+    </div>
     </div>
 </section>
 
