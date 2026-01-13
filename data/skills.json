@@ -1,10 +1,5 @@
 [
     {
-        "id": 5,
-        "category": "Tools",
-        "skill_list": "Pandas"
-    },
-    {
         "id": 6,
         "category": "AI & ML",
         "skill_list": "Machine Learning, Deep Learning, Natural lenguage processing, Gen AI."
