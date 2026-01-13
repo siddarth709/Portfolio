@@ -15,11 +15,6 @@
         "skill_list": "Flask, HTML/CSS, JavaScript"
     },
     {
-        "id": 4,
-        "category": "Tools",
-        "skill_list": "Git, TensorFlow, PyTorch"
-    },
-    {
         "id": 5,
         "category": "Tools",
         "skill_list": "Pandas"
