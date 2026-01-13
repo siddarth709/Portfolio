@@ -1,1 +1,7 @@
-[]
+[
+    {
+        "id": 1,
+        "category": "Programming Languages",
+        "skill_list": "Python, C, Java"
+    }
+]
