@@ -8,5 +8,10 @@
         "id": 2,
         "category": "Programming Languages",
         "skill_list": "Python, C,  Java"
+    },
+    {
+        "id": 3,
+        "category": "Libraries & Frameworks",
+        "skill_list": "Pandas, Matplotlib, Scikit-learn, TensorFlow, PyTorch, HuggingFace, Transformers"
     }
 ]
