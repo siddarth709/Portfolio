@@ -1,10 +1,5 @@
 [
     {
-        "id": 3,
-        "category": "Web",
-        "skill_list": "Flask, HTML/CSS, JavaScript"
-    },
-    {
         "id": 4,
         "category": "Tools",
         "skill_list": "Git, TensorFlow, PyTorch"
