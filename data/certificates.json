@@ -1,5 +1,14 @@
 [
     {
+        "id": 2,
+        "title": "Machine Learning",
+        "issuer": "Stanford + Deeplearning AI on Coursera",
+        "date": "Sep 10",
+        "link": "#",
+        "description": "Supervised learning (linear regression, logistic\r\nregression, neural networks, decision trees), unsupervised learning\r\n(clustering, anomaly detection), recommender systems, and\r\nreinforcement learning.",
+        "image": "0.jpg"
+    },
+    {
         "id": 1,
         "title": "IBM Data Science",
         "issuer": "IBM + Coursera",
