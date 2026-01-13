@@ -1,7 +1,32 @@
 [
     {
         "id": 1,
-        "category": "Programming Languages",
-        "skill_list": "Python, C, Java"
+        "category": "AI/ML",
+        "skill_list": "Neural Networks, NLP, Computer Vision"
+    },
+    {
+        "id": 2,
+        "category": "Languages",
+        "skill_list": "Python, C++, SQL"
+    },
+    {
+        "id": 3,
+        "category": "Web",
+        "skill_list": "Flask, HTML/CSS, JavaScript"
+    },
+    {
+        "id": 4,
+        "category": "Tools",
+        "skill_list": "Git, TensorFlow, PyTorch"
+    },
+    {
+        "id": 5,
+        "category": "Tools",
+        "skill_list": "Pandas"
+    },
+    {
+        "id": 6,
+        "category": "AI & ML",
+        "skill_list": "Machine Learning, Deep Learning, Natural lenguage processing, Gen AI."
     }
 ]
