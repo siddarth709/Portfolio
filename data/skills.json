@@ -13,10 +13,5 @@
         "id": 3,
         "category": "Web",
         "skill_list": "Flask, HTML/CSS, JavaScript"
-    },
-    {
-        "id": 5,
-        "category": "Tools",
-        "skill_list": "Pandas"
     }
 ]
