@@ -18,5 +18,10 @@
         "id": 4,
         "category": "Programming Languages",
         "skill_list": "Python, C, Java"
+    },
+    {
+        "id": 5,
+        "category": "Developer Tools",
+        "skill_list": "Git, GitHub, Linux"
     }
 ]
