@@ -10,11 +10,6 @@
         "skill_list": "Machine Learning, Deep Learning, Natural lenguage processing, Gen AI."
     },
     {
-        "id": 7,
-        "category": "AI & ML",
-        "skill_list": "Machine Learning, Deep Learning, \r\nNatural Language processing, Gen AI"
-    },
-    {
         "id": 4,
         "category": "Developer Tools",
         "skill_list": "Git, GitHub, Linux"
