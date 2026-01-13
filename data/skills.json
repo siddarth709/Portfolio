@@ -1,17 +1,12 @@
 [
     {
-        "id": 5,
-        "category": "Tools",
-        "skill_list": "Pandas"
+        "id": 1,
+        "category": "AI & ML",
+        "skill_list": "Machine Learning, Deep Learning, Gen AI, Natural Language Processing."
     },
     {
-        "id": 6,
-        "category": "AI & ML",
-        "skill_list": "Machine Learning, Deep Learning, Natural lenguage processing, Gen AI."
-    },
-    {
-        "id": 7,
-        "category": "AI & ML",
-        "skill_list": "Machine Learning, Deep Learning, \r\nNatural Language processing, Gen AI"
+        "id": 2,
+        "category": "Programming Languages",
+        "skill_list": "Python, C,  Java"
     }
 ]
