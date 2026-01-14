@@ -1,5 +1,14 @@
 [
     {
+        "id": 5,
+        "title": "Databases and SQL for Data Science",
+        "issuer": "IBM on Coursera",
+        "date": "Oct 12",
+        "link": "#",
+        "description": "A practical course on using databases and SQL with Python to store, query, and analyze data for data science applications.",
+        "image": "Coursera_2QZ32BG04YKL_page-0001.jpg"
+    },
+    {
         "id": 4,
         "title": "Generative AI and LLMs Architecture and Data preparation",
         "issuer": "IBM on Coursera",
