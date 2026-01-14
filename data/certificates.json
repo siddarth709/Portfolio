@@ -1,21 +1,21 @@
 [
     {
         "id": 4,
-        "title": "Applied Data Science Capstone",
+        "title": "Generative AI and LLMs Architecture and Data preparation",
         "issuer": "IBM on Coursera",
-        "date": "Oct 22",
+        "date": "Aug 22",
         "link": "#",
-        "description": "A project-based capstone course that applies data science skills to solve real-world problems using data analysis, visualization, and predictive modeling.",
-        "image": "Coursera_5YV7RB24BYMP_page-0001.jpg"
+        "description": "A comprehensive course covering the architecture of generative AI and large language models, with a focus on data collection, cleaning, and preparation for effective model training.",
+        "image": "Coursera_3M0OGLTUNDMC_page-0001.jpg"
     },
     {
         "id": 3,
-        "title": "Developing AI Applications with Python and Flask",
+        "title": "Machine Learning with Python (with Honors)",
         "issuer": "IBM on Coursera",
-        "date": "Aug 8",
+        "date": "Oct 21",
         "link": "#",
-        "description": "A hands-on course that teaches how to build, deploy, and integrate AI-powered applications using Python and the Flask web framework.",
-        "image": "Coursera_IBDNR6LJWD50_page-0001.jpg"
+        "description": "A practical course focused on building, training, and deploying machine learning models using Python and popular libraries like NumPy, pandas, and scikit-learn.",
+        "image": "Coursera_E72JZL35SUXY_page-0001.jpg"
     },
     {
         "id": 2,
