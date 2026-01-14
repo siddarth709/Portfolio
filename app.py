@@ -80,7 +80,7 @@ def sync_to_github(file_path, content_bytes=None, is_binary=False, message="Upda
     """
     if not GITHUB_TOKEN or not GITHUB_REPO_NAME:
         msg = "GitHub Sync Skipped: Missing GITHUB_TOKEN or GITHUB_REPO"
-        print(msg)
+        print(msg, flush=True)
         return False, msg
 
     try:
@@ -100,18 +100,18 @@ def sync_to_github(file_path, content_bytes=None, is_binary=False, message="Upda
             contents = repo.get_contents(rel_path)
             repo.update_file(contents.path, f"{message} [skip ci]", content_bytes, contents.sha)
             msg = f"Successfully synced {rel_path} to GitHub."
-            print(msg)
+            print(msg, flush=True)
             return True, msg
         except GithubException as e:
             if e.status == 404:
                 # File doesn't exist, create it
                 repo.create_file(rel_path, f"{message} [skip ci]", content_bytes)
                 msg = f"Created {rel_path} on GitHub."
-                print(msg)
+                print(msg, flush=True)
                 return True, msg
             else:
                 msg = f"Error syncing to GitHub: {e}"
-                print(msg)
+                print(msg, flush=True)
                 return False, msg
     except Exception as e:
          msg = f"GitHub Sync Error: {e}"
@@ -124,10 +124,10 @@ def init_data_from_github():
     This handles persistence for ephemeral filesystems (like Render).
     """
     if not GITHUB_TOKEN or not GITHUB_REPO_NAME:
-        print("Startup: No GitHub credentials found. Skipping data restore.")
+        print("Startup: No GitHub credentials found. Skipping data restore.", flush=True)
         return
 
-    print("Startup: Attempting to pull data from GitHub...")
+    print("Startup: Attempting to pull data from GitHub...", flush=True)
     try:
         g = Github(GITHUB_TOKEN)
         repo = g.get_repo(GITHUB_REPO_NAME)
@@ -158,17 +158,17 @@ def init_data_from_github():
                 
                 with open(local_path, 'wb') as f:
                     f.write(contents.decoded_content)
-                print(f"Startup: Restored {file_rel_path} from GitHub.")
+                print(f"Startup: Restored {file_rel_path} from GitHub.", flush=True)
             except GithubException as e:
                 if e.status == 404:
-                    print(f"Startup: {file_rel_path} not found on GitHub. Using local default.")
+                    print(f"Startup: {file_rel_path} not found on GitHub. Using local default.", flush=True)
                 else:
-                    print(f"Startup: Error pulling {file_rel_path}: {e}")
+                    print(f"Startup: Error pulling {file_rel_path}: {e}", flush=True)
             except Exception as e:
-                print(f"Startup: System error pulling {file_rel_path}: {e}")
+                print(f"Startup: System error pulling {file_rel_path}: {e}", flush=True)
 
     except Exception as e:
-        print(f"Startup: Critical Error connecting to GitHub: {e}")
+        print(f"Startup: Critical Error connecting to GitHub: {e}", flush=True)
 
 # Run restoration on module load (typically startup)
 init_data_from_github()
