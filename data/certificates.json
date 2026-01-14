@@ -1,5 +1,14 @@
 [
     {
+        "id": 6,
+        "title": "Databases and SQL for Data Science ",
+        "issuer": "IBM on coursera",
+        "date": "Oct 12",
+        "link": "#",
+        "description": "Database for data science hands on labs",
+        "image": "cert_1768426544_Coursera_2QZ32BG04YKL_page-0001.jpg"
+    },
+    {
         "id": 5,
         "title": "Applied Data Science Capstone",
         "issuer": "IBM on Coursera",
