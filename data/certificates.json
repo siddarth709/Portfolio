@@ -1,12 +1,21 @@
 [
     {
-        "id": 3,
-        "title": "Machine Learning with Python (with Honors)",
+        "id": 4,
+        "title": "Applied Data Science Capstone",
         "issuer": "IBM on Coursera",
-        "date": "Oct 21",
+        "date": "Oct 22",
         "link": "#",
-        "description": "A practical course focused on building, training, and deploying machine learning models using Python and popular libraries like NumPy, pandas, and scikit-learn.",
-        "image": "Coursera_E72JZL35SUXY_page-0001.jpg"
+        "description": "A project-based capstone course that applies data science skills to solve real-world problems using data analysis, visualization, and predictive modeling.",
+        "image": "Coursera_5YV7RB24BYMP_page-0001.jpg"
+    },
+    {
+        "id": 3,
+        "title": "Developing AI Applications with Python and Flask",
+        "issuer": "IBM on Coursera",
+        "date": "Aug 8",
+        "link": "#",
+        "description": "A hands-on course that teaches how to build, deploy, and integrate AI-powered applications using Python and the Flask web framework.",
+        "image": "Coursera_IBDNR6LJWD50_page-0001.jpg"
     },
     {
         "id": 2,
