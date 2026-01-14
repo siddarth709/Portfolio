@@ -7,6 +7,7 @@ import io
 import base64
 import json
 import os
+import time
 from github import Github, GithubException
 
 app = Flask(__name__)
@@ -71,6 +72,7 @@ def allowed_file(filename):
 
 # --- Helper Functions ---
 
+
 def sync_to_github(file_path, content_bytes=None, is_binary=False, message="Update data"):
     """
     Syncs a file to GitHub.
@@ -116,25 +118,85 @@ def sync_to_github(file_path, content_bytes=None, is_binary=False, message="Upda
          print(msg)
          return False, msg
 
+def init_data_from_github():
+    """
+    Pulls critical data files from GitHub on startup.
+    This handles persistence for ephemeral filesystems (like Render).
+    """
+    if not GITHUB_TOKEN or not GITHUB_REPO_NAME:
+        print("Startup: No GitHub credentials found. Skipping data restore.")
+        return
+
+    print("Startup: Attempting to pull data from GitHub...")
+    try:
+        g = Github(GITHUB_TOKEN)
+        repo = g.get_repo(GITHUB_REPO_NAME)
+        
+        # List of data files to sync
+        data_files = [
+            'data/certificates.json',
+            'data/projects.json',
+            'data/education.json',
+            'data/experience.json',
+            'data/skills.json',
+            'data/research.json',
+            'data/testimonials.json',
+            'data/home.json',
+            'data/profile.json',
+            'data/documents.json',
+            'data/messages.json'
+        ]
+
+        for file_rel_path in data_files:
+            try:
+                local_path = os.path.join(app.root_path, file_rel_path)
+                contents = repo.get_contents(file_rel_path)
+                
+                # Check if we need to update (simple overwrite strategy)
+                # Ensure directory exists first
+                os.makedirs(os.path.dirname(local_path), exist_ok=True)
+                
+                with open(local_path, 'wb') as f:
+                    f.write(contents.decoded_content)
+                print(f"Startup: Restored {file_rel_path} from GitHub.")
+            except GithubException as e:
+                if e.status == 404:
+                    print(f"Startup: {file_rel_path} not found on GitHub. Using local default.")
+                else:
+                    print(f"Startup: Error pulling {file_rel_path}: {e}")
+            except Exception as e:
+                print(f"Startup: System error pulling {file_rel_path}: {e}")
+
+    except Exception as e:
+        print(f"Startup: Critical Error connecting to GitHub: {e}")
+
+# Run restoration on module load (typically startup)
+init_data_from_github()
+
 def load_json(filepath):
     if os.path.exists(filepath):
-        with open(filepath, 'r') as f:
-            return json.load(f)
+        # Cache busting - read fresh every time
+        # (Though open() usually reads fresh from disk anyway)
+        try:
+            with open(filepath, 'r') as f:
+                return json.load(f)
+        except json.JSONDecodeError:
+            return []
     return []
 
 def save_json(filepath, data):
     with open(filepath, 'w') as f:
         json.dump(data, f, indent=4)
     # Sync to GitHub
-    # Sync to GitHub
     success, msg = sync_to_github(filepath, message=f"Update {os.path.basename(filepath)}")
     if not success:
         try:
             # Flash warning only if in request context (simple check)
             if request:
-                flash(f"Saved locally, but Sync failed: {msg}", 'warning')
+                flash(f"Data saved locally but GitHub Sync failed: {msg}", 'warning')
         except:
             pass # Not in request context
+
 
 
 def save_certificate(data):
@@ -467,7 +529,8 @@ def admin():
             if 'image' in request.files:
                 file = request.files['image']
                 if file and file.filename != '' and allowed_file(file.filename):
-                    filename = secure_filename(file.filename)
+                    safe_filename = secure_filename(file.filename)
+                    filename = f"cert_{int(time.time())}_{safe_filename}"
                     file.save(os.path.join(app.config['UPLOAD_FOLDER_CERTS'], filename))
                     sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_CERTS'], filename), is_binary=True, message=f"Upload Cert {filename}")
                     image_filename = filename
@@ -489,8 +552,8 @@ def admin():
             if 'document' in request.files:
                 file = request.files['document']
                 if file and file.filename != '':
-                    # Allow secure filename for docs
-                    filename = secure_filename(file.filename)
+                    safe_filename = secure_filename(file.filename)
+                    filename = f"doc_{int(time.time())}_{safe_filename}"
                     file.save(os.path.join(app.config['UPLOAD_FOLDER_DOCS'], filename))
                     sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_DOCS'], filename), is_binary=True, message=f"Upload Doc {filename}")
                     
@@ -515,8 +578,8 @@ def admin():
             if 'document' in request.files:
                 file = request.files['document']
                 if file and file.filename != '':
-                    filename = secure_filename(file.filename)
-                    # Saving to private docs folder
+                    safe_filename = secure_filename(file.filename)
+                    filename = f"research_private_{int(time.time())}_{safe_filename}"
                     file.save(os.path.join(app.config['UPLOAD_FOLDER_DOCS'], filename))
                     sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_DOCS'], filename), is_binary=True, message=f"Upload Research Doc {filename}")
                     doc_filename = filename
@@ -534,8 +597,8 @@ def admin():
             if 'public_document' in request.files:
                 file = request.files['public_document']
                 if file and file.filename != '':
-                    filename = secure_filename(file.filename)
-                    # Saving to PUBLIC research folder
+                    safe_filename = secure_filename(file.filename)
+                    filename = f"research_public_{int(time.time())}_{safe_filename}"
                     file.save(os.path.join(app.config['UPLOAD_FOLDER_RESEARCH_PUBLIC'], filename))
                     sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_RESEARCH_PUBLIC'], filename), is_binary=True, message=f"Upload Public Research Doc {filename}")
                     new_research['public_document'] = filename
@@ -552,7 +615,8 @@ def admin():
             if 'image' in request.files:
                 file = request.files['image']
                 if file and file.filename != '' and allowed_file(file.filename):
-                    filename = secure_filename(file.filename)
+                    safe_filename = secure_filename(file.filename)
+                    filename = f"project_{int(time.time())}_{safe_filename}"
                     file.save(os.path.join(app.config['UPLOAD_FOLDER_PROJECTS'], filename))
                     sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_PROJECTS'], filename), is_binary=True, message=f"Upload Project {filename}")
                     image_filename = filename
@@ -580,23 +644,25 @@ def admin():
             profile['email'] = email
             profile['linkedin'] = linkedin
             profile['github'] = github
-            profile['github'] = github
             profile['twitter'] = twitter
-            profile['phone'] = request.form.get('phone') # Add phone number
+            profile['phone'] = request.form.get('phone') 
             profile['bio'] = bio
 
             if 'profile_image' in request.files:
                 file = request.files['profile_image']
                 if file and file.filename != '':
-                    filename = "profile_pic.png" # Keep it simple for now
+                    safe_filename = secure_filename(file.filename)
+                    filename = f"profile_{int(time.time())}_{safe_filename}"
                     file.save(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename))
                     profile['image'] = filename
+                    profile['profile_image'] = filename # Update both keys just in case
                     sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename), is_binary=True, message="Update Profile Pic")
 
             if 'banner_image' in request.files:
                  file = request.files['banner_image']
                  if file and file.filename != '':
-                    filename = "banner.png"
+                    safe_filename = secure_filename(file.filename)
+                    filename = f"banner_{int(time.time())}_{safe_filename}"
                     file.save(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename))
                     profile['banner_image'] = filename
                     sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename), is_binary=True, message="Update Banner")
@@ -606,15 +672,10 @@ def admin():
                 if img_field in request.files:
                     file = request.files[img_field]
                     if file and file.filename != '':
-                        # Use fixed names or secure filenames. Let's strictly map them to keep it clean?
-                        # Or just use the uploaded filename? The user might upload "screenshot.png" for all.
-                        # Better to have designated filenames like "skills_pic.png", "edu_pic.png" etc?
-                        # The prompt implies "modify or change image".
-                        # Let's use the uploaded filename but maybe prefix? Or just overwrite specific files?
-                        # Users might want to try different images. Let's use unique timestamped names or secure filenames.
-                        # Actually for simplistic CMS logic in this project, replacing a specific file (e.g. 'skills.jpg') is cleaner but caching issues.
-                        # Let's use secure_filename.
-                        filename = secure_filename(file.filename)
+                        safe_filename = secure_filename(file.filename)
+                        # Prefix with field name and timestamp to prevent collisions and fix caching
+                        filename = f"{img_field}_{int(time.time())}_{safe_filename}"
+                        
                         file.save(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename))
                         profile[img_field] = filename
                         sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_IMAGES'], filename), is_binary=True, message=f"Update {img_field}")

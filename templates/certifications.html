@@ -17,10 +17,15 @@
                 data-image="{{ url_for('static', filename='uploads/certificates/' + cert.image) if cert.image else '' }}">
 
                 {% if cert.image %}
-                <div class="tile-image-container" style="height: 180px;">
+                <div class="tile-image-container">
                     <img src="{{ url_for('static', filename='uploads/certificates/' + cert.image) }}"
-                        alt="{{ cert.title }}" class="tile-image"
-                        style="object-fit: contain; padding: 1rem; background: #fff;">
+                        alt="{{ cert.title }}" class="tile-image">
+                </div>
+                {% else %}
+                <!-- Fallback gradient if no image -->
+                <div class="tile-image-container"
+                    style="background: linear-gradient(45deg, #1a1a1a, #2a2a2a); display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 3rem; opacity: 0.2; color: var(--color-accent);">★</span>
                 </div>
                 {% endif %}
 

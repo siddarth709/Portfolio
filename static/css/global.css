@@ -78,12 +78,12 @@ body {
     left: 50%;
     width: 200vw;
     height: 200vh;
-    background: linear-gradient(to right, transparent 0%, rgba(0, 240, 255, 0.05) 50%, transparent 100%);
+    background: linear-gradient(to right, transparent 0%, rgba(0, 240, 255, 0.1) 50%, transparent 100%);
     transform: translate(-50%, -50%) rotate(45deg) translateX(-150%);
     /* Start off-screen */
     pointer-events: none;
     z-index: -1;
-    animation: sweep 12s linear infinite;
+    animation: sweep 7s linear infinite;
 }
 
 @keyframes sweep {
