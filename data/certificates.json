@@ -1,5 +1,14 @@
 [
     {
+        "id": 3,
+        "title": "Developing AI Applications with Python and Flask",
+        "issuer": "IBM on Coursera",
+        "date": "Aug 8",
+        "link": "#",
+        "description": "A hands-on course that teaches how to build, deploy, and integrate AI-powered applications using Python and the Flask web framework.",
+        "image": "Coursera_IBDNR6LJWD50_page-0001.jpg"
+    },
+    {
         "id": 2,
         "title": "Machine Learning",
         "issuer": "Stanford + Deeplearning AI on Coursera",
