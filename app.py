@@ -764,5 +764,9 @@ def delete(item_type, id):
 def download_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER_DOCS'], filename)
 
+@app.route('/googlecf8652954e7dc775.html')
+def google_verification():
+    return send_from_directory('static', 'googlecf8652954e7dc775.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
