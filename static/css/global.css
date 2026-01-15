@@ -774,11 +774,20 @@ img {
         transform: translateY(20px);
         transition: all 0.3s ease;
         margin: 0;
+        /* Initial state for text shadow */
+        text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
     }
 
-    /* Staggered Animation for Links */
+    /* Staggered Animation for Links with Float and Glow */
     .nav-links.active a {
-        animation: linkFadeIn 0.5s ease forwards;
+        /* Combine entrance, float, and glow animations */
+        /* linkFadeIn: brings it in (0.5s) */
+        /* float: moves up/down (3s infinite) - starts after entrance (0.5s delay) */
+        /* pulseGlow: pulses light (2s infinite) - starts immediately */
+        animation:
+            linkFadeIn 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards,
+            float 4s ease-in-out infinite 0.6s,
+            pulseGlow 2s ease-in-out infinite;
     }
 
     .nav-links.active a:nth-child(1) {
@@ -812,6 +821,32 @@ img {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes pulseGlow {
+
+    0%,
+    100% {
+        text-shadow: 0 0 10px rgba(0, 240, 255, 0.2), 0 0 20px rgba(0, 240, 255, 0.1);
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    50% {
+        text-shadow: 0 0 20px rgba(0, 240, 255, 0.6), 0 0 40px rgba(0, 240, 255, 0.4);
+        color: rgba(255, 255, 255, 1);
     }
 }
 
