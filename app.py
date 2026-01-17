@@ -714,6 +714,30 @@ def admin():
             save_skill(new_skill)
             flash('Skill Added!', 'success')
 
+        elif action == 'add_testimonial':
+            name = request.form.get('name')
+            message = request.form.get('message')
+            
+            image_filename = None
+            if 'image' in request.files:
+                file = request.files['image']
+                if file and file.filename != '' and allowed_file(file.filename):
+                    safe_filename = secure_filename(file.filename)
+                    filename = f"testimonial_{int(time.time())}_{safe_filename}"
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER_TESTIMONIALS'], filename))
+                    sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_TESTIMONIALS'], filename), is_binary=True, message=f"Upload Testimonial Image {filename}")
+                    image_filename = filename
+
+            new_testimonial = {
+                "id": len(load_json(DATA_FILE_TESTIMONIALS)) + 1,
+                "name": name,
+                "message": message,
+                "date": "Now",
+                "image": image_filename
+            }
+            save_testimonial(new_testimonial)
+            flash('Testimonial Added!', 'success')
+
 
 
         return redirect(url_for('admin'))
