@@ -9,6 +9,17 @@
     body.sidebar-open {
         overflow: hidden;
     }
+
+    /* Hide global nav/footer for app-like feel on admin */
+    .navbar,
+    .footer {
+        display: none !important;
+    }
+
+    body {
+        padding-bottom: 0 !important;
+        /* Remove any padding added by global css for footer */
+    }
 </style>
 {% endblock %}
 

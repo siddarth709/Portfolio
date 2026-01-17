@@ -22,6 +22,20 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // Update Mobile Title
+        const activeLink = document.querySelector(`.sidebar-nav-item[data-tab="${tabId}"]`);
+        if (activeLink) {
+            const titleText = activeLink.innerText.trim();
+            // Remove icon if present in text (simple split or replace)
+            // The icon is in a span, innerText usually captures it. Let's just use the text node or clean it.
+            // Actually innerText of the link is "👤 Profile Settings" which is fine to show in header or just "Profile Settings"
+            // Let's strip the first character (emoji/icon) if it exists and a space
+
+            const cleanTitle = titleText.replace(/^.\s/, '');
+            const mobileTitle = document.querySelector('.mobile-title');
+            if (mobileTitle) mobileTitle.textContent = cleanTitle;
+        }
+
         // Persist selection (optional, for refresh)
         localStorage.setItem('adminActiveTab', tabId);
     }
