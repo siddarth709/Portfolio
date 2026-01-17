@@ -8,7 +8,6 @@ import base64
 import json
 import os
 import time
-from github import Github, GithubException
 
 app = Flask(__name__)
 # Change this in production via Environment Variable
@@ -67,56 +66,49 @@ DATA_FILE_MESSAGES = os.path.join(app.root_path, 'data', 'messages.json')
 DATA_FILE_HOME = os.path.join(app.root_path, 'data', 'home.json')
 DATA_FILE_TESTIMONIALS = os.path.join(app.root_path, 'data', 'testimonials.json')
 
+@app.route('/dashboard')
+def dashboard_redirect():
+    return redirect(url_for('admin'))
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # --- Helper Functions ---
 
 
-def sync_to_github(file_path, content_bytes=None, is_binary=False, message="Update data"):
-    """
-    Syncs a file to GitHub.
-    Returns: (success, status_message)
-    """
-    if not GITHUB_TOKEN or not GITHUB_REPO_NAME:
-        msg = "GitHub Sync Skipped: Missing GITHUB_TOKEN or GITHUB_REPO"
-        print(msg, flush=True)
-        return False, msg
+import subprocess
 
+def sync_to_github(file_path=None, content_bytes=None, is_binary=False, message="Update data"):
+    """
+    Syncs changes to GitHub using system git commands.
+    This is more reliable than PyGithub for this environment.
+    """
     try:
-        g = Github(GITHUB_TOKEN)
-        repo = g.get_repo(GITHUB_REPO_NAME)
+        # 1. Add changes
+        subprocess.run(["git", "add", "."], check=True, cwd=app.root_path)
         
-        # Calculate relative path from app root
-        rel_path = os.path.relpath(file_path, app.root_path)
+        # 2. Commit
+        # Use a generic message if multiple files, or specific if one
+        commit_msg = message if message else "Update content via Admin Dashboard"
+        subprocess.run(["git", "commit", "-m", commit_msg], cwd=app.root_path)
+        
+        # 3. Push
+        result = subprocess.run(["git", "push"], capture_output=True, text=True, cwd=app.root_path)
+        
+        if result.returncode == 0:
+            print("Successfully pushed to GitHub.", flush=True)
+            return True, "Synced to GitHub"
+        else:
+            print(f"Git Push Failed: {result.stderr}", flush=True)
+            return False, f"Push Failed: {result.stderr}"
 
-        if content_bytes is None:
-            mode = 'rb' if is_binary else 'r'
-            with open(file_path, mode) as f:
-                content_bytes = f.read()
-
-        try:
-            # Try to get existing file
-            contents = repo.get_contents(rel_path)
-            repo.update_file(contents.path, f"{message} [skip ci]", content_bytes, contents.sha)
-            msg = f"Successfully synced {rel_path} to GitHub."
-            print(msg, flush=True)
-            return True, msg
-        except GithubException as e:
-            if e.status == 404:
-                # File doesn't exist, create it
-                repo.create_file(rel_path, f"{message} [skip ci]", content_bytes)
-                msg = f"Created {rel_path} on GitHub."
-                print(msg, flush=True)
-                return True, msg
-            else:
-                msg = f"Error syncing to GitHub: {e}"
-                print(msg, flush=True)
-                return False, msg
+    except subprocess.CalledProcessError as e:
+        # This often happens if 'nothing to commit', which is fine
+        print(f"Git command failed (might be nothing to commit): {e}", flush=True)
+        return True, "Local save ok"
     except Exception as e:
-         msg = f"GitHub Sync Error: {e}"
-         print(msg)
-         return False, msg
+        print(f"Git Sync System Error: {e}", flush=True)
+        return False, str(e)
 
 def init_data_from_github():
     """
@@ -769,4 +761,4 @@ def google_verification():
     return send_from_directory('static', 'googlecf8652954e7dc775.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8080)

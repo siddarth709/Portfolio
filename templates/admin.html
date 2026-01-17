@@ -5,448 +5,394 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 <style>
-    /* Inline styles for this specific dashboard layout to keep it self-contained for now */
-    .dashboard-section {
-        margin-bottom: 3rem;
-    }
-
-    .dashboard-section-title {
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        padding-bottom: 0.5rem;
-        color: var(--color-accent);
-    }
-
-    .subsection-title {
-        font-size: 1.1rem;
-        margin-bottom: 1rem;
-        color: var(--color-text-secondary);
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-
-    .profile-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem;
-    }
-
-    .content-forms-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 1.5rem;
+    /* Prevent body scroll when mobile sidebar is open (optional polish) */
+    body.sidebar-open {
+        overflow: hidden;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<section class="section">
-    <div class="container" style="max-width: 1400px;">
+<div class="admin-wrapper">
 
-        <!-- Header -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
-            <h1 class="section-title display-text" style="margin-bottom: 0;">Dashboard<span class="text-accent">.</span>
-            </h1>
-            <a href="{{ url_for('logout') }}" class="btn btn-outline" style="font-size: 0.9rem;">Logout</a>
-        </div>
-
-        <!-- 1. Profile Settings Section -->
-        <div class="dashboard-section fade-in">
-            <h2 class="dashboard-section-title">Profile Settings</h2>
-            <div class="admin-card">
-                <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
-                    <input type="hidden" name="action" value="update_profile">
-
-                    <div class="profile-grid">
-
-                        <!-- Personal Info -->
-                        <div>
-                            <h3 class="subsection-title">Personal Information</h3>
-                            <div class="form-group">
-                                <label class="form-label">Name</label>
-                                <input type="text" name="name" value="{{ profile.name }}" class="form-input">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Email</label>
-                                <input type="email" name="email" value="{{ profile.email }}" class="form-input">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Phone Number</label>
-                                <input type="text" name="phone" value="{{ profile.phone }}"
-                                    placeholder="+91 98765 43210" class="form-input">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Bio (Short Description)</label>
-                                <textarea name="bio" rows="4" class="form-textarea">{{ profile.bio }}</textarea>
-                            </div>
-                        </div>
-
-                        <!-- Social Links -->
-                        <div>
-                            <h3 class="subsection-title">Social Media Links</h3>
-                            <div class="form-group">
-                                <label class="form-label">LinkedIn URL</label>
-                                <input type="text" name="linkedin" value="{{ profile.linkedin }}" class="form-input">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">GitHub URL</label>
-                                <input type="text" name="github" value="{{ profile.github }}" class="form-input">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Twitter / X URL</label>
-                                <input type="text" name="twitter" value="{{ profile.twitter }}" class="form-input">
-                            </div>
-                        </div>
-
-                        <!-- Images -->
-                        <div
-                            style="grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 2rem; margin-top: 1rem;">
-                            <h3 class="subsection-title">Images & Assets</h3>
-                            <div
-                                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
-
-                                <!-- Profile Pic -->
-                                <div>
-                                    <label class="form-label">Profile Photo</label>
-                                    <input type="file" id="hidden-profile-input" name="profile_image" accept="image/*"
-                                        style="display: none;">
-                                    <button id="edit-profile-btn" type="button" class="btn btn-outline"
-                                        style="width: 100%; justify-content: center;">
-                                        📷 Change Photo
-                                    </button>
-                                </div>
-
-                                <!-- Banner -->
-                                <div>
-                                    <label class="form-label">Banner Image</label>
-                                    <input type="file" name="banner_image" accept="image/*" class="form-file-input">
-                                </div>
-
-                                <!-- Skills Image -->
-                                <div>
-                                    <label class="form-label">Skills Section Image</label>
-                                    <input type="file" id="skills-img-input" name="skills_image" accept="image/*"
-                                        style="display: none;">
-                                    <button id="skills-img-btn" type="button" class="btn btn-outline"
-                                        style="width: 100%;">Change Skills Image</button>
-                                </div>
-
-                                <!-- Education Image -->
-                                <div>
-                                    <label class="form-label">Education Section Image</label>
-                                    <input type="file" id="edu-img-input" name="education_image" accept="image/*"
-                                        style="display: none;">
-                                    <button id="edu-img-btn" type="button" class="btn btn-outline"
-                                        style="width: 100%;">Change Education Image</button>
-                                </div>
-
-                                <!-- Experience Image -->
-                                <div>
-                                    <label class="form-label">Experience Section Image</label>
-                                    <input type="file" id="exp-img-input" name="experience_image" accept="image/*"
-                                        style="display: none;">
-                                    <button id="exp-img-btn" type="button" class="btn btn-outline"
-                                        style="width: 100%;">Change Experience Image</button>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <button type="submit" class="btn btn-primary"
-                        style="width: 100%; justify-content: center; margin-top: 2rem; padding: 1rem;">Update Profile
-                        Settings</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- 2. Add Content Section -->
-        <div class="dashboard-section fade-in">
-            <h2 class="dashboard-section-title">Add New Content</h2>
-            <div class="content-forms-grid">
-
-                <!-- Add Project -->
-                <div class="admin-card">
-                    <h3 class="subsection-title">Project</h3>
-                    <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
-                        <input type="hidden" name="action" value="add_project">
-                        <div class="form-group">
-                            <input type="text" name="title" required placeholder="Project Title" class="form-input">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="link" required placeholder="Project Link URL" class="form-input">
-                        </div>
-                        <div class="form-group">
-                            <input type="file" name="image" accept="image/*" class="form-file-input">
-                        </div>
-                        <div class="form-group">
-                            <textarea name="description" rows="2" required placeholder="Brief Description"
-                                class="form-textarea"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
-                            Project &plus;</button>
-                    </form>
-                </div>
-
-                <!-- Add Certificate -->
-                <div class="admin-card">
-                    <h3 class="subsection-title">Certification</h3>
-                    <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
-                        <input type="hidden" name="action" value="add_cert">
-                        <div class="form-group">
-                            <input type="text" name="title" required placeholder="Certificate Name" class="form-input">
-                        </div>
-                        <div class="form-group">
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
-                                <input type="text" name="issuer" required placeholder="Issuer" class="form-input">
-                                <input type="text" name="date" required placeholder="Date (Year)" class="form-input">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <input type="file" name="image" accept="image/*" class="form-file-input">
-                        </div>
-                        <div class="form-group">
-                            <textarea name="description" rows="2" required placeholder="Brief Description"
-                                class="form-textarea"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
-                            Certificate &plus;</button>
-                    </form>
-                </div>
-
-                <!-- Add Experience -->
-                <div class="admin-card">
-                    <h3 class="subsection-title">Experience</h3>
-                    <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
-                        <input type="hidden" name="action" value="add_experience">
-                        <div class="form-group">
-                            <input type="text" name="company" required placeholder="Company Name" class="form-input">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="role" required placeholder="Job Role" class="form-input">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="date" required placeholder="Duration (e.g. 2023 - Present)"
-                                class="form-input">
-                        </div>
-                        <div class="form-group">
-                            <textarea name="description" rows="2" placeholder="Responsibilities / Achievements"
-                                class="form-textarea"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
-                            Experience &plus;</button>
-                    </form>
-                </div>
-
-                <!-- Add Education -->
-                <div class="admin-card">
-                    <h3 class="subsection-title">Education</h3>
-                    <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
-                        <input type="hidden" name="action" value="add_education">
-                        <div class="form-group">
-                            <input type="text" name="school" required placeholder="School / University"
-                                class="form-input">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="degree" required placeholder="Degree / Course" class="form-input">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="date" required placeholder="Year (e.g. 2020-2024)"
-                                class="form-input">
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
-                            Education &plus;</button>
-                    </form>
-                </div>
-
-                <!-- Add Research -->
-                <div class="admin-card">
-                    <h3 class="subsection-title">Research / Publication</h3>
-                    <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
-                        <input type="hidden" name="action" value="add_research">
-                        <div class="form-group">
-                            <select name="type" required class="form-select">
-                                <option value="published">Published Paper</option>
-                                <option value="ongoing">Ongoing Project</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="title" required placeholder="Research Title" class="form-input">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="link" placeholder="External Link (Optional)" class="form-input">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" style="font-size: 0.8rem;">Private PDF (Protected)</label>
-                            <input type="file" name="document" class="form-file-input">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" style="font-size: 0.8rem;">Public PDF (Optional)</label>
-                            <input type="file" name="public_document" class="form-file-input">
-                        </div>
-                        <div class="form-group">
-                            <textarea name="description" rows="2" required placeholder="Abstract / Description"
-                                class="form-textarea"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
-                            Research &plus;</button>
-                    </form>
-                </div>
-
-                <!-- Add Skill -->
-                <div class="admin-card">
-                    <h3 class="subsection-title">Skill Category</h3>
-                    <form method="POST" action="{{ url_for('admin') }}">
-                        <input type="hidden" name="action" value="add_skill">
-                        <div class="form-group">
-                            <input type="text" name="category" required placeholder="Category Name (e.g. AI/ML)"
-                                class="form-input">
-                        </div>
-                        <div class="form-group">
-                            <textarea name="items" rows="3" required
-                                placeholder="Skills (comma separated, e.g. Python, TensorFlow, PyTorch)"
-                                class="form-textarea"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Add
-                            Skills &plus;</button>
-                    </form>
-                </div>
-
-                <!-- Upload Document -->
-                <div class="admin-card">
-                    <h3 class="subsection-title">General Document</h3>
-                    <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
-                        <input type="hidden" name="action" value="add_doc">
-                        <div class="form-group">
-                            <input type="text" name="title" required placeholder="Document Name" class="form-input">
-                        </div>
-                        <div class="form-group">
-                            <input type="file" name="document" required class="form-file-input">
-                        </div>
-                        <button type="submit" class="btn btn-outline"
-                            style="width: 100%; justify-content: center;">Upload Document &#8679;</button>
-                    </form>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- 3. Manage Content (Lists) -->
-        <div class="dashboard-section fade-in">
-            <h2 class="dashboard-section-title">Manage Content</h2>
-
-            <!-- Messages Section -->
-            <div class="admin-card" style="margin-bottom: 2rem;">
-                <h3 class="subsection-title" style="color: var(--color-accent);">Inbox Messages</h3>
-                {% if messages %}
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
-                    {% for msg in messages %}
-                    <div
-                        style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                            <strong>{{ msg.name }}</strong>
-                            <span style="font-size: 0.8rem; color: var(--color-text-secondary);">{{ msg.date }}</span>
-                        </div>
-                        <div style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">{{
-                            msg.email }}</div>
-                        <p style="font-size: 0.95rem; line-height: 1.4;">{{ msg.message }}</p>
-                        <a href="#" class="btn-delete"
-                            data-href="{{ url_for('delete', item_type='message', id=msg.id) }}"
-                            style="display: block; text-align: right; color: #ff6b6b; font-size: 0.8rem; margin-top: 1rem;">Delete
-                            Message</a>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <p style="color: var(--color-text-secondary); padding: 1rem;">No messages received yet.</p>
-                {% endif %}
-            </div>
-
-            <!-- Content Lists Grid -->
-            <div class="content-forms-grid">
-
-                {% macro content_list(title, items, item_type) %}
-                <div class="admin-card" style="padding: 1.5rem;">
-                    <h3 class="subsection-title">{{ title }}</h3>
-                    {% if items %}
-                    <ul style="list-style: none;">
-                        {% for item in items %}
-                        <li
-                            style="padding: 0.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
-                            <div
-                                style="flex-grow: 1; margin-right: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                {% if item_type == 'testimonial' %}
-                                <span style="color: var(--color-text-primary);">{{ item.name }}</span>
-                                {% elif item_type == 'education' %}
-                                <span style="color: var(--color-text-primary);">{{ item.school }}</span>
-                                <br><span style="font-size: 0.8rem; color: var(--color-text-secondary);">{{ item.degree
-                                    }}</span>
-                                {% elif item_type == 'experience' %}
-                                <span style="color: var(--color-text-primary);">{{ item.company }}</span>
-                                <br><span style="font-size: 0.8rem; color: var(--color-text-secondary);">{{ item.role
-                                    }}</span>
-                                {% elif item_type == 'skill' %}
-                                <span style="color: var(--color-text-primary);">{{ item.category }}</span>
-                                {% else %}
-                                <span style="color: var(--color-text-primary);">{{ item.title }}</span>
-                                {% endif %}
-                            </div>
-                            <a href="#" class="btn-delete"
-                                data-href="{{ url_for('delete', item_type=item_type, id=item.id) }}"
-                                style="color: #ff6b6b; font-size: 1.1rem; padding: 0.2rem 0.5rem;">&times;</a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                    {% else %}
-                    <p style="color: var(--color-text-secondary); font-size: 0.9rem;">No items found.</p>
-                    {% endif %}
-                </div>
-                {% endmacro %}
-
-                {{ content_list('All Projects', projects, 'project') }}
-                {{ content_list('All Certificates', certificates, 'certificate') }}
-                {{ content_list('All Education', education, 'education') }}
-                {{ content_list('All Experience', experience, 'experience') }}
-                {{ content_list('Research Items', research, 'research') }}
-                {{ content_list('Skill Categories', skills, 'skill') }}
-                {{ content_list('Testimonials', testimonials, 'testimonial') }}
-
-                <!-- Documents List -->
-                <div class="admin-card" style="padding: 1.5rem;">
-                    <h3 class="subsection-title">Uploaded Documents</h3>
-                    {% if documents %}
-                    <ul style="list-style: none;">
-                        {% for doc in documents %}
-                        <li
-                            style="padding: 0.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
-                            <div style="flex-grow: 1; margin-right: 1rem; overflow: hidden; text-overflow: ellipsis;">
-                                <strong>{{ doc.title }}</strong>
-                                <br><span style="font-size: 0.75rem; color: var(--color-text-secondary);">{{
-                                    doc.filename }}</span>
-                            </div>
-                            <div style="display: flex; gap: 1rem; align-items: center;">
-                                <a href="{{ url_for('download_file', filename=doc.filename) }}"
-                                    style="color: var(--color-accent); font-size: 1rem;" title="Download">⬇</a>
-                                <a href="#" class="btn-delete"
-                                    data-href="{{ url_for('delete', item_type='document', id=doc.id) }}"
-                                    style="color: #ff6b6b; font-size: 1.1rem;" title="Delete">&times;</a>
-                            </div>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                    {% else %}
-                    <p style="color: var(--color-text-secondary); font-size: 0.9rem;">No documents found.</p>
-                    {% endif %}
-                </div>
-
-            </div>
-        </div>
-
+    <!-- Mobile Header -->
+    <div class="mobile-admin-header">
+        <button id="sidebar-toggle" class="btn-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+        <span class="mobile-title">Dashboard</span>
     </div>
-</section>
+
+    <div class="admin-container">
+
+        <!-- SIDEBAR -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">PORTFOLIO<span class="text-accent">.</span></div>
+                <button id="sidebar-close" class="btn-icon mobile-only">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="sidebar-nav-item active" data-tab="section-profile">
+                    <span class="icon">👤</span> Profile Settings
+                </a>
+                <a href="#" class="sidebar-nav-item" data-tab="section-add-content">
+                    <span class="icon">➕</span> Add Content
+                </a>
+                <a href="#" class="sidebar-nav-item" data-tab="section-manage-content">
+                    <span class="icon">📁</span> Manage Content
+                </a>
+
+                <div class="sidebar-divider"></div>
+
+                <a href="{{ url_for('logout') }}" class="sidebar-nav-item logout">
+                    <span class="icon">🚪</span> Logout
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>Logged in as Admin</p>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="admin-main">
+
+            <!-- SECTION 1: PROFILE -->
+            <div id="section-profile" class="dashboard-content-section active">
+                <div class="section-header">
+                    <h2>Profile Settings</h2>
+                    <p>Manage your personal information and main images.</p>
+                </div>
+
+                <div class="admin-card">
+                    <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
+                        <input type="hidden" name="action" value="update_profile">
+
+                        <div class="profile-grid">
+                            <!-- Personal Info -->
+                            <div>
+                                <h3 class="subsection-title">Personal Information</h3>
+                                <div class="form-group">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" name="name" value="{{ profile.name }}" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" name="email" value="{{ profile.email }}" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="text" name="phone" value="{{ profile.phone }}"
+                                        placeholder="+91 98765 43210" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Bio</label>
+                                    <textarea name="bio" rows="4" class="form-textarea">{{ profile.bio }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Social Links -->
+                            <div>
+                                <h3 class="subsection-title">Social Media</h3>
+                                <div class="form-group">
+                                    <label class="form-label">LinkedIn URL</label>
+                                    <input type="text" name="linkedin" value="{{ profile.linkedin }}"
+                                        class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">GitHub URL</label>
+                                    <input type="text" name="github" value="{{ profile.github }}" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Twitter / X URL</label>
+                                    <input type="text" name="twitter" value="{{ profile.twitter }}" class="form-input">
+                                </div>
+                            </div>
+
+                            <!-- Images -->
+                            <div class="full-width-col"
+                                style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 2rem; margin-top: 1rem;">
+                                <h3 class="subsection-title">Images & Assets</h3>
+                                <div class="images-grid">
+                                    <div>
+                                        <label class="form-label">Profile Photo</label>
+                                        <input type="file" id="hidden-profile-input" name="profile_image"
+                                            accept="image/*" style="display: none;">
+                                        <button id="edit-profile-btn" type="button"
+                                            class="btn btn-outline full-width">📷 Change Photo</button>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Banner Image</label>
+                                        <input type="file" name="banner_image" accept="image/*" class="form-file-input">
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Skills Image</label>
+                                        <input type="file" id="skills-img-input" name="skills_image" accept="image/*"
+                                            style="display: none;">
+                                        <button id="skills-img-btn" type="button"
+                                            class="btn btn-outline full-width">Change Skills Image</button>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Education Image</label>
+                                        <input type="file" id="edu-img-input" name="education_image" accept="image/*"
+                                            style="display: none;">
+                                        <button id="edu-img-btn" type="button" class="btn btn-outline full-width">Change
+                                            edu Image</button>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Experience Image</label>
+                                        <input type="file" id="exp-img-input" name="experience_image" accept="image/*"
+                                            style="display: none;">
+                                        <button id="exp-img-btn" type="button" class="btn btn-outline full-width">Change
+                                            exp Image</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Save Profile Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- SECTION 2: ADD CONTENT -->
+            <div id="section-add-content" class="dashboard-content-section">
+                <div class="section-header">
+                    <h2>Add New Content</h2>
+                    <p>Create new entries for your portfolio sections.</p>
+                </div>
+
+                <div class="content-forms-grid">
+
+                    <!-- Add Project -->
+                    <div class="admin-card">
+                        <h3 class="card-title">Project</h3>
+                        <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
+                            <input type="hidden" name="action" value="add_project">
+                            <div class="form-group"><input type="text" name="title" required placeholder="Project Title"
+                                    class="form-input"></div>
+                            <div class="form-group"><input type="text" name="link" required
+                                    placeholder="Project Link URL" class="form-input"></div>
+                            <div class="form-group"><input type="file" name="image" accept="image/*"
+                                    class="form-file-input"></div>
+                            <div class="form-group"><textarea name="description" rows="2" required
+                                    placeholder="Brief Description" class="form-textarea"></textarea></div>
+                            <button type="submit" class="btn btn-primary full-width">Add Project &plus;</button>
+                        </form>
+                    </div>
+
+                    <!-- Add Certificate -->
+                    <div class="admin-card">
+                        <h3 class="card-title">Certification</h3>
+                        <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
+                            <input type="hidden" name="action" value="add_cert">
+                            <div class="form-group"><input type="text" name="title" required
+                                    placeholder="Certificate Name" class="form-input"></div>
+                            <div class="form-group grid-2">
+                                <input type="text" name="issuer" required placeholder="Issuer" class="form-input">
+                                <input type="text" name="date" required placeholder="Year" class="form-input">
+                            </div>
+                            <div class="form-group"><input type="file" name="image" accept="image/*"
+                                    class="form-file-input"></div>
+                            <div class="form-group"><textarea name="description" rows="2" required
+                                    placeholder="Description" class="form-textarea"></textarea></div>
+                            <button type="submit" class="btn btn-primary full-width">Add Certificate &plus;</button>
+                        </form>
+                    </div>
+
+                    <!-- Add Experience -->
+                    <div class="admin-card">
+                        <h3 class="card-title">Experience</h3>
+                        <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
+                            <input type="hidden" name="action" value="add_experience">
+                            <div class="form-group"><input type="text" name="company" required
+                                    placeholder="Company Name" class="form-input"></div>
+                            <div class="form-group"><input type="text" name="role" required placeholder="Job Role"
+                                    class="form-input"></div>
+                            <div class="form-group"><input type="text" name="date" required placeholder="Duration"
+                                    class="form-input"></div>
+                            <div class="form-group"><textarea name="description" rows="2" placeholder="Responsibilities"
+                                    class="form-textarea"></textarea></div>
+                            <button type="submit" class="btn btn-primary full-width">Add Experience &plus;</button>
+                        </form>
+                    </div>
+
+                    <!-- Add Education -->
+                    <div class="admin-card">
+                        <h3 class="card-title">Education</h3>
+                        <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
+                            <input type="hidden" name="action" value="add_education">
+                            <div class="form-group"><input type="text" name="school" required placeholder="School"
+                                    class="form-input"></div>
+                            <div class="form-group"><input type="text" name="degree" required placeholder="Degree"
+                                    class="form-input"></div>
+                            <div class="form-group"><input type="text" name="date" required placeholder="Year"
+                                    class="form-input"></div>
+                            <button type="submit" class="btn btn-primary full-width">Add Education &plus;</button>
+                        </form>
+                    </div>
+
+                    <!-- Add Research -->
+                    <div class="admin-card">
+                        <h3 class="card-title">Research Setup</h3>
+                        <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
+                            <input type="hidden" name="action" value="add_research">
+                            <div class="form-group">
+                                <select name="type" required class="form-select">
+                                    <option value="published">Published Paper</option>
+                                    <option value="ongoing">Ongoing Project</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><input type="text" name="title" required placeholder="Title"
+                                    class="form-input"></div>
+                            <div class="form-group"><input type="text" name="link" placeholder="External Link"
+                                    class="form-input"></div>
+                            <div class="form-group">
+                                <label class="form-label sm">Private PDF</label>
+                                <input type="file" name="document" class="form-file-input">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label sm">Public PDF</label>
+                                <input type="file" name="public_document" class="form-file-input">
+                            </div>
+                            <div class="form-group"><textarea name="description" rows="2" required
+                                    placeholder="Abstract" class="form-textarea"></textarea></div>
+                            <button type="submit" class="btn btn-primary full-width">Add Research &plus;</button>
+                        </form>
+                    </div>
+
+                    <!-- Add Skill -->
+                    <div class="admin-card">
+                        <h3 class="card-title">Skill Category</h3>
+                        <form method="POST" action="{{ url_for('admin') }}">
+                            <input type="hidden" name="action" value="add_skill">
+                            <div class="form-group"><input type="text" name="category" required
+                                    placeholder="Category (e.g. AI/ML)" class="form-input"></div>
+                            <div class="form-group"><textarea name="items" rows="3" required
+                                    placeholder="Skills (comma separated)" class="form-textarea"></textarea></div>
+                            <button type="submit" class="btn btn-primary full-width">Add Skills &plus;</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: MANAGE CONTENT -->
+            <div id="section-manage-content" class="dashboard-content-section">
+                <div class="section-header">
+                    <h2>Manage Content</h2>
+                    <p>Edit or delete existing entries.</p>
+                </div>
+
+                <!-- Messages -->
+                <div class="admin-card full-width mb-2">
+                    <h3 class="card-title text-accent">Inbox Messages</h3>
+                    {% if messages %}
+                    <div class="messages-grid">
+                        {% for msg in messages %}
+                        <div class="message-card">
+                            <div class="msg-header">
+                                <strong>{{ msg.name }}</strong>
+                                <span class="msg-date">{{ msg.date }}</span>
+                            </div>
+                            <div class="msg-email">{{ msg.email }}</div>
+                            <p class="msg-body">{{ msg.message }}</p>
+                            <a href="#" class="btn-delete text-danger"
+                                data-href="{{ url_for('delete', item_type='message', id=msg.id) }}">Delete Message</a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="empty-state">No messages received yet.</p>
+                    {% endif %}
+                </div>
+
+                <!-- Lists -->
+                <div class="content-forms-grid">
+                    {% macro content_list(title, items, item_type) %}
+                    <div class="admin-card">
+                        <h3 class="card-title">{{ title }}</h3>
+                        {% if items %}
+                        <ul class="item-list">
+                            {% for item in items %}
+                            <li class="item-row">
+                                <div class="item-info">
+                                    {% if item_type == 'testimonial' %}
+                                    <span class="main-text">{{ item.name }}</span>
+                                    {% elif item_type == 'education' %}
+                                    <span class="main-text">{{ item.school }}</span>
+                                    <span class="sub-text">{{ item.degree }}</span>
+                                    {% elif item_type == 'experience' %}
+                                    <span class="main-text">{{ item.company }}</span>
+                                    <span class="sub-text">{{ item.role }}</span>
+                                    {% elif item_type == 'skill' %}
+                                    <span class="main-text">{{ item.category }}</span>
+                                    {% else %}
+                                    <span class="main-text">{{ item.title }}</span>
+                                    {% endif %}
+                                </div>
+                                <a href="#" class="btn-delete icon-btn"
+                                    data-href="{{ url_for('delete', item_type=item_type, id=item.id) }}">&times;</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="empty-state">No items found.</p>
+                        {% endif %}
+                    </div>
+                    {% endmacro %}
+
+                    {{ content_list('All Projects', projects, 'project') }}
+                    {{ content_list('All Certificates', certificates, 'certificate') }}
+                    {{ content_list('All Education', education, 'education') }}
+                    {{ content_list('All Experience', experience, 'experience') }}
+                    {{ content_list('Research Items', research, 'research') }}
+                    {{ content_list('Skill Categories', skills, 'skill') }}
+                    {{ content_list('Testimonials', testimonials, 'testimonial') }}
+
+                    <!-- Documents List -->
+                    <div class="admin-card">
+                        <h3 class="card-title">Uploaded Documents</h3>
+                        {% if documents %}
+                        <ul class="item-list">
+                            {% for doc in documents %}
+                            <li class="item-row">
+                                <div class="item-info">
+                                    <span class="main-text">{{ doc.title }}</span>
+                                    <span class="sub-text">{{ doc.filename }}</span>
+                                </div>
+                                <div class="actions">
+                                    <a href="{{ url_for('download_file', filename=doc.filename) }}" class="icon-link"
+                                        title="Download">⬇</a>
+                                    <a href="#" class="btn-delete icon-btn text-danger"
+                                        data-href="{{ url_for('delete', item_type='document', id=doc.id) }}"
+                                        title="Delete">&times;</a>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="empty-state">No documents found.</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+</div>
 
 <!-- Profile Editor Modal (Unchanged) -->
 <div id="editor-modal" class="modal-overlay">
@@ -473,32 +419,6 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/profile-editor.js') }}"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Intercept delete clicks
-        const deleteLinks = document.querySelectorAll('.btn-delete');
-        deleteLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const href = link.getAttribute('data-href');
+<script src="{{ url_for('static', filename='js/dashboard_layout.js') }}"></script>
 
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#ff6b6b',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, delete it!',
-                    background: '#1a1a1a',
-                    color: '#fff'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = href;
-                    }
-                });
-            });
-        });
-    });
-</script>
 {% endblock %}
