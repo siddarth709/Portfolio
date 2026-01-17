@@ -221,6 +221,15 @@
             uploadPlaceholder.style.display = 'flex';
             zoomControls.style.display = 'none';
             state = { scale: 1, pointX: 0, pointY: 0 };
+
+            // Reset Button
+            triggerUploadBtn.textContent = "Choose Image";
+            triggerUploadBtn.removeAttribute('style'); // Clear all inline styles
+            // Re-apply display:flex if it was removed? No, it's defined in CSS class.
+            // But wait, the file-upload-wrapper is display:inline-block, btn is flex.
+            // Removing style attribute is safe as long as we didn't rely on inline styles for layout.
+            // The HTML didn't have inline styles on the button.
+
         }
 
         // --- Image Logic (Cropping/Zooming) ---
@@ -234,6 +243,13 @@
                     uploadPlaceholder.style.display = 'none';
                     zoomControls.style.display = 'flex';
                     hasImage = true;
+
+                    // Highlight Button
+                    triggerUploadBtn.textContent = "Change Image";
+                    triggerUploadBtn.style.borderColor = 'var(--color-accent)';
+                    triggerUploadBtn.style.color = 'var(--color-accent)';
+                    triggerUploadBtn.style.borderStyle = 'solid';
+                    triggerUploadBtn.style.background = 'rgba(0, 240, 255, 0.1)';
                 }
                 reader.readAsDataURL(e.target.files[0]);
             }
