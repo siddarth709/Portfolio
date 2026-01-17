@@ -368,11 +368,6 @@
                                     <span class="main-text">{{ item.title }}</span>
                                     {% endif %}
                                 </div>
-                                {% if item_type == 'testimonial' %}
-                                <a href="#" class="btn-edit icon-btn" data-id="{{ item.id }}"
-                                    data-name="{{ item.name }}" data-message="{{ item.message }}"
-                                    style="color: var(--color-accent); margin-right: 0.5rem;">✎</a>
-                                {% endif %}
                                 <a href="#" class="btn-delete icon-btn"
                                     data-href="{{ url_for('delete', item_type=item_type, id=item.id) }}">&times;</a>
                             </li>
@@ -422,41 +417,6 @@
             </div>
 
         </main>
-    </div>
-</div>
-
-<!-- Edit Testimonial Modal -->
-<div id="edit-testimonial-modal" class="modal-overlay">
-    <div class="editor-modal">
-        <div class="editor-header">
-            <h3>Edit Testimonial</h3>
-            <button id="close-edit-modal" class="editor-close">&times;</button>
-        </div>
-        <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data" style="width: 100%;">
-            <div class="editor-body" style="align-items: stretch;">
-                <input type="hidden" name="action" value="update_testimonial">
-                <input type="hidden" id="edit-id" name="id">
-
-                <div class="form-group">
-                    <label class="form-label">Client Name</label>
-                    <input type="text" id="edit-name" name="name" required class="form-input">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Message</label>
-                    <textarea id="edit-message" name="message" rows="4" required class="form-textarea"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Change Image (Optional)</label>
-                    <input type="file" name="image" accept="image/*" class="form-file-input">
-                </div>
-            </div>
-            <div class="editor-footer">
-                <button type="button" id="cancel-edit-testimonial" class="btn btn-outline">Cancel</button>
-                <button type="submit" class="btn btn-save">Save Changes</button>
-            </div>
-        </form>
     </div>
 </div>
 

@@ -27,15 +27,11 @@
             </button>
 
             <div class="nav-links">
-                <a href="{{ url_for('projects') }}"
-                    class="{{ 'active' if request.endpoint == 'projects' }}">Projects</a>
-                <a href="{{ url_for('certifications') }}"
-                    class="{{ 'active' if request.endpoint == 'certifications' }}">Certifications</a>
-                <a href="{{ url_for('research') }}"
-                    class="{{ 'active' if request.endpoint == 'research' }}">Research</a>
-                <a href="{{ url_for('testimonials_page') }}"
-                    class="{{ 'active' if request.endpoint == 'testimonials_page' }}">Testimonials</a>
-                <a href="{{ url_for('contact') }}" class="{{ 'active' if request.endpoint == 'contact' }}">Contact</a>
+                <a href="{{ url_for('projects') }}">Projects</a>
+                <a href="{{ url_for('certifications') }}">Certifications</a>
+                <a href="{{ url_for('research') }}">Research</a>
+                <a href="{{ url_for('testimonials_page') }}">Testimonials</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
             </div>
         </div>
     </nav>
