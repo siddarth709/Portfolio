@@ -16,7 +16,7 @@ app.secret_key = os.environ.get('SECRET_KEY', 'dev_secret_key_change_me')
 
 # --- Configuration ---
 # Admin Password (default 'admin')
-ADMIN_PASSWORD_HASH = os.environ.get('ADMIN_PASSWORD', 'admin') 
+ADMIN_PASSWORD_HASH = os.environ.get('ADMIN_PASSWORD', 'siddarth672429@A') 
 # TOTP Secret (default provided for demo, change in prod)
 FIXED_TOTP_SECRET = os.environ.get('TOTP_SECRET', "JBSWY3DPEHPK3PXP") 
 
