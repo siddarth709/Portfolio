@@ -240,6 +240,17 @@ def save_home(data):
 def save_testimonial(data):
     items = load_json(DATA_FILE_TESTIMONIALS)
     items.insert(0, data)
+    save_testimonial_file(items)
+
+def update_testimonial_data(data):
+    items = load_json(DATA_FILE_TESTIMONIALS)
+    for i, item in enumerate(items):
+        if str(item['id']) == str(data['id']):
+            items[i] = data
+            break
+    save_testimonial_file(items)
+
+def save_testimonial_file(items):
     save_json(DATA_FILE_TESTIMONIALS, items)
 
 def delete_item(item_id, item_type):
@@ -737,6 +748,38 @@ def admin():
             }
             save_testimonial(new_testimonial)
             flash('Testimonial Added!', 'success')
+
+        elif action == 'update_testimonial':
+            id = request.form.get('id')
+            name = request.form.get('name')
+            message = request.form.get('message')
+            
+            # Find existing to preserve or update image
+            current_testimonials = load_json(DATA_FILE_TESTIMONIALS)
+            existing_item = next((item for item in current_testimonials if str(item['id']) == str(id)), None)
+            
+            if existing_item:
+                image_filename = existing_item.get('image')
+                if 'image' in request.files:
+                    file = request.files['image']
+                    if file and file.filename != '' and allowed_file(file.filename):
+                        safe_filename = secure_filename(file.filename)
+                        filename = f"testimonial_{int(time.time())}_{safe_filename}"
+                        file.save(os.path.join(app.config['UPLOAD_FOLDER_TESTIMONIALS'], filename))
+                        sync_to_github(os.path.join(app.config['UPLOAD_FOLDER_TESTIMONIALS'], filename), is_binary=True, message=f"Update Testimonial Image {filename}")
+                        image_filename = filename
+
+                updated_testimonial = {
+                    "id": int(id),
+                    "name": name,
+                    "message": message,
+                    "date": existing_item.get('date', "Now"),
+                    "image": image_filename
+                }
+                update_testimonial_data(updated_testimonial)
+                flash('Testimonial Updated!', 'success')
+            else:
+                flash('Testimonial not found', 'error')
 
 
 

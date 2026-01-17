@@ -103,4 +103,38 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
+
+
+    // --- Edit Testimonial Logic ---
+    const editBtns = document.querySelectorAll('.btn-edit');
+    const editModal = document.getElementById('edit-testimonial-modal');
+    const closeEditModalBtn = document.getElementById('close-edit-modal');
+    const cancelEditBtn = document.getElementById('cancel-edit-testimonial');
+
+    if (editModal) {
+        // Open Modal & Populate
+        editBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const id = btn.getAttribute('data-id');
+                const name = btn.getAttribute('data-name');
+                const message = btn.getAttribute('data-message');
+
+                document.getElementById('edit-id').value = id;
+                document.getElementById('edit-name').value = name;
+                document.getElementById('edit-message').value = message;
+
+                editModal.classList.add('active');
+            });
+        });
+
+        // Close Modal Handlers
+        function closeEditModal(e) {
+            if (e) e.preventDefault();
+            editModal.classList.remove('active');
+        }
+
+        if (closeEditModalBtn) closeEditModalBtn.addEventListener('click', closeEditModal);
+        if (cancelEditBtn) cancelEditBtn.addEventListener('click', closeEditModal);
+    }
 });
