@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}N S Siddarth | AIML{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <div class="ambient-background">
+        <canvas id="canvas-bg"></canvas>
+        <div class="gradient-mesh"></div>
+    </div>
+
+    <nav class="navbar">
+        <div class="container navbar-content">
+            <a href="/" class="logo display-text">PORTFOLIO<span class="text-accent">.</span></a>
+
+            <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+                <span class="hamburger"></span>
+            </button>
+
+            <div class="nav-links">
+                <a href="{{ url_for('projects') }}"
+                    class="{{ 'active' if request.endpoint == 'projects' }}">Projects</a>
+                <a href="{{ url_for('certifications') }}"
+                    class="{{ 'active' if request.endpoint == 'certifications' }}">Certifications</a>
+                <a href="{{ url_for('research') }}"
+                    class="{{ 'active' if request.endpoint == 'research' }}">Research</a>
+                <a href="{{ url_for('testimonials_page') }}"
+                    class="{{ 'active' if request.endpoint == 'testimonials_page' }}">Testimonials</a>
+                <a href="{{ url_for('contact') }}" class="{{ 'active' if request.endpoint == 'contact' }}">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Portfolio. <span class="text-accent">N S Siddarth</span>.</p>
+            {% if request.endpoint == 'index' %}
+            <p style="margin-top: 0.5rem;"><a href="{{ url_for('login') }}"
+                    style="color: var(--color-text-secondary); font-size: 0.8rem; text-decoration: none;">Admin
+                    Login</a></p>
+            {% endif %}
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/canvas_bg.js') }}"></script>
+
+    <!-- Project Preview Modal -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content card-modal preview-modal-content">
+            <div class="modal-header"
+                style="padding: 0.8rem 1rem; background: #1a1a1a; display: flex; align-items: center; justify-content: space-between;">
+                <!-- Window Controls -->
+                <div style="display: flex; gap: 8px;">
+                    <span class="preview-close"
+                        style="width: 20px; height: 20px; border-radius: 50%; background: #ff5f56; display: flex; align-items: center; justify-content: center; font-size: 14px; color: rgba(0,0,0,0.6); font-weight: bold; cursor: pointer; line-height: 1;">&times;</span>
+                </div>
+
+                <!-- Title/Address Bar -->
+                <div style="flex: 1; text-align: center;">
+                    <span id="previewTitle" style="color: #888; font-size: 0.9rem; font-family: monospace;">Project
+                        Preview</span>
+                </div>
+
+                <!-- External Link -->
+                <div>
+                    <a href="#" target="_blank" id="openExternallyBtn" class="btn btn-outline"
+                        style="font-size: 0.7rem; padding: 0.3rem 0.8rem; height: auto; line-height: 1;">
+                        ↗
+                    </a>
+                </div>
+            </div>
+            <div class="modal-body" style="padding:0; height: 80vh; display: block;">
+                <iframe id="previewFrame" src="" frameborder="0"
+                    style="width: 100%; height: 100%; display: block;"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Check for Flask Flash Messages and trigger SweetAlert2 Toasts
+        {% with messages = get_flashed_messages(with_categories = true) %}
+        {% if messages %}
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            background: '#18181b',
+            color: '#fff',
+            iconColor: 'var(--color-accent)',
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
+        {% for category, message in messages %}
+        Toast.fire({
+            icon: "{{ 'success' if category == 'success' else 'error' }}",
+            title: "{{ message }}"
+        });
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

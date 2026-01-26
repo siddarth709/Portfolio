@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio | Research{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h1 class="section-title display-text">Research<span class="text-accent">.</span></h1>
+        <p class="hero-subtitle" style="margin-bottom: 4rem;">Exploring the frontiers of Artificial Intelligence and
+            Machine Learning.</p>
+
+        <div class="grid-layout">
+
+            {% for item in research %}
+            <!-- Research Item Block -->
+            <div class="tile-card fade-in">
+                <div class="tile-content">
+                    <span class="tile-tag">
+                        {% if item.type == 'published' %}Published Paper{% else %}Ongoing Project{% endif %}
+                    </span>
+                    <h3 class="tile-title">{{ item.title }}</h3>
+                    <p class="tile-description">{{ item.description }}</p>
+
+                    <div class="tile-footer">
+                        {% if item.link and item.link != '#' %}
+                        <a href="{{ item.link }}" target="_blank" class="tile-link">{{ item.link_text }} &rarr;</a>
+                        {% endif %}
+
+                        {% if item.document %}
+                        <a href="{{ url_for('protected_research', id=item.id) }}" class="tile-link"
+                            style="margin-left: 1rem; color: #ff6b6b;">
+                            <span style="font-size: 1.2em; margin-right: 5px;">🔒</span> Access Doc
+                        </a>
+                        {% endif %}
+
+                        {% if item.public_document %}
+                        <a href="{{ url_for('static', filename='uploads/research_public/' + item.public_document) }}"
+                            target="_blank" class="tile-link" style="margin-left: 1rem; color: var(--color-accent);">
+                            <span style="font-size: 1.2em; margin-right: 5px;">👁️</span> Preview
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <!-- Research Item Block End -->
+            {% endfor %}
+
+            <!-- Coming Soon Card -->
+            <div class="tile-empty fade-in">
+                <div class="coming-soon-icon">&micro;</div>
+                <h3 class="tile-title" style="margin-bottom:0;">Upcoming Research</h3>
+                <p class="tile-description" style="flex-grow:0; margin-top:0.5rem;">Working on new papers regarding
+                    GANs.</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

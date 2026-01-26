@@ -1,0 +1,56 @@
+[
+    {
+        "id": 6,
+        "title": "Databases and SQL for Data Science ",
+        "issuer": "IBM on coursera",
+        "date": "Oct 12",
+        "link": "#",
+        "description": "Database for data science hands on labs",
+        "image": "cert_1768426544_Coursera_2QZ32BG04YKL_page-0001.jpg"
+    },
+    {
+        "id": 5,
+        "title": "Applied Data Science Capstone",
+        "issuer": "IBM on Coursera",
+        "date": "Oct 22",
+        "link": "#",
+        "description": "A project-based capstone course that applies data science skills to solve real-world problems using data analysis, visualization, and predictive modeling.\r\n",
+        "image": "Coursera_5YV7RB24BYMP_page-0001.jpg"
+    },
+    {
+        "id": 4,
+        "title": "Generative AI and LLMs Architecture and Data preparation",
+        "issuer": "IBM on Coursera",
+        "date": "Aug 22",
+        "link": "#",
+        "description": "A comprehensive course covering the architecture of generative AI and large language models, with a focus on data collection, cleaning, and preparation for effective model training.",
+        "image": "Coursera_3M0OGLTUNDMC_page-0001.jpg"
+    },
+    {
+        "id": 3,
+        "title": "Machine Learning with Python (with Honors)",
+        "issuer": "IBM on Coursera",
+        "date": "Oct 21",
+        "link": "#",
+        "description": "A practical course focused on building, training, and deploying machine learning models using Python and popular libraries like NumPy, pandas, and scikit-learn.",
+        "image": "Coursera_E72JZL35SUXY_page-0001.jpg"
+    },
+    {
+        "id": 2,
+        "title": "Machine Learning",
+        "issuer": "Stanford + Deeplearning AI on Coursera",
+        "date": "Sep 10",
+        "link": "#",
+        "description": "Supervised learning (linear regression, logistic\r\nregression, neural networks, decision trees), unsupervised learning\r\n(clustering, anomaly detection), recommender systems, and\r\nreinforcement learning.",
+        "image": "0.jpg"
+    },
+    {
+        "id": 1,
+        "title": "IBM Data Science",
+        "issuer": "IBM + Coursera",
+        "date": "Oct 22",
+        "link": "#",
+        "description": "End-to-end data science pipeline, encompassing Python programming, SQL data extraction, exploratory analysis, and the deployment of machine learning models to drive data-driven decision-making.",
+        "image": "Coursera_ZTPV1QJ47MYL_page-0001.jpg"
+    }
+]

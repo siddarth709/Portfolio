@@ -1,0 +1,37 @@
+:root {
+  /* Colors */
+  --color-bg-main: #0a0a0a;
+  --color-bg-secondary: #111111;
+  --color-bg-main-rgb: 0, 0, 0;
+  /* Updated to pure black for deep glass */
+  --color-bg-secondary-rgb: 17, 17, 17;
+  --color-text-main: #ffffff;
+  --color-text-secondary: #888888;
+  --color-accent: #00f0ff;
+  --color-accent-rgb: 0, 240, 255;
+  --color-border: #333333;
+
+  /* Typography */
+  --font-main: 'Outfit', sans-serif;
+  --font-display: 'Rajdhani', sans-serif;
+
+  /* Spacing */
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 4rem;
+
+  /* Layout */
+  --container-width: 1200px;
+  --header-height: 80px;
+
+  /* Animation */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+}
+
+@media (prefers-color-scheme: light) {
+  /* We are forcing dark mode for this premium catchy look, 
+     but defining this block just in case we want to support it later 
+     or to explicitly override it. */
+}

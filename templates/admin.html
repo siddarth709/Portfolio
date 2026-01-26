@@ -1,0 +1,540 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio | Admin Dashboard{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<style>
+    /* Prevent body scroll when mobile sidebar is open (optional polish) */
+    body.sidebar-open {
+        overflow: hidden;
+    }
+
+    /* Hide global nav/footer for app-like feel on admin */
+    .navbar,
+    .footer {
+        display: none !important;
+    }
+
+    body {
+        padding-bottom: 0 !important;
+        /* Remove any padding added by global css for footer */
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-wrapper">
+
+    <!-- Mobile Header -->
+    <div class="mobile-admin-header">
+        <button id="sidebar-toggle" class="btn-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+        <span class="mobile-title">Dashboard</span>
+    </div>
+
+    <div class="admin-container">
+
+        <!-- SIDEBAR -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <a href="/" class="sidebar-logo" style="text-decoration: none;">PORTFOLIO<span
+                        class="text-accent">.</span></a>
+                <button id="sidebar-close" class="btn-icon mobile-only">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="sidebar-nav-item active" data-tab="section-profile">
+                    <span class="icon">👤</span> Profile Settings
+                </a>
+                <a href="#" class="sidebar-nav-item" data-tab="section-add-content">
+                    <span class="icon">➕</span> Add Content
+                </a>
+                <a href="#" class="sidebar-nav-item" data-tab="section-manage-content">
+                    <span class="icon">📁</span> Manage Content
+                </a>
+
+                <div class="sidebar-divider"></div>
+
+                <a href="{{ url_for('logout') }}" class="sidebar-nav-item logout">
+                    <span class="icon">🚪</span> Logout
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>Logged in as Admin</p>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="admin-main">
+
+            <!-- SECTION 1: PROFILE -->
+            <div id="section-profile" class="dashboard-content-section active">
+                <div class="section-header">
+                    <h2>Profile Settings</h2>
+                    <p>Manage your personal information and main images.</p>
+                </div>
+
+                <div class="admin-card">
+                    <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
+                        <input type="hidden" name="action" value="update_profile">
+
+                        <div class="profile-grid">
+                            <!-- Personal Info -->
+                            <div>
+                                <h3 class="subsection-title">Personal Information</h3>
+                                <div class="form-group">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" name="name" value="{{ profile.name }}" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" name="email" value="{{ profile.email }}" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="text" name="phone" value="{{ profile.phone }}"
+                                        placeholder="+91 98765 43210" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Bio</label>
+                                    <textarea name="bio" rows="4" class="form-textarea">{{ profile.bio }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Social Links -->
+                            <div>
+                                <h3 class="subsection-title">Social Media</h3>
+                                <div class="form-group">
+                                    <label class="form-label">LinkedIn URL</label>
+                                    <input type="text" name="linkedin" value="{{ profile.linkedin }}"
+                                        class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">GitHub URL</label>
+                                    <input type="text" name="github" value="{{ profile.github }}" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Twitter / X URL</label>
+                                    <input type="text" name="twitter" value="{{ profile.twitter }}" class="form-input">
+                                </div>
+                            </div>
+
+                            <!-- Images -->
+                            <div class="full-width-col"
+                                style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 2rem; margin-top: 1rem;">
+                                <h3 class="subsection-title">Images & Assets</h3>
+                                <div class="images-grid">
+                                    <div>
+                                        <label class="form-label">Profile Photo</label>
+                                        <input type="file" id="hidden-profile-input" name="profile_image"
+                                            accept="image/*" style="display: none;">
+                                        <button id="edit-profile-btn" type="button"
+                                            class="btn btn-outline full-width">📷 Change Photo</button>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Banner Image</label>
+                                        <input type="file" name="banner_image" accept="image/*" class="form-file-input">
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Skills Image</label>
+                                        <input type="file" id="skills-img-input" name="skills_image" accept="image/*"
+                                            style="display: none;">
+                                        <button id="skills-img-btn" type="button"
+                                            class="btn btn-outline full-width">Change Skills Image</button>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Education Image</label>
+                                        <input type="file" id="edu-img-input" name="education_image" accept="image/*"
+                                            style="display: none;">
+                                        <button id="edu-img-btn" type="button" class="btn btn-outline full-width">Change
+                                            edu Image</button>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Experience Image</label>
+                                        <input type="file" id="exp-img-input" name="experience_image" accept="image/*"
+                                            style="display: none;">
+                                        <button id="exp-img-btn" type="button" class="btn btn-outline full-width">Change
+                                            exp Image</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Save Profile Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Typing Roles Management -->
+            <div class="admin-card">
+                <h3>Manage Typing Roles</h3>
+                <div class="role-list" style="margin-bottom: 2rem;">
+                    {% if profile.roles %}
+                    <div class="role-grid" style="display: grid; gap: 1rem;">
+                        {% for role in profile.roles %}
+                        <div class="role-item"
+                            style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="color: var(--color-text-secondary); margin-right: 0.5rem;">{{ role.prefix
+                                    }}</span>
+                                <span style="font-weight: bold; color: var(--color-accent);">{{ role.core }}</span>
+                            </div>
+                            <form method="POST" action="{{ url_for('admin') }}" style="margin: 0;">
+                                <input type="hidden" name="action" value="delete_role">
+                                <input type="hidden" name="index" value="{{ loop.index0 }}">
+                                <button type="button" onclick="confirmRoleDelete(this)" class="btn-icon delete"
+                                    style="background: none; border: none; color: #ff4757; cursor: pointer;">
+                                    🗑️
+                                </button>
+                            </form>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p style="color: var(--color-text-secondary);">No roles defined yet.</p>
+                    {% endif %}
+                </div>
+
+                <h4>Add New Role</h4>
+                <form method="POST" action="{{ url_for('admin') }}" class="admin-form"
+                    style="display: grid; grid-template-columns: 1fr 2fr auto; gap: 1rem; align-items: end;">
+                    <input type="hidden" name="action" value="add_role">
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Prefix (e.g., "a ")</label>
+                        <input type="text" name="prefix" placeholder="a " required style="width: 100%;">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Role Text</label>
+                        <input type="text" name="core" placeholder="Creative Builder" required style="width: 100%;">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+            </div>
+
+            <!-- SECTION 2: ADD CONTENT -->
+            <div id="section-add-content" class="dashboard-content-section">
+                <div class="section-header">
+                    <h2>Add New Content</h2>
+                    <p>Create new entries for your portfolio sections.</p>
+                </div>
+
+                <div class="content-forms-grid">
+
+                    <!-- Add Project -->
+                    <div class="admin-card">
+                        <h3 class="card-title">Project</h3>
+                        <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
+                            <input type="hidden" name="action" value="add_project">
+                            <div class="form-group"><input type="text" name="title" required placeholder="Project Title"
+                                    class="form-input"></div>
+                            <div class="form-group"><input type="text" name="link" required
+                                    placeholder="Project Link URL" class="form-input"></div>
+                            <div class="form-group"><input type="file" name="image" accept="image/*"
+                                    class="form-file-input"></div>
+                            <div class="form-group"><textarea name="description" rows="2" required
+                                    placeholder="Brief Description" class="form-textarea"></textarea></div>
+                            <button type="submit" class="btn btn-primary full-width">Add Project &plus;</button>
+                        </form>
+                    </div>
+
+                    <!-- Add Certificate -->
+                    <div class="admin-card">
+                        <h3 class="card-title">Certification</h3>
+                        <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
+                            <input type="hidden" name="action" value="add_cert">
+                            <div class="form-group"><input type="text" name="title" required
+                                    placeholder="Certificate Name" class="form-input"></div>
+                            <div class="form-group grid-2">
+                                <input type="text" name="issuer" required placeholder="Issuer" class="form-input">
+                                <input type="text" name="date" required placeholder="Year" class="form-input">
+                            </div>
+                            <div class="form-group"><input type="file" name="image" accept="image/*"
+                                    class="form-file-input"></div>
+                            <div class="form-group"><textarea name="description" rows="2" required
+                                    placeholder="Description" class="form-textarea"></textarea></div>
+                            <button type="submit" class="btn btn-primary full-width">Add Certificate &plus;</button>
+                        </form>
+                    </div>
+
+                    <!-- Add Experience -->
+                    <div class="admin-card">
+                        <h3 class="card-title">Experience</h3>
+                        <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
+                            <input type="hidden" name="action" value="add_experience">
+                            <div class="form-group"><input type="text" name="company" required
+                                    placeholder="Company Name" class="form-input"></div>
+                            <div class="form-group"><input type="text" name="role" required placeholder="Job Role"
+                                    class="form-input"></div>
+                            <div class="form-group"><input type="text" name="date" required placeholder="Duration"
+                                    class="form-input"></div>
+                            <div class="form-group"><textarea name="description" rows="2" placeholder="Responsibilities"
+                                    class="form-textarea"></textarea></div>
+                            <button type="submit" class="btn btn-primary full-width">Add Experience &plus;</button>
+                        </form>
+                    </div>
+
+                    <!-- Add Education -->
+                    <div class="admin-card">
+                        <h3 class="card-title">Education</h3>
+                        <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
+                            <input type="hidden" name="action" value="add_education">
+                            <div class="form-group"><input type="text" name="school" required placeholder="School"
+                                    class="form-input"></div>
+                            <div class="form-group"><input type="text" name="degree" required placeholder="Degree"
+                                    class="form-input"></div>
+                            <div class="form-group"><input type="text" name="date" required placeholder="Year"
+                                    class="form-input"></div>
+                            <button type="submit" class="btn btn-primary full-width">Add Education &plus;</button>
+                        </form>
+                    </div>
+
+                    <!-- Add Research -->
+                    <div class="admin-card">
+                        <h3 class="card-title">Research Setup</h3>
+                        <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
+                            <input type="hidden" name="action" value="add_research">
+                            <div class="form-group">
+                                <select name="type" required class="form-select">
+                                    <option value="published">Published Paper</option>
+                                    <option value="ongoing">Ongoing Project</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><input type="text" name="title" required placeholder="Title"
+                                    class="form-input"></div>
+                            <div class="form-group"><input type="text" name="link" placeholder="External Link"
+                                    class="form-input"></div>
+                            <div class="form-group">
+                                <label class="form-label sm">Private PDF</label>
+                                <input type="file" name="document" class="form-file-input">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label sm">Public PDF</label>
+                                <input type="file" name="public_document" class="form-file-input">
+                            </div>
+                            <div class="form-group"><textarea name="description" rows="2" required
+                                    placeholder="Abstract" class="form-textarea"></textarea></div>
+                            <button type="submit" class="btn btn-primary full-width">Add Research &plus;</button>
+                        </form>
+                    </div>
+
+                    <!-- Add Testimonial -->
+                    <div class="admin-card">
+                        <h3 class="card-title">Testimonial</h3>
+                        <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data">
+                            <input type="hidden" name="action" value="add_testimonial">
+                            <div class="form-group"><input type="text" name="name" required placeholder="Client Name"
+                                    class="form-input"></div>
+                            <div class="form-group"><input type="file" name="image" accept="image/*"
+                                    class="form-file-input"></div>
+                            <div class="form-group"><textarea name="message" rows="3" required
+                                    placeholder="Testimonial Message" class="form-textarea"></textarea></div>
+                            <button type="submit" class="btn btn-primary full-width">Add Testimonial &plus;</button>
+                        </form>
+                    </div>
+
+                    <!-- Add Skill -->
+                    <div class="admin-card">
+                        <h3 class="card-title">Skill Category</h3>
+                        <form method="POST" action="{{ url_for('admin') }}">
+                            <input type="hidden" name="action" value="add_skill">
+                            <div class="form-group"><input type="text" name="category" required
+                                    placeholder="Category (e.g. AI/ML)" class="form-input"></div>
+                            <div class="form-group"><textarea name="items" rows="3" required
+                                    placeholder="Skills (comma separated)" class="form-textarea"></textarea></div>
+                            <button type="submit" class="btn btn-primary full-width">Add Skills &plus;</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: MANAGE CONTENT -->
+            <div id="section-manage-content" class="dashboard-content-section">
+                <div class="section-header">
+                    <h2>Manage Content</h2>
+                    <p>Edit or delete existing entries.</p>
+                </div>
+
+                <!-- Messages -->
+                <div class="admin-card full-width mb-2">
+                    <h3 class="card-title text-accent">Inbox Messages</h3>
+                    {% if messages %}
+                    <div class="messages-grid">
+                        {% for msg in messages %}
+                        <div class="message-card">
+                            <div class="msg-header">
+                                <strong>{{ msg.name }}</strong>
+                                <span class="msg-date">{{ msg.date }}</span>
+                            </div>
+                            <div class="msg-email">{{ msg.email }}</div>
+                            <p class="msg-body">{{ msg.message }}</p>
+                            <a href="#" class="btn-delete text-danger"
+                                data-href="{{ url_for('delete', item_type='message', id=msg.id) }}">Delete Message</a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="empty-state">No messages received yet.</p>
+                    {% endif %}
+                </div>
+
+                <!-- Lists -->
+                <div class="content-forms-grid">
+                    {% macro content_list(title, items, item_type) %}
+                    <div class="admin-card">
+                        <h3 class="card-title">{{ title }}</h3>
+                        {% if items %}
+                        <ul class="item-list">
+                            {% for item in items %}
+                            <li class="item-row">
+                                <div class="item-info">
+                                    {% if item_type == 'testimonial' %}
+                                    <span class="main-text">{{ item.name }}</span>
+                                    {% elif item_type == 'education' %}
+                                    <span class="main-text">{{ item.school }}</span>
+                                    <span class="sub-text">{{ item.degree }}</span>
+                                    {% elif item_type == 'experience' %}
+                                    <span class="main-text">{{ item.company }}</span>
+                                    <span class="sub-text">{{ item.role }}</span>
+                                    {% elif item_type == 'skill' %}
+                                    <span class="main-text">{{ item.category }}</span>
+                                    {% else %}
+                                    <span class="main-text">{{ item.title }}</span>
+                                    {% endif %}
+                                </div>
+                                {% if item_type == 'testimonial' %}
+                                <a href="#" class="btn-edit icon-btn" data-id="{{ item.id }}"
+                                    data-name="{{ item.name }}" data-message="{{ item.message }}"
+                                    style="color: var(--color-accent); margin-right: 0.5rem;">✎</a>
+                                {% endif %}
+                                <a href="#" class="btn-delete icon-btn"
+                                    data-href="{{ url_for('delete', item_type=item_type, id=item.id) }}">&times;</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="empty-state">No items found.</p>
+                        {% endif %}
+                    </div>
+                    {% endmacro %}
+
+                    {{ content_list('All Projects', projects, 'project') }}
+                    {{ content_list('All Certificates', certificates, 'certificate') }}
+                    {{ content_list('All Education', education, 'education') }}
+                    {{ content_list('All Experience', experience, 'experience') }}
+                    {{ content_list('Research Items', research, 'research') }}
+                    {{ content_list('Skill Categories', skills, 'skill') }}
+                    {{ content_list('Testimonials', testimonials, 'testimonial') }}
+
+                    <!-- Documents List -->
+                    <div class="admin-card">
+                        <h3 class="card-title">Uploaded Documents</h3>
+                        {% if documents %}
+                        <ul class="item-list">
+                            {% for doc in documents %}
+                            <li class="item-row">
+                                <div class="item-info">
+                                    <span class="main-text">{{ doc.title }}</span>
+                                    <span class="sub-text">{{ doc.filename }}</span>
+                                </div>
+                                <div class="actions">
+                                    <a href="{{ url_for('download_file', filename=doc.filename) }}" class="icon-link"
+                                        title="Download">⬇</a>
+                                    <a href="#" class="btn-delete icon-btn text-danger"
+                                        data-href="{{ url_for('delete', item_type='document', id=doc.id) }}"
+                                        title="Delete">&times;</a>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="empty-state">No documents found.</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<!-- Edit Testimonial Modal -->
+<div id="edit-testimonial-modal" class="modal-overlay">
+    <div class="editor-modal">
+        <div class="editor-header">
+            <h3>Edit Testimonial</h3>
+            <button id="close-edit-modal" class="editor-close">&times;</button>
+        </div>
+        <form method="POST" action="{{ url_for('admin') }}" enctype="multipart/form-data" style="width: 100%;">
+            <div class="editor-body" style="align-items: stretch;">
+                <input type="hidden" name="action" value="update_testimonial">
+                <input type="hidden" id="edit-id" name="id">
+
+                <div class="form-group">
+                    <label class="form-label">Client Name</label>
+                    <input type="text" id="edit-name" name="name" required class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Message</label>
+                    <textarea id="edit-message" name="message" rows="4" required class="form-textarea"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Change Image (Optional)</label>
+                    <input type="file" name="image" accept="image/*" class="form-file-input">
+                </div>
+            </div>
+            <div class="editor-footer">
+                <button type="button" id="cancel-edit-testimonial" class="btn btn-outline">Cancel</button>
+                <button type="submit" class="btn btn-save">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Profile Editor Modal (Unchanged) -->
+<div id="editor-modal" class="modal-overlay">
+    <div class="editor-modal">
+        <div class="editor-header">
+            <h3>Adjust Image</h3>
+            <button id="close-modal" class="editor-close">&times;</button>
+        </div>
+        <div class="editor-body">
+            <div id="crop-container" class="crop-container">
+                <img id="crop-image" class="crop-image" src="" alt="To Crop">
+            </div>
+            <div class="controls-container">
+                <span class="zoom-icon">-</span>
+                <input type="range" id="zoom-slider" class="zoom-slider" step="0.01">
+                <span class="zoom-icon">+</span>
+            </div>
+        </div>
+        <div class="editor-footer">
+            <button id="cancel-edit" class="btn btn-outline">Cancel</button>
+            <button id="save-edit" class="btn btn-save">Done</button>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/profile-editor.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard_layout.js') }}"></script>
+
+{% endblock %}

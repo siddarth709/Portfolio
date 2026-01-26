@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}N S Siddarth | AIML{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block content %}
+
+
+<!-- About Section -->
+<div class="about-header" style="height: auto; margin-bottom: 0; background: transparent;">
+    <!-- Keeping Banner Hidden or Optional for Home layout, or repurpose? 
+         User said "Add about in homepage", let's include the whole structure but maybe tweak spacing.
+         For now, sticking to the exact structure from about.html but appended.
+    -->
+    <!-- Actually, let's use the exact structure but maybe simplify the banner part if it looks weird below Hero.
+         The About Page had a big banner. Index page has Hero. 
+         Let's add it as a new section below Hero.
+    -->
+</div>
+
+<section id="about" class="section about-intro" style="padding-top: 5rem;">
+    <div class="about-header" style="height: 300px; margin-bottom: 6rem;">
+        <img src="{{ url_for('static', filename='images/' + profile.banner_image) if profile.banner_image else url_for('static', filename='images/banner.png') }}"
+            alt="Banner" class="about-banner">
+        <div class="header-content container">
+            <div class="profile-wrapper">
+                <div class="profile-container">
+                    <img src="{{ url_for('static', filename='images/' + profile.profile_image) if profile.profile_image else url_for('static', filename='images/profile.jpg') }}"
+                        alt="Profile Picture" class="profile-img">
+                </div>
+                <div class="profile-info fade-in">
+                    <h1 class="profile-name">{{ profile.name }}</h1>
+                    <p class="profile-role"
+                        style="font-size: 1.2rem; color: var(--color-accent); margin-bottom: 0.5rem; font-family: var(--font-display); height: 1.5em;">
+                        I am <span class="typing-text"></span><span class="cursor">|</span>
+                    </p>
+                    <p class="profile-email">
+                        <span style="color: var(--color-accent);">✉️</span> {{ profile.email }}
+                    </p>
+                    {% if profile.phone %}
+                    <p class="profile-phone"
+                        style="font-family: 'Inter', sans-serif; color: var(--color-text-secondary); font-size: 1rem; margin-top: 0.5rem;">
+                        <span style="color: var(--color-accent);">📞</span> {{ profile.phone }}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="about-content" style="max-width: 900px; margin: 0 auto;">
+            <p class="display-text fade-in" style="font-size: 1.5rem; margin-bottom: 2rem; white-space: pre-line;">
+                {{ profile.bio }}
+            </p>
+            <div style="text-align: center; margin-bottom: 3rem;" class="fade-in">
+                <a href="{{ profile.linkedin }}" target="_blank" class="btn btn-outline">
+                    Connect on LinkedIn &rarr;
+                </a>
+            </div>
+
+            <div class="fade-in"
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 4rem; margin-top: 4rem;">
+                <!-- Skills Removed from here to move effectively below -->
+                <div style="display: none;"></div>
+                <!-- Education & Experience List Removed -->
+                <div style="display: none;"></div>
+            </div>
+
+        </div>
+
+        <!-- New Big Skills Showcase Section -->
+        <div class="skills-showcase section">
+            <div class="skills-text">
+                <h2 class="display-text section-title">Skills & <span class="cyan-highlight">Expertise</span>.</h2>
+                <div class="skills-list-big">
+                    {% for skill in skills %}
+                    <div class="skill-category-big">
+                        <h3 class="skill-cat-title">{{ skill.category }}</h3>
+                        <p class="skill-items-big">{{ skill.skill_list }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="skills-image">
+                <div class="circular-image-container">
+                    <img src="{{ url_for('static', filename='images/' + profile.skills_image) }}"
+                        alt="Skills Visualization">
+                </div>
+            </div>
+        </div>
+        <!-- Education & Experience Grid -->
+        <div class="edu-exp-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 6rem;">
+
+            <!-- Education Box -->
+            <div class="edu-exp-box glass-panel"
+                style="padding: 2rem; border-radius: 12px; position: relative; overflow: hidden;">
+                <div class="box-header"
+                    style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 2rem;">
+                    <h2 class="display-text section-title" style="font-size: 2rem; margin: 0;">Education<span
+                            class="text-accent">.</span></h2>
+                    <div class="mini-circular-image"
+                        style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255,255,255,0.2); flex-shrink: 0;">
+                        <img src="{{ url_for('static', filename='images/' + profile.education_image) }}" alt="Education"
+                            style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                </div>
+
+                <div class="box-list">
+                    {% for edu in education %}
+                    <div class="timeline-item fade-in" style="margin-bottom: 1.5rem;">
+                        <h3 class="h3" style="margin: 0; font-size: 1.2rem; color: var(--color-text-main);">{{
+                            edu.school }}</h3>
+                        <p class="text-accent" style="margin: 0.2rem 0;">{{ edu.degree }}</p>
+                        <span class="date" style="font-size: 0.85rem; color: var(--color-text-secondary);">{{
+                            edu.date }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Experience Box -->
+            <div class="edu-exp-box glass-panel"
+                style="padding: 2rem; border-radius: 12px; position: relative; overflow: hidden;">
+                <div class="box-header"
+                    style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 2rem;">
+                    <h2 class="display-text section-title" style="font-size: 2rem; margin: 0;">Experience<span
+                            class="text-accent">.</span></h2>
+                    <div class="mini-circular-image"
+                        style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255,255,255,0.2); flex-shrink: 0;">
+                        <img src="{{ url_for('static', filename='images/' + profile.experience_image) }}"
+                            alt="Experience" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                </div>
+
+                <div class="box-list">
+                    {% for exp in experience %}
+                    <div class="timeline-item fade-in" style="margin-bottom: 1.5rem;">
+                        <h4 style="margin: 0; font-size: 1.2rem; color: var(--color-text-main);">{{ exp.company
+                            }}</h4>
+                        <p style="font-size: 1rem; color: var(--color-text-secondary); margin: 0.2rem 0;">{{
+                            exp.role }}</p>
+                        <p style="font-size: 0.85rem; color: var(--color-text-secondary);">{{ exp.date }}</p>
+                        <p
+                            style="font-size: 0.9rem; color: var(--color-text-secondary); margin-top: 0.5rem; line-height: 1.4;">
+                            {{ exp.description }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+</section>
+
+{% block extra_js %}
+<script>
+    window.typingRoles = {{ profile.roles | tojson }};
+</script>
+{% endblock %}
+
+{% endblock %}

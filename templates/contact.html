@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio | Contact{% endblock %}
+
+{% block content %}
+<section class="section contact-section">
+    <div class="container">
+        <h1 class="section-title display-text">Get In Touch<span class="text-accent">.</span></h1>
+
+        <div class="contact-grid">
+            <!-- Left Side: Contact Info -->
+            <div class="contact-info">
+                <p class="contact-desc">
+                    Have a project in mind or just want to chat? Feel free to reach out. I'm currently open to new
+                    opportunities.
+                </p>
+
+                <a href="mailto:siddarth1729@outlook.com"
+                    class="contact-email-link display-text">siddarth1729@outlook.com</a>
+
+                <div class="social-links">
+                    {% if profile.twitter %}
+                    <a href="{{ profile.twitter }}" target="_blank" class="social-btn">Twitter</a>
+                    {% endif %}
+                    {% if profile.linkedin %}
+                    <a href="{{ profile.linkedin }}" target="_blank" class="social-btn">LinkedIn</a>
+                    {% endif %}
+                    {% if profile.github %}
+                    <a href="{{ profile.github }}" target="_blank" class="social-btn">GitHub</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Right Side: Form -->
+            <div class="contact-form-container">
+                <div class="contact-form-card">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                        <div class="alert-message {{ category }}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+
+                    <form method="POST" action="{{ url_for('contact') }}" class="contact-form">
+                        <input type="text" name="name" placeholder="Name" required class="form-control">
+                        <input type="email" name="email" placeholder="Email" required class="form-control">
+                        <textarea name="message" rows="5" placeholder="Message" required
+                            class="form-control"></textarea>
+                        <button type="submit" class="btn btn-primary contact-btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

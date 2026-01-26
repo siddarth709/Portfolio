@@ -1,0 +1,372 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio | Testimonials{% endblock %}
+
+{% block extra_css %}
+<!-- We might eventually want a specific CSS file, but for now we'll ensure styles are available 
+     either in global.css or we can include home.css if needed, but moving to global is better. 
+-->
+{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 8rem;">
+    <div class="container">
+        <div class="section-title"
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
+            <h1 class="display-text">Word from <span class="text-accent">Others</span></h1>
+            <button class="btn btn-outline" onclick="openAddTestimonial()">Add Word +</button>
+        </div>
+
+        <div class="grid-layout testimonial-grid">
+            {% for item in testimonials %}
+            <div class="tile-card testimonial-card fade-in">
+                <div class="tile-content">
+                    <div class="tile-tag">Word</div>
+                    <p class="tile-description"
+                        style="font-size: 1.1rem; color: var(--color-text-main); font-style: italic;">
+                        "{{ item.message }}"
+                    </p>
+                    <div class="tile-footer" style="justify-content: flex-start; gap: 1rem;">
+                        {% if item.image %}
+                        <img src="{{ url_for('static', filename='uploads/testimonials/' + item.image) }}"
+                            alt="{{ item.name }}" class="testimonial-img">
+                        {% endif %}
+                        <div>
+                            <span class="tile-title"
+                                style="font-size: 1rem; margin-bottom: 0; display: block; line-height: 1.2;">- {{
+                                item.name }}</span>
+                            <span class="tile-date" style="display: block; line-height: 1.2;">{{ item.date }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            {% if not testimonials %}
+            <div class="tile-empty" onclick="openAddTestimonial()" style="cursor: pointer;">
+                <div class="coming-soon-icon">+</div>
+                <h3 class="coming-soon-title">Be the first</h3>
+                <p class="coming-soon-text">Add a word about me</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Custom Testimonial Modal -->
+<div id="testimonial-modal" class="modal-overlay">
+    <div class="editor-modal">
+        <div class="editor-header">
+            <h3>Add Your Word</h3>
+            <button id="close-modal-btn" class="editor-close">&times;</button>
+        </div>
+
+        <!-- Step 1: Password -->
+        <div id="step-password" class="editor-body">
+            <p style="color: var(--color-text-secondary); margin-bottom: 1rem;">Please enter the password to contribute.
+            </p>
+            <input type="password" id="modal-password" class="form-input" placeholder="Password"
+                style="text-align: center;">
+            <p id="password-error" style="color: #ff6b6b; font-size: 0.9rem; margin-top: 0.5rem; display: none;">Invalid
+                Password</p>
+        </div>
+
+        <!-- Step 2: Form -->
+        <div id="step-form" class="editor-body" style="display: none;">
+
+            <!-- Profile Picture Section -->
+            <div class="crop-container" id="crop-container__modal">
+                <img id="crop-image__modal" class="crop-image" src="" alt="">
+                <div id="upload-placeholder"
+                    style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--color-text-secondary); pointer-events: none;">
+                    <span style="font-size: 2rem; margin-bottom: 0.5rem;">📷</span>
+                    <span style="font-size: 0.8rem;">Upload Photo</span>
+                </div>
+            </div>
+
+            <!-- Controls (Zoom) -->
+            <div class="controls-container" id="zoom-controls" style="display: none;">
+                <span class="zoom-icon">-</span>
+                <input type="range" id="zoom-slider__modal" class="zoom-slider" step="0.01">
+                <span class="zoom-icon">+</span>
+            </div>
+
+            <!-- File Input Trigger -->
+            <div class="file-upload-wrapper">
+                <input type="file" id="real-file-input" accept="image/*" style="display: none;">
+                <button id="trigger-upload" class="file-upload-btn">
+                    Choose Image
+                </button>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="modal-name" class="form-input" placeholder="Your Name">
+            </div>
+
+            <div class="form-group">
+                <textarea id="modal-message" class="form-input" rows="3" placeholder="Your Message"></textarea>
+            </div>
+
+        </div>
+
+        <div class="editor-footer">
+            <button id="modal-secondary-btn" class="btn btn-outline" style="display: none;">Back</button>
+            <button id="modal-primary-btn" class="btn btn-primary">Next</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Elements
+        const modal = document.getElementById('testimonial-modal');
+        const openBtn = document.querySelector('button[onclick="openAddTestimonial()"]'); // We will override the onclick
+        const closeBtn = document.getElementById('close-modal-btn');
+        const primaryBtn = document.getElementById('modal-primary-btn');
+        const secondaryBtn = document.getElementById('modal-secondary-btn');
+
+        const stepPassword = document.getElementById('step-password');
+        const stepForm = document.getElementById('step-form');
+
+        const passwordInput = document.getElementById('modal-password');
+        const passwordError = document.getElementById('password-error');
+
+        // Image Logic Elements
+        const realFileInput = document.getElementById('real-file-input');
+        const triggerUploadBtn = document.getElementById('trigger-upload');
+        const cropContainer = document.getElementById('crop-container__modal');
+        const cropImage = document.getElementById('crop-image__modal');
+        const zoomSlider = document.getElementById('zoom-slider__modal');
+        const zoomControls = document.getElementById('zoom-controls');
+        const uploadPlaceholder = document.getElementById('upload-placeholder');
+
+        // Form Inputs
+        const nameInput = document.getElementById('modal-name');
+        const messageInput = document.getElementById('modal-message');
+
+        // State
+        let currentStep = 'password';
+        let validatedPassword = '';
+        let scale = 1;
+        let panning = false;
+        let pointX = 0, pointY = 0, startX = 0, startY = 0;
+        let imgWidth = 0, imgHeight = 0;
+        let hasImage = false;
+
+        // --- Override Open Function ---
+        // Remove the onclick attribute from HTML to use this listener, or specific targeting
+        // We already have "openAddTestimonial()" in HTML. Let's just redefine it globally.
+        window.openAddTestimonial = function () {
+            modal.classList.add('active');
+            resetModal();
+        };
+
+        function closeModal() {
+            modal.classList.remove('active');
+        }
+
+        closeBtn.addEventListener('click', closeModal);
+
+        // --- Steps Logic ---
+        primaryBtn.addEventListener('click', async () => {
+            if (currentStep === 'password') {
+                const pwd = passwordInput.value;
+                if (pwd === 'siddarthjt024') {
+                    validatedPassword = pwd;
+                    goToStep('form');
+                } else {
+                    passwordError.style.display = 'block';
+                    passwordInput.style.borderColor = '#ff6b6b';
+                }
+            } else if (currentStep === 'form') {
+                // Submit
+                await submitTestimonial();
+            }
+        });
+
+        secondaryBtn.addEventListener('click', () => {
+            if (currentStep === 'form') {
+                goToStep('password');
+            }
+        });
+
+        function goToStep(step) {
+            currentStep = step;
+            if (step === 'password') {
+                stepPassword.style.display = 'flex'; // flex for center alignment if styled
+                stepForm.style.display = 'none';
+                primaryBtn.textContent = 'Next';
+                secondaryBtn.style.display = 'none';
+            } else {
+                stepPassword.style.display = 'none';
+                stepForm.style.display = 'flex'; // flex col
+                primaryBtn.textContent = 'Submit';
+                secondaryBtn.style.display = 'block';
+            }
+        }
+
+        function resetModal() {
+            currentStep = 'password';
+            passwordInput.value = '';
+            passwordError.style.display = 'none';
+            passwordInput.style.borderColor = 'var(--color-border)';
+            goToStep('password');
+
+            // Reset Form
+            nameInput.value = '';
+            messageInput.value = '';
+            realFileInput.value = '';
+            cropImage.src = '';
+            hasImage = false;
+            uploadPlaceholder.style.display = 'flex';
+            zoomControls.style.display = 'none';
+            state = { scale: 1, pointX: 0, pointY: 0 };
+
+            // Reset Button
+            triggerUploadBtn.textContent = "Choose Image";
+            triggerUploadBtn.removeAttribute('style'); // Clear all inline styles
+            // Re-apply display:flex if it was removed? No, it's defined in CSS class.
+            // But wait, the file-upload-wrapper is display:inline-block, btn is flex.
+            // Removing style attribute is safe as long as we didn't rely on inline styles for layout.
+            // The HTML didn't have inline styles on the button.
+
+        }
+
+        // --- Image Logic (Cropping/Zooming) ---
+        triggerUploadBtn.addEventListener('click', () => realFileInput.click());
+
+        realFileInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    cropImage.src = event.target.result;
+                    uploadPlaceholder.style.display = 'none';
+                    zoomControls.style.display = 'flex';
+                    hasImage = true;
+
+                    // Highlight Button
+                    triggerUploadBtn.textContent = "Change Image";
+                    triggerUploadBtn.style.borderColor = 'var(--color-accent)';
+                    triggerUploadBtn.style.color = 'var(--color-accent)';
+                    triggerUploadBtn.style.borderStyle = 'solid';
+                    triggerUploadBtn.style.background = 'rgba(0, 240, 255, 0.1)';
+                }
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+
+        cropImage.onload = () => {
+            // Init state
+            scale = 1; pointX = 0; pointY = 0;
+            zoomSlider.value = 1;
+            imgWidth = cropImage.naturalWidth;
+            imgHeight = cropImage.naturalHeight;
+
+            // Fit to container (250px)
+            const containerSize = 250;
+            const scaleFit = Math.max(containerSize / imgWidth, containerSize / imgHeight);
+            scale = scaleFit;
+
+            zoomSlider.min = scaleFit * 0.5;
+            zoomSlider.max = scaleFit * 3;
+            zoomSlider.value = scaleFit;
+
+            updateTransform();
+        };
+
+        zoomSlider.addEventListener('input', (e) => {
+            scale = parseFloat(e.target.value);
+            updateTransform();
+        });
+
+        function updateTransform() {
+            cropImage.style.transform = `translate(-50%, -50%) translate(${pointX}px, ${pointY}px) scale(${scale})`;
+        }
+
+        // Pan Logic
+        cropContainer.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            panning = true;
+            startX = e.clientX - pointX;
+            startY = e.clientY - pointY;
+            cropContainer.style.cursor = 'grabbing';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!panning) return;
+            e.preventDefault();
+            pointX = e.clientX - startX;
+            pointY = e.clientY - startY;
+            updateTransform();
+        });
+
+        window.addEventListener('mouseup', () => {
+            panning = false;
+            cropContainer.style.cursor = 'grab';
+        });
+
+        // --- Submission Logic ---
+        async function submitTestimonial() {
+            const name = nameInput.value;
+            const message = messageInput.value;
+
+            if (!name || !message) {
+                Swal.fire({ toast: true, position: 'top-end', icon: 'error', title: 'Please fill in all fields', timer: 3000, showConfirmButton: false });
+                return;
+            }
+
+            primaryBtn.textContent = 'Uploading...';
+
+            const formData = new FormData();
+            formData.append('password', validatedPassword);
+            formData.append('name', name);
+            formData.append('message', message);
+
+            if (hasImage) {
+                // Create cropped image
+                const canvas = document.createElement('canvas');
+                const size = 300;
+                canvas.width = size; canvas.height = size;
+                const ctx = canvas.getContext('2d');
+
+                ctx.fillStyle = '#0a0a0a';
+                ctx.fillRect(0, 0, size, size);
+
+                // Draw
+                ctx.translate(size / 2, size / 2);
+                ctx.translate(pointX, pointY);
+                ctx.scale(scale, scale);
+                ctx.drawImage(cropImage, -imgWidth / 2, -imgHeight / 2);
+
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.9));
+                formData.append('image', blob, 'profile.jpg');
+            }
+
+            try {
+                const response = await fetch('{{ url_for("add_testimonial") }}', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Posted!',
+                        background: '#111',
+                        color: '#fff',
+                        confirmButtonColor: '#00f0ff'
+                    }).then(() => location.reload());
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Error', text: data.message, background: '#111', color: '#fff' });
+                    primaryBtn.textContent = 'Submit';
+                }
+            } catch (e) {
+                console.error(e);
+                Swal.fire({ icon: 'error', title: 'Network Error', background: '#111', color: '#fff' });
+                primaryBtn.textContent = 'Submit';
+            }
+        }
+    });
+</script>
+{% endblock %}

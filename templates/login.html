@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio | Admin Login{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container" style="max-width: 500px;">
+        <h1 class="section-title display-text" style="text-align: center; margin-bottom: 3rem;">Admin Login<span
+                class="text-accent">.</span></h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div
+            style="background: rgba(255,0,0,0.1); border: 1px solid red; color: #ff6b6b; padding: 1rem; border-radius: 4px; margin-bottom: 2rem;">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="fade-in" style="background: var(--color-bg-secondary); padding: 2rem; border-radius: 8px;">
+            {% if qr_code %}
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--color-text-secondary);">scan this with
+                    Google Authenticator</p>
+                <img src="data:image/png;base64, {{ qr_code }}" alt="QR Code"
+                    style="width: 200px; height: 200px; margin: 0 auto; border-radius: 4px; display: inline-block;">
+                <!-- Secret should not be hardcoded here in production -->
+            </div>
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('login') }}">
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Password</label>
+                    <input type="password" name="password" required
+                        style="width: 100%; padding: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                </div>
+                <div style="margin-bottom: 2rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Authenticator Code</label>
+                    <input type="text" name="otp" required placeholder="123 456"
+                        style="width: 100%; padding: 0.8rem; background: var(--color-bg-main); border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 4px;">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Login
+                    &rarr;</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

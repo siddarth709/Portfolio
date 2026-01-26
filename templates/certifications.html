@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio | Certifications{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h1 class="section-title display-text">Certifications<span class="text-accent">.</span></h1>
+
+        <div class="grid-layout">
+
+            {% for cert in certificates %}
+            <!-- Certificate Block Start -->
+            <div class="tile-card fade-in enlarge-card" data-title="{{ cert.title }}" data-issuer="{{ cert.issuer }}"
+                data-date="{{ cert.date }}" data-description="{{ cert.description }}"
+                data-link="{{ cert.link if cert.link else '#' }}"
+                data-image="{{ url_for('static', filename='uploads/certificates/' + cert.image) if cert.image else '' }}">
+
+                {% if cert.image %}
+                <div class="tile-image-container">
+                    <img src="{{ url_for('static', filename='uploads/certificates/' + cert.image) }}"
+                        alt="{{ cert.title }}" class="tile-image">
+                </div>
+                {% else %}
+                <!-- Fallback gradient if no image -->
+                <div class="tile-image-container"
+                    style="background: linear-gradient(45deg, #1a1a1a, #2a2a2a); display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 3rem; opacity: 0.2; color: var(--color-accent);">★</span>
+                </div>
+                {% endif %}
+
+                <div class="tile-content">
+                    <span class="tile-tag">{{ cert.issuer }}</span>
+                    <h3 class="tile-title">{{ cert.title }}</h3>
+                    <p class="tile-description">{{ cert.description }}</p>
+
+                    <div class="tile-footer">
+                        <span class="tile-date">{{ cert.date }}</span>
+                        {% if cert.link and cert.link != '#' %}
+                        <a href="{{ cert.link }}" target="_blank" class="tile-link">View Credential &rarr;</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <!-- Certificate Block End -->
+            {% endfor %}
+
+            <!-- Coming Soon Card -->
+            <div class="tile-empty fade-in">
+                <div class="coming-soon-icon">&star;</div>
+                <h3 class="tile-title" style="margin-bottom:0;">In Progress</h3>
+                <p class="tile-description" style="flex-grow:0; margin-top:0.5rem;">Pursuing advanced certifications in
+                    Deep Learning.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Enhanced Certificate Modal -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content card-modal">
+            <span class="close">&times;</span>
+            <div class="modal-header">
+                <h2 id="modalTitle" class="modal-title"></h2>
+                <span id="modalIssuer" class="modal-badge"></span>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-image-wrapper">
+                    <img id="modalImage" class="modal-img-display" src="" alt="">
+                </div>
+                <div class="modal-info">
+                    <p id="modalDescription" class="modal-desc"></p>
+                    <div class="modal-meta">
+                        <span id="modalDate" class="modal-date"></span>
+                        <a id="modalLink" href="#" target="_blank" class="btn btn-primary modal-btn">View Credential</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

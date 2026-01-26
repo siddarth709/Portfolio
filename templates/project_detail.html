@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio | Project View{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <a href="{{ url_for('projects') }}"
+            style="display: inline-block; margin-bottom: 2rem; color: var(--color-text-secondary);">&larr; Back to
+            Projects</a>
+
+        <h1 class="display-text" style="font-size: 3.5rem; margin-bottom: 1rem;">Project {{ project_id }}<span
+                class="text-accent">.</span></h1>
+        <p class="hero-subtitle">Description of the project goes here. This is a placeholder for dynamic content.</p>
+
+        <div
+            style="width: 100%; height: 400px; background: #222; margin: 3rem 0; border-radius: 8px; position: relative; overflow: hidden;">
+            <!-- Placeholder Image -->
+            <div
+                style="position: absolute; inset: 0; background: linear-gradient(45deg, #222, #333); display: flex; align-items: center; justify-content: center; color: #444; font-size: 2rem; font-weight: bold;">
+                Project Mockup
+            </div>
+        </div>
+
+        <div style="max-width: 800px;">
+            <h3 style="margin-bottom: 1rem;">The Challenge</h3>
+            <p style="margin-bottom: 2rem; color: var(--color-text-secondary);">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua.
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat.
+            </p>
+
+            <h3 style="margin-bottom: 1rem;">The Solution</h3>
+            <p style="margin-bottom: 2rem; color: var(--color-text-secondary);">
+                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                laborum.
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

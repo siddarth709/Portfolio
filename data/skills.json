@@ -1,0 +1,22 @@
+[
+    {
+        "id": 6,
+        "category": "AI & ML",
+        "skill_list": "Machine Learning, Deep Learning, Natural lenguage processing, Gen AI."
+    },
+    {
+        "id": 4,
+        "category": "Developer Tools",
+        "skill_list": "Git, GitHub, Linux"
+    },
+    {
+        "id": 3,
+        "category": "Libraries & Frameworks",
+        "skill_list": "Matplotlib, TensorFlow, pandas, HuggingFace, Transformers, Scikit-Learn"
+    },
+    {
+        "id": 4,
+        "category": "Programming Languages",
+        "skill_list": "Python, C, Java"
+    }
+]

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio | Projects{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h1 class="section-title display-text">All Projects<span class="text-accent">.</span></h1>
+        <div class="grid-layout">
+
+            {% for project in projects %}
+            <!-- Project Card -->
+            <div class="tile-card fade-in">
+                <div class="tile-image-container">
+                    {% if project.image %}
+                    <img src="{{ url_for('static', filename='uploads/projects/' + project.image) }}"
+                        alt="{{ project.title }}" class="tile-image">
+                    {% else %}
+                    <div style="width:100%; height:100%; background: linear-gradient(45deg, #222, #333);"></div>
+                    {% endif %}
+                </div>
+                <div class="tile-content">
+                    <h3 class="tile-title">{{ project.title }}</h3>
+                    <p class="tile-description">{{ project.description }}</p>
+                    <div class="tile-footer">
+                        {% if project.link and project.link != '#' %}
+                        <a href="{{ project.link }}" target="_blank" class="tile-link preview-link"
+                            data-title="{{ project.title }}">Preview Project &rarr;</a>
+                        {% else %}
+                        <span class="tile-date">Coming Soon</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Coming Soon Card -->
+            <div class="tile-empty fade-in">
+                <div class="coming-soon-icon">&plus;</div>
+                <h3 class="tile-title" style="margin-bottom:0;">More Coming Soon</h3>
+                <p class="tile-description" style="flex-grow:0; margin-top:0.5rem;">I'm constantly building and
+                    experimenting.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
